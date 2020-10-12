@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Flunky Stats</string>
+    <string name="spieler">Spieler</string>
+    <string name="teams">Teams</string>
+    <string name="turniere">Turniere</string>
+    <string name="sven">Sven</string>
+</resources>
