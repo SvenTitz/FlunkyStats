@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity() {
         val database = Firebase.database
         val playerRef = database.getReference("Players")
 
-        val player = Player("Lukas Stachelscheid", "100002")
+        val player = Player("Dustin Gooßens", "100002")
 
-        playerRef.child("000003").setValue(player)
+        playerRef.child("000004").setValue(player)
 
 
 //        ike.addValueEventListener(object : ValueEventListener {
