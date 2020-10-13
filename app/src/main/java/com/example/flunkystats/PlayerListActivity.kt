@@ -10,13 +10,13 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.player_list.*
-import kotlinx.android.synthetic.main.player_stats.*
+import kotlinx.android.synthetic.main.activity_player_list.*
 
 class PlayerListActivity: AppCompatActivity() {
 
@@ -26,15 +26,30 @@ class PlayerListActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.player_list)
+        setContentView(R.layout.activity_player_list)
 
         loadPlayers()
 
         fabAddPlayer.setOnClickListener {
 //            startActivity(Intent(this, PlayerCreatorActivity::class.java))
             val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
-            builder.setTitle("test Title")
-            val edittext = EditText(this)
+            builder.setTitle("Spieler Hinzufügen:")
+//            val edittext = EditText(this)
+            val edittext:EditText = EditText.inflate(this, R.layout.inflatable_edit_text, null) as EditText
+
+//            <EditText
+//            android:id="@+id/etPlayerName"
+//            android:layout_width="match_parent"
+//            android:layout_height="wrap_content"
+//            android:ems="10"
+//            android:hint="Spieler Name"
+//            android:textColor="@color/colorPrimary"
+//            android:backgroundTint="@color/backgroundDark"
+//            android:textColorHint="@color/backgroundDark"
+//            android:textSize="30sp" />
+
+            edittext.hint = "Spieler Name"
+
             builder.setView(edittext)
             val dialog :AlertDialog = builder.show()
         }

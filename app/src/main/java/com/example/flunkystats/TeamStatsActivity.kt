@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.team_stats.*
 
 class TeamStatsActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.team_stats)
+        setContentView(R.layout.activity_team_stats)
 
         val team = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_TEAM)
 

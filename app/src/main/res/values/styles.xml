@@ -9,6 +9,7 @@
 
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="StatsTextViewStyle" parent="android:Widget.TextView">
