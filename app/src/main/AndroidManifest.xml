@@ -16,10 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlayerListActivity" android:label="Spieler Liste"/>
-        <activity android:name=".PlayerStatsActivity" android:label="Spieler Stats"/>
-        <activity android:name=".TeamStatsActivity" android:label="Team Stats"/>
-
+        <activity
+            android:name=".PlayerListActivity"
+            android:label="Spieler Liste" />
+        <activity
+            android:name=".PlayerStatsActivity"
+            android:label="Spieler Stats" />
+        <activity
+            android:name=".TeamStatsActivity"
+            android:label="Team Stats" />
+        <activity
+            android:name=".PlayerCreatorActivity"
+            android:label="Spieler Hinzufügen" />
     </application>
 
 </manifest>

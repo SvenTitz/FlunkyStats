@@ -12,7 +12,7 @@ class TeamStatsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.team_stats)
 
-        val team = intent.getStringExtra(EXTRA_MESSAGE_TEAM)
+        val team = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_TEAM)
 
         if(team != null) {
             Log.d("Sven", team.toString())

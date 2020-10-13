@@ -49,7 +49,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="Inforsaurier"
+                        android:text="Team Name"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
                 </RelativeLayout>
@@ -86,9 +86,9 @@
                         android:gravity="center"
                         android:lines="2"
                         android:paddingBottom="8dp"
-                        android:text="Sven\nTitz"
+                        android:text="Name of\nMember1"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textSize="24sp" />
 
                     <TextView
                         android:id="@+id/tvTMember2"
@@ -98,9 +98,9 @@
                         android:gravity="center"
                         android:lines="2"
                         android:paddingBottom="8dp"
-                        android:text="Alex\nAbeler"
+                        android:text="Name of\nMember2"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -139,6 +139,18 @@
                         android:paddingBottom="8dp"
                         android:text="99,9%"
                         android:textColor="@color/colorPrimary"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tvTHits"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="99,9%"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
                     <TextView
@@ -151,7 +163,7 @@
                         android:paddingBottom="8dp"
                         android:text="99,9%"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -190,6 +202,18 @@
                         android:paddingBottom="8dp"
                         android:text="3,12"
                         android:textColor="@color/colorPrimary"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tvTSlugs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="3,12"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
                     <TextView
@@ -202,7 +226,7 @@
                         android:paddingBottom="8dp"
                         android:text="3,12"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textSize="24sp" />
                 </LinearLayout>
 
                 <TextView

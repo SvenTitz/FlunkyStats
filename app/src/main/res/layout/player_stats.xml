@@ -35,21 +35,24 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:id="@+id/tvPName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:text="Sven Titz"
+                        android:paddingBottom="4dp"
+                        android:text="Spieler Name"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
                 </RelativeLayout>
@@ -72,43 +75,14 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/llPTeams"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/border"
                     android:orientation="vertical"
-                    android:paddingTop="8dp">
-
-                    <TextView
-                        android:id="@+id/tvPTeam1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:text="Inforsaurier"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-
-                    <TextView
-                        android:id="@+id/tvPTeam2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:text="Inforsaurier 2.0"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-
-                    <TextView
-                        android:id="@+id/tvPTeam3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:text="Sven + Merlin"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </LinearLayout>
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -304,6 +278,14 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvPID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="ID: "
+                android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
     </ScrollView>
