@@ -7,4 +7,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="StatsTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+
 </resources>

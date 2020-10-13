@@ -7,9 +7,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.TextViewCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -39,7 +41,8 @@ class PlayerStatsActivity: AppCompatActivity() {
             return
         }
 
-        tvPID.text = "ID: $playerID"
+        val idText = "ID: $playerID"
+        tvPID.text = idText
 
         readPlayerName(playerID)
 
@@ -115,6 +118,7 @@ class PlayerStatsActivity: AppCompatActivity() {
     private fun readTeamName(teamID: String) {
         val teamQ = teamsRef.orderByKey().equalTo(teamID)
         teamQ.addListenerForSingleValueEvent(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
                 Log.d("Sven", "values: $values")
@@ -134,17 +138,11 @@ class PlayerStatsActivity: AppCompatActivity() {
         })
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun createTeamTextView(teamName: String): TextView {
-        var newTV = TextView(this)
+
+        val newTV:TextView = TextView.inflate(this, R.layout.stats_text_view, null) as TextView
         newTV.text = teamName
-        newTV.id = teamName.hashCode();
-        Log.d("Sven", "new View with anem $teamName get ID: ${teamName.hashCode()}")
-        Log.d("Sven", "new View with anem $teamName get ID: ${newTV.id}")
-        newTV.gravity = Gravity.CENTER
-        newTV.setPadding(0,0,0,4)
-        newTV.setTextColor(resources.getColor(R.color.colorPrimary))
-        newTV.textSize = 36F
+        newTV.id = teamName.hashCode()
 
         llPTeams.addView(newTV)
 

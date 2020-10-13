@@ -1,11 +1,13 @@
 package com.example.flunkystats
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -29,8 +31,12 @@ class PlayerListActivity: AppCompatActivity() {
         loadPlayers()
 
         fabAddPlayer.setOnClickListener {
-//            val newButton = createNewButton("New Player"+PlayerListActivity.btnIDs++, llPlayerList)
-            startActivity(Intent(this, PlayerCreatorActivity::class.java))
+//            startActivity(Intent(this, PlayerCreatorActivity::class.java))
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
+            builder.setTitle("test Title")
+            val edittext = EditText(this)
+            builder.setView(edittext)
+            val dialog :AlertDialog = builder.show()
         }
     }
 
@@ -59,8 +65,6 @@ class PlayerListActivity: AppCompatActivity() {
 
         return newBtn
     }
-
-
 
     fun loadPlayers() {
         val database = Firebase.database
