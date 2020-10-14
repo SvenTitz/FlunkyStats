@@ -88,6 +88,10 @@ class PlayerStatsActivity: AppCompatActivity() {
         //read the teamID for each membership
         teamMembQ.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value == null) {
+                    Log.w("Sven", "dataSnapshot was null")
+                    return
+                }
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
                 Log.d("Sven", "values: $values")
                 values.forEach { (k, v) ->
