@@ -3,6 +3,7 @@ package com.example.flunkystats
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
@@ -23,6 +24,12 @@ interface LoadsData {
         constSet.connect(pgsBar.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
 
         constSet.applyTo(layout)
+
+        return pgsBar
+    }
+    fun addProgressBar (layout: ViewGroup, context: Context): ProgressBar {
+        val pgsBar = ProgressBar.inflate(context, R.layout.inflatable_progress_bar, null) as ProgressBar
+        layout.addView(pgsBar)
 
         return pgsBar
     }

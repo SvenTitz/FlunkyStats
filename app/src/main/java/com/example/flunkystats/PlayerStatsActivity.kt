@@ -3,6 +3,9 @@ package com.example.flunkystats
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +17,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_player_stats.*
 
 
-class PlayerStatsActivity: AppCompatActivity() {
+class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
     private val database = Firebase.database
     private val teamMembRef = database.getReference("TeamMembership")
@@ -35,9 +38,9 @@ class PlayerStatsActivity: AppCompatActivity() {
         val idText = "ID: $playerID"
         tvPID.text = idText
 
-        readPlayerName(playerID)
+        loadPlayerName(playerID)
 
-        readPlayerTeams(playerID)
+        loadPlayerTeams(playerID)
 
 //        tvPTeam1.setOnClickListener {
 //            val intent = Intent(this, TeamStatsActivity::class.java).apply {
@@ -61,7 +64,7 @@ class PlayerStatsActivity: AppCompatActivity() {
 
     }
 
-    private fun readPlayerName(playerID: String) {
+    private fun loadPlayerName(playerID: String) {
         val playerRef = database.getReference("Players")
         val playerQuery = playerRef.orderByKey().equalTo(playerID)
         playerQuery.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -80,7 +83,10 @@ class PlayerStatsActivity: AppCompatActivity() {
         })
     }
 
-    private fun readPlayerTeams(playerID: String) {
+    private fun loadPlayerTeams(playerID: String) {
+        //add progress bar
+        val pgsBar = addProgressBar(findViewById<LinearLayout>(R.id.llPTeams), this)
+        pgsBar.visibility = View.VISIBLE
 
         //search for teammemberships of play with ID: $memberID
         val teamMembQ = teamMembRef.orderByChild("memberID").equalTo(playerID)
@@ -101,8 +107,9 @@ class PlayerStatsActivity: AppCompatActivity() {
                         return
                     }
                     //read the team name and create new textview with the name
-                    readTeamName(teamID)
+                    loadTeamName(teamID)
                 }
+                pgsBar.visibility = View.GONE
             }
             override fun onCancelled (error: DatabaseError) {
                 Log.w("Sven", "Failed to read value.", error.toException())
@@ -110,7 +117,7 @@ class PlayerStatsActivity: AppCompatActivity() {
         })
     }
 
-    private fun readTeamName(teamID: String) {
+    private fun loadTeamName(teamID: String) {
         val teamQ = teamsRef.orderByKey().equalTo(teamID)
         teamQ.addListenerForSingleValueEvent(object : ValueEventListener {
 

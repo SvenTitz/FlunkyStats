@@ -105,7 +105,7 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
 
     private fun loadPlayers() {
 
-        var pgsBar = addProgressBar(findViewById(R.id.plaConstLayout), this)
+        var pgsBar = addProgressBar(findViewById<ConstraintLayout>(R.id.plaConstLayout), this)
         pgsBar.scaleX = 2F
         pgsBar.scaleY = pgsBar.scaleX
         pgsBar.visibility = View.VISIBLE
