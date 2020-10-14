@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,13 +19,16 @@ import kotlinx.android.synthetic.main.activity_player_stats.*
 
 class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
+    //References to the database
     private val database = Firebase.database
+    private val playerRef = database.getReference("Players")
     private val teamMembRef = database.getReference("TeamMembership")
     private val teamsRef = database.getReference("Teams")
 
+    //variables used to load team names
     private lateinit var teamPgsBar: ProgressBar
-    private var countTeamsLoading = 0;
-    private var teamNames: ArrayList<String> = ArrayList<String>()
+    private var countTeamsLoading = 0
+    private var teamNamesList: ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +36,10 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
         teamPgsBar = addProgressBar(findViewById<LinearLayout>(R.id.llPTeams), this)
 
-        var playerID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_PLAYER_ID)
+        val playerID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_PLAYER_ID)
 
         if(playerID == null) {
-            //throw proper popup error
-            //throw proper popup error
+           //TODO: throw proper error
             Log.w("Sven", "player ID could not be transfered")
             return
         }
@@ -52,12 +53,16 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
     }
 
+    /**
+     * Loads the Name of the Player with ID: [playerID]
+     */
     private fun loadPlayerName(playerID: String) {
-        val playerRef = database.getReference("Players")
+
         val playerQuery = playerRef.orderByKey().equalTo(playerID)
         playerQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
                 Log.d("Sven", "values: $values")
                 val entry = values.iterator().next()
@@ -71,28 +76,30 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
+    /**
+     * Loads all Teams for the player with ID: [playerID]
+     */
     private fun loadPlayerTeams(playerID: String) {
         //add progress bar
         teamPgsBar.visibility = View.VISIBLE
 
-        //search for teammemberships of play with ID: $memberID
+        //search for team memberships of player with ID: [playerID]
         val teamMembQ = teamMembRef.orderByChild("memberID").equalTo(playerID)
 
         //read the teamID for each membership
         teamMembQ.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value == null) {
+                    //no teams found
                     Log.w("Sven", "dataSnapshot was null")
                     return
                 }
+                //loop through all teams found
+                @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                Log.d("Sven", "values: $values")
-                values.forEach { (k, v) ->
-                    val teamID = v["teamID"]
-                    Log.d("Sven", "teamID:  $teamID")
-                    if(teamID == null) {
-                        return
-                    }
+                values.forEach { (_, v) ->
+                    //read team name and return if null
+                    val teamID = v["teamID"] ?: return
                     //read the team name and add it to the teamNames array list
                     loadTeamName(teamID)
                 }
@@ -103,25 +110,32 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
+    /**
+     * Loads the Name of Team with ID [teamID] and adds it if all other Team Names are done loading
+     */
     private fun loadTeamName(teamID: String) {
+        //loading one more team name
         countTeamsLoading++
 
+        //query the team by $teamID and read values
         val teamQ = teamsRef.orderByKey().equalTo(teamID)
         teamQ.addListenerForSingleValueEvent(object : ValueEventListener {
-
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                Log.d("Sven", "values: $values")
+                //get the entry of the team with id $teamID
                 val entry = values.iterator().next()
-                Log.d("Sven", "entry: $entry")
-                Log.d("Sven", "name: ${entry.value["name"]}")
+                //save the name and add it to the teamNames ArrayList
                 val teamName = entry.value["name"]
                 if (teamName == null) {
                     Log.w("Sven", "Team name is null")
+                    countTeamsLoading--  //done loading team name
                     return
                 }
-                teamNames.add(teamName)
+                teamNamesList.add(teamName)
+                //done loading team name
                 countTeamsLoading--
+                //create the team text views if $countTeamsLoading is 0
                 createTeamTextViews()
             }
             override fun onCancelled (error: DatabaseError) {
@@ -130,20 +144,28 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
+    /**
+     * IF Team Names are still loading: do nothing.
+     * OTHERWISE: Adds all Team Names from [teamNamesList] to the Layout.
+     */
     private fun createTeamTextViews() {
         if(countTeamsLoading != 0) {
+            //there are still team names loading
             return
         }
         else {
+            //all team names are done loading -> create the TextViews
             teamPgsBar.visibility = View.GONE
-            teamNames.forEach { name ->
+            teamNamesList.forEach { name ->
                 createTeamTextView(name)
             }
         }
     }
 
+    /**
+     * Adds a TextView to [llPTeams] with [teamName] as Text
+     */
     private fun createTeamTextView(teamName: String): TextView {
-
         val newTV:TextView = TextView.inflate(this, R.layout.inflatable_stats_text_view, null) as TextView
         newTV.text = teamName
         newTV.id = teamName.hashCode()
