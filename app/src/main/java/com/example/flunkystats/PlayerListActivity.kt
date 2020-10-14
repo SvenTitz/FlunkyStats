@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.flunkystats.util.StringUtil
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -100,7 +101,7 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
         pgsBar.visibility = View.VISIBLE
 
         //load all player data
-        playerRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        playerRef.orderByChild("name").addListenerForSingleValueEvent(object : ValueEventListener {
              override fun onDataChange(dataSnapshot: DataSnapshot) {
                  @Suppress("UNCHECKED_CAST")
                  val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
@@ -146,7 +147,8 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
         //add functionality to positive Button
         builder.setPositiveButton("Hinzufügen") { dialog, _ ->
             //add a new player to database
-            addPlayer(edittext.text.toString()) //TODO: check for duplicate names
+            val playerName:String = StringUtil.capitalizeFirstLetters(edittext.text.toString())
+            addPlayer(playerName, true)
             dialog.cancel()
         }
 
@@ -174,6 +176,64 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
         else {
             Log.w("Sven", "Failed to push new player")
         }
+    }
+
+    /**
+     * Adds a new palyer with name [name] to the database
+     * if [checkDupName] checks for duplicate names first
+     */
+    @Suppress ("SameParameterValue")
+    private fun addPlayer(name: String, checkDupName :Boolean) {
+
+        //add player without checking for duplicate names
+        if( !checkDupName ) {
+            addPlayer(name)
+            return
+        }
+
+        //search for players with [name]
+        val playerQ = playerRef.orderByChild("name").equalTo(name)
+        playerQ.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.value == null) {
+                    //no player with this name found -> add player
+                    addPlayer(name)
+                }
+                else {
+                    //player with duplicate name found -> open dialog and ask to add anyway
+                    openDupNameDialog(name)
+                }
+
+            }
+
+            override fun onCancelled (error: DatabaseError) {
+                Log.w("Sven", "Failed to read value.", error.toException())
+            }
+        })
+
+    }
+
+    /**
+     * used when trying to add a player with duplicate [name] to the database
+     * give option to add player anyway, or cancel
+     */
+    private fun openDupNameDialog(name: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
+        builder.setTitle("Spieler mit diesem Namen Existiert bereits.")
+        builder.setMessage("Trotzdem hinzufügen?")
+
+        //add functionality to positive Button
+        builder.setPositiveButton("Hinzufügen") { dialog, _ ->
+            addPlayer(name)
+            dialog.cancel()
+        }
+
+        //add functionality to negative Button
+        builder.setNegativeButton("Abbrechen") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
 }
