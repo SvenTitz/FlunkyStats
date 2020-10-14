@@ -1,7 +1,7 @@
+@file:Suppress("unused")
+
 package com.example.flunkystats.data
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties

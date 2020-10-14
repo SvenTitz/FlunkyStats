@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -49,7 +48,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="Team Name"
+                        android:text="@string/placeholder_team_name"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
                 </RelativeLayout>
@@ -57,13 +56,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Name:"
+                    android:text="@string/name_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp" />
 
             </RelativeLayout>
 
@@ -86,7 +85,7 @@
                         android:gravity="center"
                         android:lines="2"
                         android:paddingBottom="8dp"
-                        android:text="Name of\nMember1"
+                        android:text="@string/placeholder_name_of_member1"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -98,7 +97,7 @@
                         android:gravity="center"
                         android:lines="2"
                         android:paddingBottom="8dp"
-                        android:text="Name of\nMember2"
+                        android:text="@string/placeholder_name_of_member2"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -107,13 +106,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Mitglieder:"
+                    android:text="@string/mitglieder_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
 
@@ -137,7 +136,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="99,9%"
+                        android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -149,7 +148,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="99,9%"
+                        android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
@@ -161,7 +160,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="99,9%"
+                        android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -170,13 +169,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Trefferquote:"
+                    android:text="@string/trefferquote_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
 
@@ -200,7 +199,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="3,12"
+                        android:text="@string/placeholder_3_12"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -212,7 +211,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="3,12"
+                        android:text="@string/placeholder_3_12"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
@@ -224,7 +223,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="3,12"
+                        android:text="@string/placeholder_3_12"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
                 </LinearLayout>
@@ -232,13 +231,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Durchschnittliche Schlücke:"
+                    android:text="@string/durchschnittliche_schluecke_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
 
@@ -261,7 +260,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="25"
+                        android:text="@string/placeholder_99"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
@@ -273,7 +272,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="20"
+                        android:text="@string/placeholder_99"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
@@ -285,7 +284,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="80%"
+                        android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
                 </LinearLayout>
@@ -293,13 +292,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Spiele / Siege:"
+                    android:text="@string/spiele_siege_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
 
@@ -322,7 +321,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="5"
+                        android:text="@string/placeholder_99"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
 
@@ -334,7 +333,7 @@
                         android:gravity="center"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="2"
+                        android:text="@string/placeholder_99"
                         android:textColor="@color/colorPrimary"
                         android:textSize="36sp" />
                 </LinearLayout>
@@ -342,13 +341,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:background="@color/background"
                     android:padding="4dp"
-                    android:text="Turniere / Siege:"
+                    android:text="@string/turniere_siege_colon"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
 

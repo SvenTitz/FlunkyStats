@@ -1,13 +1,11 @@
 package com.example.flunkystats
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -51,6 +49,8 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
         loadPlayerTeams(playerID)
 
+        //TODO: Load Rest of Data
+
     }
 
     /**
@@ -60,7 +60,6 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
         val playerQuery = playerRef.orderByKey().equalTo(playerID)
         playerQuery.addListenerForSingleValueEvent(object : ValueEventListener {
-            @RequiresApi(Build.VERSION_CODES.N)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>

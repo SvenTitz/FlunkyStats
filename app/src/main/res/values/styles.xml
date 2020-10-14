@@ -12,9 +12,4 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="StatsTextViewStyle" parent="android:Widget.TextView">
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">36sp</item>
-    </style>
-
 </resources>

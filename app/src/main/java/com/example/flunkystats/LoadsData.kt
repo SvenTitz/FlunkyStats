@@ -3,17 +3,24 @@ package com.example.flunkystats
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
+/**
+ * interface for all classes that load data from the database
+ */
 interface LoadsData {
 
+    /**
+     * Adds a progressbar to the center of [layout] in [context]
+     */
     fun addProgressBar (layout: ConstraintLayout, context: Context): ProgressBar {
+        //inflate progressbar and add it to layout
         val pgsBar = ProgressBar.inflate(context, R.layout.inflatable_progress_bar, null) as ProgressBar
         layout.addView(pgsBar)
 
-        var constSet = ConstraintSet()
+        //center it
+        val constSet = ConstraintSet()
 
         constSet.constrainHeight(pgsBar.id, ConstraintSet.WRAP_CONTENT)
         constSet.constrainWidth(pgsBar.id, ConstraintSet.WRAP_CONTENT)
@@ -27,7 +34,12 @@ interface LoadsData {
 
         return pgsBar
     }
+
+    /**
+     * adds a progressbar to [layout] in [context]. no additional positioning of progressbar
+     */
     fun addProgressBar (layout: ViewGroup, context: Context): ProgressBar {
+        //inflate progressbar and add it to layout
         val pgsBar = ProgressBar.inflate(context, R.layout.inflatable_progress_bar, null) as ProgressBar
         layout.addView(pgsBar)
 

@@ -17,7 +17,7 @@ class TeamStatsActivity: AppCompatActivity() {
             Log.d("Sven", team.toString())
 
             findViewById<TextView>(R.id.tvTName).apply {
-                text = team;
+                text = team
             }
         }
 

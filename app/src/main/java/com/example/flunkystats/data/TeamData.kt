@@ -1,6 +1,6 @@
-package com.example.flunkystats.data
+@file:Suppress("unused")
 
-import java.net.IDN
+package com.example.flunkystats.data
 
 data class TeamData (
     var member1ID: String = "",

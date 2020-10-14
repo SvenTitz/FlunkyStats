@@ -1,21 +1,14 @@
 package com.example.flunkystats
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -25,53 +18,38 @@ import kotlinx.android.synthetic.main.activity_player_list.*
 
 class PlayerListActivity: AppCompatActivity(), LoadsData {
 
+    //references to database
     private val database = Firebase.database
     private val playerRef = database.reference.child("Players")
-
-    companion object {
-        var btnIDs = 1
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player_list)
 
-        loadPlayers()
+        //loads Player data and creates a button for each player
+        loadPlayers() //TODO: save to/load from cache
 
+        //set on click listener for floating action button "add Player"
         fabAddPlayer.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
-            builder.setTitle("Spieler Hinzufügen:")
-
-            val edittext:EditText = EditText.inflate(this, R.layout.inflatable_edit_text, null) as EditText
-            edittext.hint = "Spieler Name"
-            builder.setView(edittext)
-
-            builder.setPositiveButton("Hinzufügen",
-                DialogInterface.OnClickListener { dialog, id ->
-                    addPlayer(edittext.text.toString())
-                    dialog.cancel()
-                })
-
-            builder.setNegativeButton("Abbrechen",
-                DialogInterface.OnClickListener { dialog, id ->
-                    dialog.cancel()
-                })
-
-            val dialog :AlertDialog = builder.show()
+            //open the add player alert dialog
+            openAddPlayerDialog()
         }
     }
 
-    private fun createNewButton(playerName: String, playerID: String, targetLayout: ViewGroup):Button {
-        var newBtn = Button(this)
-        //set tag
-        newBtn.tag = playerID
-        //set Text
-        newBtn.text = playerName;
-        //set Background
+    /**
+     * creates a new button for the player of name [playerName] and ID [playerID] and adds it to layout [targetLayout]
+     */
+    private fun createNewPlayerButton(playerName: String, playerID: String, targetLayout: ViewGroup):Button {
+        //create the new button
+        val newBtn = Button(this) //TODO: change to inflatable
+        newBtn.text = playerName
         newBtn.setBackgroundResource(R.drawable.btn_primary_color)
+        //set payer ID as tag
+        newBtn.tag = playerID
+
         //add click listener
         newBtn.setOnClickListener {
-            Log.d("Sven", "button tag: ${newBtn.tag.toString()}")
+            //Open stats page of the player. send player ID as extra message
             val intent = Intent(this, PlayerStatsActivity::class.java).apply {
                 putExtra(AppConfig.EXTRA_MESSAGE_PLAYER_ID, newBtn.tag.toString())
             }
@@ -80,22 +58,29 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
         //add button to view group
         targetLayout.addView(newBtn)
         //add margins
-        var param = newBtn.layoutParams as ViewGroup.MarginLayoutParams
+        val param = newBtn.layoutParams as ViewGroup.MarginLayoutParams
         param.setMargins(10,10,10,10)
         newBtn.layoutParams = param
 
         return newBtn
     }
 
+    /**
+     * loads a single player with ID [playerID] from the databse.
+     * This method is called after a new player is added with the floating action button
+     */
     private fun loadSinglePlayer(playerID: String) {
+        //search for the player
         val playerQ = playerRef.orderByKey().equalTo(playerID)
+        //get the player name from the database
         playerQ.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
                 val entry = values.iterator().next().value
                 val name = entry.iterator().next().value
-                createNewButton(name, playerID, llPlayerList)
-
+                //add a button for the player to the player list
+                createNewPlayerButton(name, playerID, llPlayerList)
             }
             override fun onCancelled (error: DatabaseError) {
                 Log.w("Sven", "Failed to read value.", error.toException())
@@ -103,31 +88,40 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
         })
     }
 
+    /**
+     * loads all players when the activity is created
+     */
     private fun loadPlayers() {
 
-        var pgsBar = addProgressBar(findViewById<ConstraintLayout>(R.id.plaConstLayout), this)
+        //add progress bar while players are loading
+        val pgsBar = addProgressBar(findViewById(R.id.plaConstLayout), this)
         pgsBar.scaleX = 2F
         pgsBar.scaleY = pgsBar.scaleX
         pgsBar.visibility = View.VISIBLE
 
-         playerRef.addListenerForSingleValueEvent(object : ValueEventListener {
-             @RequiresApi(Build.VERSION_CODES.N)
+        //load all player data
+        playerRef.addListenerForSingleValueEvent(object : ValueEventListener {
              override fun onDataChange(dataSnapshot: DataSnapshot) {
+                 @Suppress("UNCHECKED_CAST")
                  val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                 Log.d("Sven", "values: $values")
-                 var players = mutableMapOf<String, String>()
+
+                 //create map of player IDs and names
+                 val players = mutableMapOf<String, String>()
+
+                 //loop through all player and add names and ids to map
                  values.forEach { (k, v) ->
-                     Log.d("Sven", "Entry: Key $k, Value: $v")
                      val name = v.iterator().next().value
                      players[k] = name
-                     //createNewButton(name, k, llPlayerList)
                  }
+
+                 //after all data has been loaded, add the buttons to the list
                  pgsBar.visibility = View.GONE
                  players.forEach { (playerID, name ) ->
-                     createNewButton(name, playerID, llPlayerList)
+                     createNewPlayerButton(name, playerID, llPlayerList)
                  }
 
              }
+
              override fun onCancelled (error: DatabaseError) {
                  Log.w("Sven", "Failed to read value.", error.toException())
              }
@@ -136,11 +130,44 @@ class PlayerListActivity: AppCompatActivity(), LoadsData {
 
     }
 
-    private fun addPlayer(name: String) {
+    /**
+     * Opens the Add Player Alert Dialog
+     */
+    private fun openAddPlayerDialog() {
+        //create new alert dialog
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
+        builder.setTitle("Spieler Hinzufügen:")
 
+        //add the EditText for the Player Name to the Dialog
+        val edittext:EditText = EditText.inflate(this, R.layout.inflatable_edit_text, null) as EditText
+        edittext.hint = "Spieler Name"
+        builder.setView(edittext)
+
+        //add functionality to positive Button
+        builder.setPositiveButton("Hinzufügen") { dialog, _ ->
+            //add a new player to database
+            addPlayer(edittext.text.toString()) //TODO: check for duplicate names
+            dialog.cancel()
+        }
+
+        //add functionality to negative Button
+        builder.setNegativeButton("Abbrechen") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        //open the dialog
+        builder.show()
+    }
+
+    /**
+     * Adds a new player with name: [name] to the database
+     */
+    private fun addPlayer(name: String) {
+        //creates new entry with random key
         val newPlayerID = playerRef.push().key
 
         if(newPlayerID != null) {
+            //add the player to the database
             playerRef.child(newPlayerID).child("name").setValue(name)
             loadSinglePlayer(newPlayerID)
         }
