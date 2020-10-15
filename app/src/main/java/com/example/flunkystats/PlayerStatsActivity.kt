@@ -34,7 +34,7 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
 
         teamPgsBar = addProgressBar(findViewById<LinearLayout>(R.id.llPTeams), this)
 
-        val playerID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_PLAYER_ID)
+        val playerID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID)
 
         if(playerID == null) {
            //TODO: throw proper error
@@ -63,10 +63,7 @@ class PlayerStatsActivity: AppCompatActivity(), LoadsData {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                Log.d("Sven", "values: $values")
                 val entry = values.iterator().next()
-                Log.d("Sven", "entry: $entry")
-                Log.d("Sven", "name: ${entry.value["name"]}")
                 tvPName.text = entry.value["name"]
             }
             override fun onCancelled (error: DatabaseError) {
