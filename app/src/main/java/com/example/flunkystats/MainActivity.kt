@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         //set on click listener for Teams button
         btnTeams.setOnClickListener {
-            //TODO: to teams list, not stats
-            startActivity(Intent(this, TeamStatsActivity::class.java))
+            startActivity(Intent(this, TeamListActivity::class.java))
         }
 
         //TODO: Turnier button

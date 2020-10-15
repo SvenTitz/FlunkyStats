@@ -21,4 +21,6 @@
     <string name="change_this">change this</string>
     <string name="addPlayerDialogTitle">Spieler Hinzufügen:</string>
     <string name="addPlayerDialogHint">Spieler Name</string>
+    <string name="addTeamDialogTitle">Team Hinzufügen:</string>
+    <string name="addTeamDialogHint">Team Name</string>
 </resources>

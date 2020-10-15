@@ -26,6 +26,9 @@
         <activity
             android:name=".TeamStatsActivity"
             android:label="Team Stats" />
+        <activity
+            android:name=".TeamListActivity"
+            android:label="Team Liste" />
     </application>
 
 </manifest>

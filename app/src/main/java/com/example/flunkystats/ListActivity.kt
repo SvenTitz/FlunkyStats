@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.flunkystats.util.StringUtil
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,6 +20,7 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
     abstract val targetStatsActivity: Class<*>
     abstract val dataRef: DatabaseReference
     abstract val targetButtonLayout: ViewGroup
+    abstract val rootLayout: ConstraintLayout
 
 
     /**
@@ -77,9 +79,10 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
      * loads all entries when the activity is created
      */
     protected fun loadEntries() {
+        //TODO: save to/load from cache
 
         //add progress bar while entries are loading
-        val pgsBar = addProgressBar(findViewById(R.id.plaConstLayout), this)
+        val pgsBar = addProgressBar(rootLayout, this)
         pgsBar.scaleX = 2F
         pgsBar.scaleY = pgsBar.scaleX
         pgsBar.visibility = View.VISIBLE
