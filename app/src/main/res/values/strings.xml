@@ -19,4 +19,6 @@
     <string name="placeholder_name_of_member2">Name of\nMember2</string>
     <string name="placeholder_name_of_member1">Name of\nMember1</string>
     <string name="change_this">change this</string>
+    <string name="addPlayerDialogTitle">Spieler Hinzufügen:</string>
+    <string name="addPlayerDialogHint">Spieler Name</string>
 </resources>

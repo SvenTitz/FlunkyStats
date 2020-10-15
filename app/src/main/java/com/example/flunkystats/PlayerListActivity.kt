@@ -27,7 +27,7 @@ class PlayerListActivity: ListActivity() {
         //set on click listener for floating action button "add Player"
         fabAddPlayer.setOnClickListener {
             //open the add player alert dialog
-            openAddEntryDialog("Spieler Hinzufügen:", "Spieler Name")
+            openAddEntryDialog(getString(R.string.addPlayerDialogTitle), getString(R.string.addPlayerDialogHint))
         }
     }
 
