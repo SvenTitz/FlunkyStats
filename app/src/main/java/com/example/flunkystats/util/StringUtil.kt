@@ -13,4 +13,8 @@ object StringUtil {
         return s.split(" ")
             .joinToString(" ") { it.toLowerCase(Locale.ROOT).capitalize(Locale.ROOT) }
     }
+
+    fun newLineEachWord(s:String):String {
+        return s.replace(" ", "\n")
+    }
 }

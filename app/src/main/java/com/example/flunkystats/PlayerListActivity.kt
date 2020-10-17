@@ -17,7 +17,7 @@ class PlayerListActivity: ListActivity() {
     override val targetButtonLayout: ViewGroup
         get() = llPlayerList
     override val rootLayout: ConstraintLayout
-        get() = findViewById(R.id.plaConstLayout)
+        get() = findViewById<ConstraintLayout>(R.id.plaConstLayout)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -59,7 +59,7 @@ class PlayerStatsActivity: StatsActivity() {
         teamPgsBar.visibility = View.VISIBLE
 
         //search for team memberships of player with ID: [playerID]
-        val teamMembQ = teamMembRef.orderByChild("memberID").equalTo(playerID)
+        val teamMembQ = teamMembRef.orderByChild("playerID").equalTo(playerID)
 
         //read the teamID for each membership
         teamMembQ.addListenerForSingleValueEvent(object : ValueEventListener {

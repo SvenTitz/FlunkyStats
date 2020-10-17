@@ -71,37 +71,15 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/llTPlayers"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/border"
-                    android:paddingTop="8dp">
-
-                    <TextView
-                        android:id="@+id/tvTMember1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:paddingBottom="8dp"
-                        android:text="@string/placeholder_name_of_member1"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
-
-                    <TextView
-                        android:id="@+id/tvTMember2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:paddingBottom="8dp"
-                        android:text="@string/placeholder_name_of_member2"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
-
-                </LinearLayout>
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -350,6 +328,14 @@
                     android:layout_marginStart="20dp"/>
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvTID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/placeholder_id"
+                android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
     </ScrollView>

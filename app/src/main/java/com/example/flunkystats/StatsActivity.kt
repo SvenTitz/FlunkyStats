@@ -3,6 +3,7 @@ package com.example.flunkystats
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -74,18 +75,25 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
      * Adds all Names from [nameList] to the [targetView] as text views.
      */
     protected fun createTextViews(nameList: ArrayList<String> , targetView: View) {
+        createTextViews(nameList, targetView, 36F)
+    }
+
+    protected fun createTextViews(nameList: ArrayList<String> , targetView: View, textSize: Float) {
         nameList.forEach { name ->
-            createTextView(name, targetView)
+            createTextView(name, targetView, textSize)
         }
     }
 
     /**
      * Adds a TextView to [targetView] with [name] as Text
      */
-    protected fun createTextView(name: String, targetView: View): TextView {
+    protected fun createTextView(name: String, targetView: View, textSize: Float): TextView {
         val newTV:TextView = TextView.inflate(this, R.layout.inflatable_stats_text_view, null) as TextView
         newTV.text = name
         newTV.id = name.hashCode()
+        newTV.textSize = textSize
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1F)
+        newTV.layoutParams = params
 
         (targetView as ViewGroup).addView(newTV)
 
