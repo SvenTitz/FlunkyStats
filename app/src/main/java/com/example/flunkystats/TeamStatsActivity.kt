@@ -10,7 +10,6 @@ import com.example.flunkystats.util.StringUtil
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_team_stats.*
 
 class TeamStatsActivity: StatsActivity() {
 
@@ -85,13 +84,10 @@ class TeamStatsActivity: StatsActivity() {
     override fun loadPlayerNameCallback(name: String, targetView: View) {
         //done loading the player name
         countPlayersLoading--
-        if (name == null) {
-            Log.w("Sven", "Team name is null")
-            return
-        }
-        playerNamesList.add(StringUtil.newLineEachWord(name))
-            //create the team text views if $countTeamsLoading is 0
+
+            //create the team text views if [countTeamsLoading] is 0
         if (countPlayersLoading == 0) {
+            playerNamesList.add(StringUtil.newLineEachWord(name))
             memberPgsBar.visibility = View.GONE
             createTextViews(playerNamesList, targetView, 24F)
         }

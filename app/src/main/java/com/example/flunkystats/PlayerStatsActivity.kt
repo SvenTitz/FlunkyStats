@@ -42,6 +42,10 @@ class PlayerStatsActivity: StatsActivity() {
 
         loadPlayerTeams(playerID, llPTeams)
 
+        val hitRatioView = findViewById<TextView>(R.id.tvPHits)
+        val avgSlugsView = findViewById<TextView>(R.id.tvPSlugs)
+        loadPlayerMatchStats(playerID, listOf(hitRatioView, avgSlugsView))
+
         //TODO: Load Rest of Data
 
     }
@@ -64,7 +68,7 @@ class PlayerStatsActivity: StatsActivity() {
         //read the teamID for each membership
         teamMembQ.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.value == null) {
+                if (!dataSnapshot.exists()) {
                     //no teams found
                     Log.w("Sven", "dataSnapshot was null")
                     return

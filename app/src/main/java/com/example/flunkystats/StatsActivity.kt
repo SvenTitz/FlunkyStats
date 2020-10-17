@@ -21,6 +21,7 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
     protected val playerRef = database.getReference("Players")
     protected val teamMembRef = database.getReference("TeamMembership")
     protected val teamsRef = database.getReference("Teams")
+    protected val matchPlayerRef = database.getReference("MatchPlayerPairs")
 
 
     /**
@@ -47,7 +48,7 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
 
 
     /**
-     * Loads the Name of Team with ID [teamID] and adds it if all other Team Names are done loading
+     * Loads the Name of Team with ID [teamID] and adds it to [targetView] if all other Team Names are done loading
      */
     protected fun loadTeamName(teamID: String, targetView: View) {
 
@@ -98,5 +99,49 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
         (targetView as ViewGroup).addView(newTV)
 
         return newTV
+    }
+
+
+    /**
+     * loads the hit ratio and average slugs of player with [playerID].
+     * Hit ratio is calculated from ratio between sum of all hits divided by all shots
+     * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games
+     * Writes the values to [targetViews]: [0] for hit ratio and [1] for avg. slugs
+     */
+    protected fun loadPlayerMatchStats(playerID: String, targetViews: List<View>) {
+        val playerMatchesQ = matchPlayerRef.orderByChild("playerID").equalTo(playerID)
+
+        playerMatchesQ.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    //no teams found
+                    Log.w("Sven", "dataSnapshot was null")
+                    return
+                }
+                @Suppress("UNCHECKED_CAST")
+                val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
+                //loop through all matches and add up shots and hits
+                var sumShots = 0f
+                var sumHits = 0f
+                var sumSlugs = 0f
+                var numbWinningGames = 0f
+                values.forEach { (_, v) ->
+                    sumShots += v["shots"]?.toFloat() ?: 0f
+                    sumHits += v["hits"]?.toFloat() ?: 0f
+                    if (v["won"] == "TRUE") {
+                        numbWinningGames++
+                        sumSlugs += v["slugs"]?.toFloat() ?: 0f
+                    }
+                }
+                val hitRatioF = sumHits / sumShots * 100
+                val hitRatioS = String.format("%.2f", hitRatioF) + "%"
+                val avgSlugs = sumSlugs / numbWinningGames
+                (targetViews[0] as TextView).text = hitRatioS
+                (targetViews[1] as TextView).text = avgSlugs.toString()
+            }
+            override fun onCancelled (error: DatabaseError) {
+                Log.w("Sven", "Failed to read value.", error.toException())
+            }
+        })
     }
 }
