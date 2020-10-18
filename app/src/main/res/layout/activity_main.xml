@@ -38,6 +38,19 @@
         app:layout_constraintTop_toBottomOf="@+id/btnPlayers" />
 
     <Button
+        android:id="@+id/btnMatches"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/btn_primary_color"
+        android:text="@string/matches"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnTeams" />
+
+    <Button
         android:id="@+id/btnTurnaments"
         android:layout_width="0dp"
         android:layout_height="60dp"
@@ -50,6 +63,6 @@
         android:text="@string/turniere"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTeams" />
+        app:layout_constraintTop_toBottomOf="@+id/btnMatches" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

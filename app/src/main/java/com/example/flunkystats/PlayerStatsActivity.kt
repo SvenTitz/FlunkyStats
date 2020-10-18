@@ -42,13 +42,13 @@ class PlayerStatsActivity: StatsActivity() {
 
         loadPlayerTeams(playerID, llPTeams)
 
-        val playerStatsTVs = listOf<TextView>(
+        val playerStatsTVs = arrayOf<TextView>(
             findViewById(R.id.tvPHits),
             findViewById(R.id.tvPSlugs),
             findViewById(R.id.tvPGamesTotal),
             findViewById(R.id.tvPGamesWon),
-            findViewById(R.id.tvPGamesWinPercentage))
-        loadPlayerMatchStats(playerID, playerStatsTVs)
+            findViewById(R.id.tvPGamesWonRatio))
+        loadPlayerMatchStats(playerID, *playerStatsTVs)
 
         loadPlayerTournNumbStats(playerID,
             findViewById<TextView>(R.id.tvPTurnamentsTotal),
@@ -57,8 +57,8 @@ class PlayerStatsActivity: StatsActivity() {
     }
 
 
-    override fun loadPlayerNameCallback(name: String, targetView: View) {
-        (targetView as TextView).text = name
+    override fun loadPlayerNameCallback(playerName: String, targetView: View) {
+        (targetView as TextView).text = playerName
     }
 
     /**
@@ -96,7 +96,9 @@ class PlayerStatsActivity: StatsActivity() {
         })
     }
 
-
+    /**
+     * once all team names are done loading add them to the [targetView]
+     */
     override fun loadTeamNameCallback(teamName: String?, targetView: View) {
         //done loading the team name
         countTeamsLoading--

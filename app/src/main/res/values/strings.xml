@@ -2,6 +2,7 @@
     <string name="app_name">Flunky Stats</string>
     <string name="spieler">Spieler</string>
     <string name="teams">Teams</string>
+    <string name="matches">Matches</string>
     <string name="turniere">Turniere</string>
     <string name="placholder_spieler_name">Spieler Name</string>
     <string name="name_colon">Name:</string>

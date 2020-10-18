@@ -39,14 +39,14 @@ class TeamStatsActivity: StatsActivity() {
 
         loadTeamPlayers(teamID, findViewById<LinearLayout>(R.id.llTPlayers))
 
-        val teamStatsTVs = listOf<TextView>(
+        val teamStatsTVs = arrayOf<TextView>(
             findViewById(R.id.tvTHits),
             findViewById(R.id.tvTSlugs),
             findViewById(R.id.tvTGamesTotal),
             findViewById(R.id.tvTGamesWon),
-            findViewById(R.id.tvTGamesWonPercentage)
+            findViewById(R.id.tvTGamesWonRatio)
         )
-        loadTeamMatchStats(teamID, teamStatsTVs)
+        loadTeamMatchStats(teamID, *teamStatsTVs)
 
         loadTeamTournNumbStats(teamID,
             findViewById(R.id.tvTTurnamentsTotal),
@@ -57,7 +57,6 @@ class TeamStatsActivity: StatsActivity() {
     override fun loadTeamNameCallback(teamName: String?, targetView: View) {
         (targetView as TextView).text = teamName ?: "Error loading team name"
     }
-
 
 
     private fun loadTeamPlayers(teamID: String, targetLayout: LinearLayout) {
@@ -86,20 +85,21 @@ class TeamStatsActivity: StatsActivity() {
                     countPlayersLoading++
                     loadPlayerName(playerID, targetLayout)
 
-                    val playerTVs: List<TextView> =
+                    //TODO: das hier ist hässlich
+                    val playerTVs =
                         if (count == 1) {
-                            listOf(
+                            arrayOf<TextView>(
                                 findViewById(R.id.tvTHits1),
                                 findViewById(R.id.tvTSlugs1)
                             )
                         } else {
-                            listOf(
+                            arrayOf<TextView>(
                                 findViewById(R.id.tvTHits2),
                                 findViewById(R.id.tvTSlugs2)
                             )
                         }
 
-                    loadPlayerMatchStats(playerID, playerTVs)
+                    loadPlayerMatchStats(playerID, *playerTVs)
                     count++
                 }
 
@@ -111,11 +111,11 @@ class TeamStatsActivity: StatsActivity() {
     }
 
 
-    override fun loadPlayerNameCallback(name: String, targetView: View) {
+    override fun loadPlayerNameCallback(playerName: String, targetView: View) {
         //done loading the player name
         countPlayersLoading--
 
-        playerNamesList.add(StringUtil.newLineEachWord(name))
+        playerNamesList.add(StringUtil.newLineEachWord(playerName))
             //create the team text views if [countTeamsLoading] is 0
         if (countPlayersLoading == 0) {
             memberPgsBar.visibility = View.GONE
@@ -123,19 +123,16 @@ class TeamStatsActivity: StatsActivity() {
         }
     }
 
+
     /**
      * loads the hit ratio, average slugs and number of Games/wins of team with [teamID].
      * Hit ratio is calculated from ratio between sum of all hits divided by all shots.
      * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games.
      * Number of Games is displayed alongside number of Wins and ratio between win/games
-     * Writes the values to [targetViews]:
-     *      [0] for hit ratio
-     *      [1] for avg. slugs
-     *      [2] for numb. games
-     *      [3] for numb. wins
-     *      [4] for win ratio
+     * [targetViews] is the list of views that should be updated
      */
-    private fun loadTeamMatchStats(teamID: String, targetViews: List<TextView>) {
+    private fun loadTeamMatchStats(teamID: String, vararg targetViews: TextView) {
+        //TODO: zusammenführen mit loadplayermatchstats?
         val teamMatchesQ = matchTeamRef.orderByChild("teamID").equalTo(teamID)
 
         teamMatchesQ.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -147,7 +144,7 @@ class TeamStatsActivity: StatsActivity() {
                 }
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                //loop through all matches and add up shots and hits
+                //loop through all matches calculate stats
                 var sumShots = 0f
                 var sumHits = 0f
                 var sumSlugs = 0f
@@ -163,15 +160,24 @@ class TeamStatsActivity: StatsActivity() {
                 }
                 val hitRatioF = sumHits / sumShots * 100
                 val hitRatioS = String.format("%.1f", hitRatioF) + "%"
-                val avgSlugs = sumSlugs / sumWins
+                val avgSlugs = String.format("%.1f", sumSlugs / sumWins)
                 val winRatioF = sumWins / sumGames * 100
                 val winRatioS = String.format("%.0f", winRatioF) + "%"
-                targetViews[0].text = hitRatioS
-                targetViews[1].text = avgSlugs.toString()
-                if (targetViews.size == 5) {
-                    targetViews[2].text = sumGames.toString()
-                    targetViews[3].text = sumWins.toInt().toString()
-                    targetViews[4].text = winRatioS
+
+                //apply stats to corresponding views
+                targetViews.forEach {
+                    when (it.id) {
+                        R.id.tvTHits ->
+                            it.text = hitRatioS
+                        R.id.tvTSlugs ->
+                            it.text = avgSlugs
+                        R.id.tvTGamesTotal ->
+                            it.text = sumGames.toString()
+                        R.id.tvTGamesWon ->
+                            it.text = sumWins.toInt().toString()
+                        R.id.tvTGamesWonRatio ->
+                            it.text = winRatioS
+                    }
                 }
             }
             override fun onCancelled (error: DatabaseError) {
@@ -180,6 +186,11 @@ class TeamStatsActivity: StatsActivity() {
         })
     }
 
+
+    /**
+     * loads the total number of tournaments and wins for team with [teamID]
+     * and puts the into [gamesView] and [winsView]
+     */
     private fun loadTeamTournNumbStats(teamID: String, gamesView: TextView, winsView: TextView) {
         val teamTournQ = tournTeamRef.orderByChild("teamID").equalTo(teamID)
 

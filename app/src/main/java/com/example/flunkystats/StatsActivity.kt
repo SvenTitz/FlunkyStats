@@ -28,7 +28,8 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
 
 
     /**
-     * Loads the Name of the Player with ID [playerID] and adds it to [targetView]
+     * Loads the Name of the Player with ID [playerID]
+     * and gives the name + [targetView] to the callback function
      */
     protected fun loadPlayerName(playerID: String, targetView: View) {
 
@@ -47,11 +48,16 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
-    abstract fun loadPlayerNameCallback(name: String, targetView: View)
+    /**
+     * function called upon retrieving a new player [playerName]
+     * [targetView] is the view relevant for the player name
+     */
+    abstract fun loadPlayerNameCallback(playerName: String, targetView: View)
 
 
     /**
-     * Loads the Name of Team with ID [teamID] and adds it to [targetView] if all other Team Names are done loading
+     * Loads the Name of the Team with ID [teamID]
+     * and gives the name + [targetView] to the callback function
      */
     protected fun loadTeamName(teamID: String, targetView: View) {
 
@@ -73,25 +79,30 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
+    /**
+     * function called upon retrieving a new [teamName]
+     * [targetView] is the view relevant for the player name
+     */
     abstract fun loadTeamNameCallback(teamName: String?, targetView: View)
 
-    /**
-     * Adds all Names from [nameList] to the [targetView] as text views.
-     */
-    protected fun createTextViews(nameList: ArrayList<String> , targetView: View) {
-        createTextViews(nameList, targetView, 36F)
-    }
 
-    protected fun createTextViews(nameList: ArrayList<String> , targetView: View, textSize: Float) {
+    /**
+     * Adds all Names from [nameList] to the [targetView] as new TextViews.
+     * [textSize] defines the font size of the new TextViews. default is 36dp
+     */
+    protected fun createTextViews(nameList: ArrayList<String> , targetView: View, textSize: Float = 36f) {
         nameList.forEach { name ->
             createTextView(name, targetView, textSize)
         }
     }
 
     /**
-     * Adds a TextView to [targetView] with [name] as Text
+     * Adds a TextView to [targetView] with [name] as Text and font size [textSize]
+     * default [textSize] is 36dp
+     * the ID of the new TextView will be [name].hashCode()
+     * Returns the new TextView
      */
-    protected fun createTextView(name: String, targetView: View, textSize: Float): TextView {
+    protected fun createTextView(name: String, targetView: View, textSize: Float = 36f): TextView {
         val newTV:TextView = TextView.inflate(this, R.layout.inflatable_stats_text_view, null) as TextView
         newTV.text = name
         newTV.id = name.hashCode()
@@ -110,14 +121,10 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
      * Hit ratio is calculated from ratio between sum of all hits divided by all shots.
      * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games.
      * Number of Games is displayed alongside number of Wins and ratio between win/games
-     * Writes the values to [targetViews]:
-     *      [0] for hit ratio
-     *      [1] for avg. slugs
-     *      [2] for numb. games
-     *      [3] for numb. wins
-     *      [4] for win ratio
+     * [targetViews] is the list of views that should be updated
      */
-    protected fun loadPlayerMatchStats(playerID: String, targetViews: List<TextView>) {
+    protected fun loadPlayerMatchStats(playerID: String, vararg targetViews: TextView) {
+        //TODO: zusammenführen mit loadteammatchstats?
         val playerMatchesQ = matchPlayerRef.orderByChild("playerID").equalTo(playerID)
 
         playerMatchesQ.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -129,7 +136,7 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
                 }
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                //loop through all matches and add up shots and hits
+                //loop through all matches calculate the stats
                 var sumShots = 0f
                 var sumHits = 0f
                 var sumSlugs = 0f
@@ -145,15 +152,24 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
                 }
                 val hitRatioF = sumHits / sumShots * 100
                 val hitRatioS = String.format("%.1f", hitRatioF) + "%"
-                val avgSlugs = sumSlugs / sumWins
+                val avgSlugs = String.format("%.1f", sumSlugs / sumWins)
                 val winRatioF = sumWins / sumGames * 100
                 val winRatioS = String.format("%.0f", winRatioF) + "%"
-                targetViews[0].text = hitRatioS
-                targetViews[1].text = avgSlugs.toString()
-                if (targetViews.size == 5) {
-                    targetViews[2].text = sumGames.toString()
-                    targetViews[3].text = sumWins.toInt().toString()
-                    targetViews[4].text = winRatioS
+
+                //apply stats to corresponding views
+                targetViews.forEach {
+                    when (it.id) {
+                        R.id.tvTHits1, R.id.tvTHits2, R.id.tvPHits ->
+                            it.text = hitRatioS
+                        R.id.tvTSlugs1, R.id.tvTSlugs2, R.id.tvPSlugs ->
+                            it.text = avgSlugs
+                        R.id.tvPGamesTotal ->
+                            it.text = sumGames.toString()
+                        R.id.tvPGamesWon ->
+                            it.text = sumWins.toInt().toString()
+                        R.id.tvPGamesWonRatio ->
+                            it.text = winRatioS
+                    }
                 }
             }
             override fun onCancelled (error: DatabaseError) {
@@ -162,8 +178,12 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
         })
     }
 
-    protected fun loadPlayerTournNumbStats(playID: String, gamesView: TextView, winsView: TextView) {
-        val playerTournQ = tournPlayerRef.orderByChild("playerID").equalTo(playID)
+    /**
+     * loads the total number of tournaments and wins for player with [playerID]
+     * and puts the into [gamesView] and [winsView]
+     */
+    protected fun loadPlayerTournNumbStats(playerID: String, gamesView: TextView, winsView: TextView) {
+        val playerTournQ = tournPlayerRef.orderByChild("playerID").equalTo(playerID)
 
         playerTournQ.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

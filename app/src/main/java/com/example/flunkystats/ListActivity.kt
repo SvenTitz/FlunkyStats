@@ -79,8 +79,6 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
      * loads all entries when the activity is created
      */
     protected fun loadEntries() {
-        //TODO: save to/load from cache
-
         //add progress bar while entries are loading
         val pgsBar = addProgressBar(rootLayout, this)
         pgsBar.scaleX = 2F
@@ -119,7 +117,7 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
     }
 
     /**
-     * Opens the Add Entry Alert Dialog
+     * Opens the Add Entry Alert Dialog with [title] and [hint]
      */
     protected fun openAddEntryDialog(title: String, hint: String) {
         //create new alert dialog

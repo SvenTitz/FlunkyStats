@@ -255,7 +255,7 @@
                         android:textSize="36sp" />
 
                     <TextView
-                        android:id="@+id/tvTGamesWonPercentage"
+                        android:id="@+id/tvTGamesWonRatio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 interface LoadsData {
 
     /**
-     * Adds a progressbar to the center of [layout] in [context]
+     * Adds a progressbar to the center of the constraint layout [layout] in [context]
      */
     fun addProgressBar (layout: ConstraintLayout, context: Context): ProgressBar {
         //inflate progressbar and add it to layout
