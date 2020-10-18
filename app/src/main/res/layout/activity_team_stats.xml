@@ -116,7 +116,7 @@
                         android:paddingBottom="8dp"
                         android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tvTHits"
@@ -140,7 +140,7 @@
                         android:paddingBottom="8dp"
                         android:text="@string/placeholder_99_9"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -179,7 +179,7 @@
                         android:paddingBottom="8dp"
                         android:text="@string/placeholder_3_12"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tvTSlugs"
@@ -203,7 +203,7 @@
                         android:paddingBottom="8dp"
                         android:text="@string/placeholder_3_12"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <TextView

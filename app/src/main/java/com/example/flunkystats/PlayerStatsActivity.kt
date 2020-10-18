@@ -42,11 +42,17 @@ class PlayerStatsActivity: StatsActivity() {
 
         loadPlayerTeams(playerID, llPTeams)
 
-        val hitRatioView = findViewById<TextView>(R.id.tvPHits)
-        val avgSlugsView = findViewById<TextView>(R.id.tvPSlugs)
-        loadPlayerMatchStats(playerID, listOf(hitRatioView, avgSlugsView))
+        val playerStatsTVs = listOf<TextView>(
+            findViewById(R.id.tvPHits),
+            findViewById(R.id.tvPSlugs),
+            findViewById(R.id.tvPGamesTotal),
+            findViewById(R.id.tvPGamesWon),
+            findViewById(R.id.tvPGamesWinPercentage))
+        loadPlayerMatchStats(playerID, playerStatsTVs)
 
-        //TODO: Load Rest of Data
+        loadPlayerTournNumbStats(playerID,
+            findViewById<TextView>(R.id.tvPTurnamentsTotal),
+            findViewById<TextView>(R.id.tvPTurnamentsWon))
 
     }
 

@@ -22,6 +22,9 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
     protected val teamMembRef = database.getReference("TeamMembership")
     protected val teamsRef = database.getReference("Teams")
     protected val matchPlayerRef = database.getReference("MatchPlayerPairs")
+    protected val tournPlayerRef = database.getReference("TournamentPlayerPairs")
+    protected val matchTeamRef = database.getReference("MatchTeamPairs")
+    protected val tournTeamRef = database.getReference("TournamentTeamPairs")
 
 
     /**
@@ -103,12 +106,18 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
 
 
     /**
-     * loads the hit ratio and average slugs of player with [playerID].
-     * Hit ratio is calculated from ratio between sum of all hits divided by all shots
-     * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games
-     * Writes the values to [targetViews]: [0] for hit ratio and [1] for avg. slugs
+     * loads the hit ratio, average slugs and number of Games/wins of player with [playerID].
+     * Hit ratio is calculated from ratio between sum of all hits divided by all shots.
+     * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games.
+     * Number of Games is displayed alongside number of Wins and ratio between win/games
+     * Writes the values to [targetViews]:
+     *      [0] for hit ratio
+     *      [1] for avg. slugs
+     *      [2] for numb. games
+     *      [3] for numb. wins
+     *      [4] for win ratio
      */
-    protected fun loadPlayerMatchStats(playerID: String, targetViews: List<View>) {
+    protected fun loadPlayerMatchStats(playerID: String, targetViews: List<TextView>) {
         val playerMatchesQ = matchPlayerRef.orderByChild("playerID").equalTo(playerID)
 
         playerMatchesQ.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -124,20 +133,52 @@ abstract class StatsActivity: AppCompatActivity(), LoadsData {
                 var sumShots = 0f
                 var sumHits = 0f
                 var sumSlugs = 0f
-                var numbWinningGames = 0f
+                var sumWins = 0f
+                val sumGames = values.size
                 values.forEach { (_, v) ->
                     sumShots += v["shots"]?.toFloat() ?: 0f
                     sumHits += v["hits"]?.toFloat() ?: 0f
                     if (v["won"] == "TRUE") {
-                        numbWinningGames++
+                        sumWins++
                         sumSlugs += v["slugs"]?.toFloat() ?: 0f
                     }
                 }
                 val hitRatioF = sumHits / sumShots * 100
-                val hitRatioS = String.format("%.2f", hitRatioF) + "%"
-                val avgSlugs = sumSlugs / numbWinningGames
-                (targetViews[0] as TextView).text = hitRatioS
-                (targetViews[1] as TextView).text = avgSlugs.toString()
+                val hitRatioS = String.format("%.1f", hitRatioF) + "%"
+                val avgSlugs = sumSlugs / sumWins
+                val winRatioF = sumWins / sumGames * 100
+                val winRatioS = String.format("%.0f", winRatioF) + "%"
+                targetViews[0].text = hitRatioS
+                targetViews[1].text = avgSlugs.toString()
+                if (targetViews.size == 5) {
+                    targetViews[2].text = sumGames.toString()
+                    targetViews[3].text = sumWins.toInt().toString()
+                    targetViews[4].text = winRatioS
+                }
+            }
+            override fun onCancelled (error: DatabaseError) {
+                Log.w("Sven", "Failed to read value.", error.toException())
+            }
+        })
+    }
+
+    protected fun loadPlayerTournNumbStats(playID: String, gamesView: TextView, winsView: TextView) {
+        val playerTournQ = tournPlayerRef.orderByChild("playerID").equalTo(playID)
+
+        playerTournQ.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                @Suppress("UNCHECKED_CAST")
+                val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
+
+                val sumTourn = values.size
+                var sumWins = 0
+                values.forEach { (_, v) ->
+                    if(v["won"] != null && v["won"] == "TRUE")  {
+                        sumWins++
+                    }
+                }
+                gamesView.text = sumTourn.toString()
+                winsView.text = sumWins.toString()
             }
             override fun onCancelled (error: DatabaseError) {
                 Log.w("Sven", "Failed to read value.", error.toException())
