@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.example.flunkystats.data.*
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
+import com.example.flunkystats.database.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,13 +14,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val dbHelper = DataBaseHelper(this)
-//        dbHelper.addPlayer(PlayerModel("1","Sven"))
-//        dbHelper.addTeam(TeamModel("2", "Infos"))
-//        dbHelper.addMatch(MatchModel("3", "4", "2"))
-//        dbHelper.addTournament(TournamentModel("4", "2", "Tourny", 1, TournamentModel.TYPE_SINGLE_ELIM))
-//        dbHelper.addPlayerTeamPair(PlayerTeamPairModel("5", "1", "2"))
-//        dbHelper.addMatchPlayerPair(MatchPlayerPairModel("6", "3", "1", 5, 2, 3, true))
-//        dbHelper.addMatchTeamPair(MatchTeamPairModel("7","3","2", 10, 3, 3, true))
+        val fbDBHelper = FirebaseDatabaseHelper(dbHelper)
+
+        //check if database is up to date
+        fbDBHelper.checkUpToDate {
+            if (it) {
+                //database is up to date
+            } else {
+               //database is not up to date
+                //TODO: reload only the part that is not up to date
+                fbDBHelper.reloadEntireDatabase()
+            }
+        }
 
         //set on click listener for Players Button
         findViewById<Button>(R.id.btnPlayers).setOnClickListener {
@@ -33,14 +38,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnMatches).setOnClickListener {
-            val snack = Snackbar.make(it, "Not yet implemented", Snackbar.LENGTH_LONG)
-            snack.show()
+            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG)
+            toast.show()
         }
 
         findViewById<Button>(R.id.btnTurnaments).setOnClickListener {
-            val snack = Snackbar.make(it, "Not yet implemented", Snackbar.LENGTH_LONG)
-            snack.show()
+            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG)
+            toast.show()
         }
 
     }
+
 }

@@ -2,6 +2,7 @@ package com.example.flunkystats
 
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -30,7 +31,8 @@ class PlayerListActivity: ListActivity() {
         //set on click listener for floating action button "add Player"
         fabAddPlayer.setOnClickListener {
             //open the add player alert dialog
-            openAddEntryDialog(getString(R.string.addPlayerDialogTitle), getString(R.string.addPlayerDialogHint))
+            Toast.makeText(this, "disabled for now", Toast.LENGTH_LONG).show()
+            //openAddEntryDialog(getString(R.string.addPlayerDialogTitle), getString(R.string.addPlayerDialogHint))
         }
     }
 

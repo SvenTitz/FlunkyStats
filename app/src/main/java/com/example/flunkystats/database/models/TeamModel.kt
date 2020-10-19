@@ -1,8 +1,8 @@
-package com.example.flunkystats.data
+package com.example.flunkystats.database.models
 
-data class TeamModel (
+data class TeamModel(
     var teamID: String = "",
-    var name: String = ""
+    var name: String? = ""
 ) {
 
     override fun toString(): String {

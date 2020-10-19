@@ -1,4 +1,4 @@
-package com.example.flunkystats.data
+package com.example.flunkystats.database.models
 
 data class MatchPlayerPairModel (
     var matchPlayerPairID: String,

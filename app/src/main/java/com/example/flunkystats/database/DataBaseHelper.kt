@@ -1,9 +1,10 @@
-package com.example.flunkystats.data
+package com.example.flunkystats.database
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.flunkystats.database.models.*
 
 class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", null, 1) {
 
@@ -15,6 +16,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         const val TABLE_PLAYER_TEAM_PAIR = "PlayerTeamPairs"
         const val TABLE_MATCH_TEAM_PAIR = "MatchTeamPairs"
         const val TABLE_MATCH_PLAYER_PAIR = "MatchPlayerPairs"
+        const val TABLE_TIMESTAMPS = "Timestamps"
 
         const val COLUMN_PLAYER_ID = "playerID"
         const val COLUMN_TEAM_ID = "teamID"
@@ -31,6 +33,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         const val COLUMN_TOURNAMENT_TYPE = "tournType"
         const val COLUMN_NUMBER_OF_TEAMS = "numbTeams"
         const val COLUMN_WINNER_TEAM_ID = "winnerTeamID"
+        const val COLUMN_TIMESTAMPS_ID = "timestampsID"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -47,19 +50,18 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         p0?.execSQL(createTableStatement)
 
         createTableStatement =
-            "CREATE TABLE $TABLE_MATCHES (" +
-                    "$COLUMN_MATCH_ID TEXT PRIMARY KEY, " +
-                    "$COLUMN_TOURNAMENT_ID TEXT, " +
-                    "$COLUMN_WINNER_TEAM_ID TEXT)"
-        p0?.execSQL(createTableStatement)
-
-        createTableStatement =
             "CREATE TABLE $TABLE_TOURNAMENTS (" +
                     "$COLUMN_TOURNAMENT_ID TEXT PRIMARY KEY, " +
                     "$COLUMN_NAME TEXT, " +
                     "$COLUMN_WINNER_TEAM_ID TEXT, " +
-                    "$COLUMN_NUMBER_OF_TEAMS INT, " +
+                    "$COLUMN_NUMBER_OF_TEAMS INTEGER, " +
                     "$COLUMN_TOURNAMENT_TYPE TEXT)"
+        p0?.execSQL(createTableStatement)
+
+        createTableStatement =
+            "CREATE TABLE $TABLE_MATCHES (" +
+                    "$COLUMN_MATCH_ID TEXT PRIMARY KEY, " +
+                    "$COLUMN_TOURNAMENT_ID TEXT)"
         p0?.execSQL(createTableStatement)
 
         createTableStatement =
@@ -74,10 +76,10 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
                     "$COLUMN_MATCH_PLAYER_PAIR_ID TEXT PRIMARY KEY, " +
                     "$COLUMN_PLAYER_ID TEXT, " +
                     "$COLUMN_MATCH_ID TEXT, " +
-                    "$COLUMN_HITS INT, " +
-                    "$COLUMN_SHOTS INT, " +
-                    "$COLUMN_SLUGS INT, " +
-                    "$COLUMN_WON INT)"
+                    "$COLUMN_HITS INTEGER, " +
+                    "$COLUMN_SHOTS INTEGER, " +
+                    "$COLUMN_SLUGS INTEGER, " +
+                    "$COLUMN_WON INTEGER)"
         p0?.execSQL(createTableStatement)
 
         createTableStatement =
@@ -85,17 +87,25 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
                     "$COLUMN_MATCH_TEAM_PAIR_ID TEXT PRIMARY KEY, " +
                     "$COLUMN_TEAM_ID TEXT, " +
                     "$COLUMN_MATCH_ID TEXT, " +
-                    "$COLUMN_HITS INT, " +
-                    "$COLUMN_SHOTS INT, " +
-                    "$COLUMN_SLUGS INT, " +
-                    "$COLUMN_WON INT)"
+                    "$COLUMN_WON INTEGER)"
+        p0?.execSQL(createTableStatement)
+
+        createTableStatement =
+            "CREATE TABLE $TABLE_TIMESTAMPS (" +
+                    "$COLUMN_TIMESTAMPS_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$TABLE_PLAYERS INTEGER, " +
+                    "$TABLE_TEAMS INTEGER, " +
+                    "$TABLE_MATCHES INTEGER, " +
+                    "$TABLE_TOURNAMENTS INTEGER, " +
+                    "$TABLE_PLAYER_TEAM_PAIR INTEGER, " +
+                    "$TABLE_MATCH_PLAYER_PAIR INTEGER, " +
+                    "$TABLE_MATCH_TEAM_PAIR INTEGER)"
         p0?.execSQL(createTableStatement)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
-
 
     fun addPlayer(player: PlayerModel): Boolean {
         val db = this.writableDatabase
@@ -125,7 +135,6 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
 
         cv.put(COLUMN_MATCH_ID, match.matchID)
         cv.put(COLUMN_TOURNAMENT_ID, match.tournID)
-        cv.put(COLUMN_WINNER_TEAM_ID, match.winnerTeamID)
 
         val res = db.insert(TABLE_MATCHES, null, cv)
         return  res != -1L
@@ -180,13 +189,48 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         cv.put(COLUMN_MATCH_TEAM_PAIR_ID, matchTeamPair.matchTeamPairID)
         cv.put(COLUMN_TEAM_ID, matchTeamPair.teamID)
         cv.put(COLUMN_MATCH_ID, matchTeamPair.matchID)
-        cv.put(COLUMN_HITS, matchTeamPair.hits)
-        cv.put(COLUMN_SHOTS, matchTeamPair.shots)
-        cv.put(COLUMN_SLUGS, matchTeamPair.slugs)
         cv.put(COLUMN_WON, matchTeamPair.won)
 
         val res = db.insert(TABLE_MATCH_TEAM_PAIR, null, cv)
         return res != -1L
+    }
+
+    fun addTimestamps(timestamp: TimestampsModel): Boolean {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+
+        cv.put(TABLE_PLAYERS, timestamp.playersTS)
+        cv.put(TABLE_TEAMS, timestamp.teamsTS)
+        cv.put(TABLE_MATCHES, timestamp.matchesTS)
+        cv.put(TABLE_TOURNAMENTS, timestamp.tournTS)
+        cv.put(TABLE_PLAYER_TEAM_PAIR, timestamp.playerTeamTS)
+        cv.put(TABLE_MATCH_PLAYER_PAIR, timestamp.matchPlayerTS)
+        cv.put(TABLE_MATCH_TEAM_PAIR, timestamp.matchTeamTS)
+
+        val res = db.insert(TABLE_TIMESTAMPS, null, cv)
+        return res != -1L
+    }
+
+    fun clearTable(tableName: String) {
+        val db = this.writableDatabase
+
+        val delTableStmt = "DELETE FROM $tableName"
+
+        db.execSQL(delTableStmt)
+    }
+
+    fun getTimestamps(): ArrayList<Int> {
+        val db = this.writableDatabase
+        val query = "SELECT * FROM $TABLE_TIMESTAMPS"
+        val cursor = db.rawQuery(query, null)
+        var resList :ArrayList<Int> = ArrayList()
+
+        cursor.moveToFirst()
+        for (i in 1 until cursor.columnCount) {
+            resList.add(cursor.getInt(i))
+        }
+
+        return resList
     }
 
 }
