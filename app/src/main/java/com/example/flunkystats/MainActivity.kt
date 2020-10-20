@@ -3,6 +3,7 @@ package com.example.flunkystats
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.example.flunkystats.database.*
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 //database is up to date
             } else {
-               //database is not up to date
+                //database is not up to date
                 //TODO: reload only the part that is not up to date
                 fbDBHelper.reloadEntireDatabase()
             }

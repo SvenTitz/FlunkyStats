@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.flunkystats.database.DataBaseHelper
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -13,8 +14,6 @@ class PlayerListActivity: ListActivity() {
 
     override val targetStatsActivity: Class<*>
         get() = PlayerStatsActivity::class.java
-    override val dataRef: DatabaseReference
-        get() = Firebase.database.reference.child("Players")
     override val targetButtonLayout: ViewGroup
         get() = llPlayerList
     override val rootLayout: ConstraintLayout
@@ -26,7 +25,7 @@ class PlayerListActivity: ListActivity() {
         setContentView(R.layout.activity_player_list)
 
         //loads Player data and creates a button for each player
-        loadEntries()
+        loadEntries(DataBaseHelper.TABLE_PLAYERS)
 
         //set on click listener for floating action button "add Player"
         fabAddPlayer.setOnClickListener {

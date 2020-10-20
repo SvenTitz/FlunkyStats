@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.lang.Exception
 
 class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
@@ -234,8 +235,12 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
     fun checkUpToDate(callbackFun: (res: Boolean) -> Unit) {
         val dbTimestamps = dbHelper.getTimestamps()
+        if(dbTimestamps == null) {
+            callbackFun(false)
+            return
+        }
 
-        timestampsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            timestampsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, Long>

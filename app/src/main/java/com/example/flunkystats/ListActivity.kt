@@ -2,6 +2,7 @@ package com.example.flunkystats
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.util.StringUtil
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,10 +20,15 @@ import com.google.firebase.database.ValueEventListener
 abstract class ListActivity: AppCompatActivity(), LoadsData {
 
     abstract val targetStatsActivity: Class<*>
-    abstract val dataRef: DatabaseReference
     abstract val targetButtonLayout: ViewGroup
     abstract val rootLayout: ConstraintLayout
+    lateinit var dbHelper: DataBaseHelper
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        dbHelper = DataBaseHelper(this)
+    }
 
     /**
      * creates a new button for the entry of name [btnText] and ID [entryID] and adds it to layout [targetLayout]
@@ -57,63 +64,18 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
      * This method is called after a new entry is added with the floating action button
      */
     private fun loadSingleEntry(entryID: String) {
-        //search for the entry
-        val dataQ = dataRef.orderByKey().equalTo(entryID)
-        //get the entry name from the database
-        dataQ.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                @Suppress("UNCHECKED_CAST")
-                val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                val entry = values.iterator().next().value
-                val name = entry.iterator().next().value
-                //add a button for the entry to the entry list
-                createNewButton(name, entryID, targetButtonLayout)
-            }
-            override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
-            }
-        })
+
     }
 
     /**
      * loads all entries when the activity is created
      */
-    protected fun loadEntries() {
-        //add progress bar while entries are loading
-        val pgsBar = addProgressBar(rootLayout, this)
-        pgsBar.scaleX = 2F
-        pgsBar.scaleY = pgsBar.scaleX
-        pgsBar.visibility = View.VISIBLE
+    protected fun loadEntries(tableName: String) {
+        val idNameMap = dbHelper.getIDandName(tableName)
 
-        //load all entry data
-        dataRef.orderByChild("name").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                @Suppress("UNCHECKED_CAST")
-                val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-
-                //create map of entry IDs and names
-                val entries = mutableMapOf<String, String>()
-
-                //loop through all entries and add names and ids to map
-                values.forEach { (k, v) ->
-                    val name = v.iterator().next().value
-                    entries[k] = name
-                }
-
-                //after all data has been loaded, add the buttons to the list
-                pgsBar.visibility = View.GONE
-                entries.forEach { (entryID, name ) ->
-                    createNewButton(name, entryID, targetButtonLayout)
-                }
-
-            }
-
-            override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
-            }
-        })
-
-
+        idNameMap.forEach { (id, name) ->
+            createNewButton(name, id, targetButtonLayout)
+        }
     }
 
     /**
@@ -150,51 +112,15 @@ abstract class ListActivity: AppCompatActivity(), LoadsData {
      * Adds a new entry with name [name] to the database
      */
     private fun addEntry(name: String) {
-        //creates new entry with random key
-        val newEntryID = dataRef.push().key
 
-        if(newEntryID != null) {
-            //add the entry to the database
-            dataRef.child(newEntryID).child("name").setValue(name)
-            loadSingleEntry(newEntryID)
-        }
-        else {
-            Log.w("Sven", "Failed to push new entry")
-        }
     }
 
     /**
      * Adds a new entry with name [name] to the database
      * if [checkDupName]: checks for duplicate names first
      */
-    @Suppress ("SameParameterValue")
     private fun addEntry(name: String, checkDupName :Boolean) {
 
-        //add entry without checking for duplicate names
-        if( !checkDupName ) {
-            addEntry(name)
-            return
-        }
-
-        //search for entry with [name]
-        val entryQ = dataRef.orderByChild("name").equalTo(name)
-        entryQ.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.value == null) {
-                    //no entry with this name found -> add entry
-                    addEntry(name)
-                }
-                else {
-                    //entry with duplicate name found -> open dialog and ask to add anyway
-                    openDupNameDialog(name)
-                }
-
-            }
-
-            override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
-            }
-        })
 
     }
 

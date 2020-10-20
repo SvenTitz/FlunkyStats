@@ -2,13 +2,8 @@ package com.example.flunkystats
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_player_stats.*
 
 
@@ -25,8 +20,6 @@ class PlayerStatsActivity: StatsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player_stats)
 
-        teamPgsBar = addProgressBar(findViewById<LinearLayout>(R.id.llPTeams), this)
-
         val playerID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID)
 
         if(playerID == null) {
@@ -38,82 +31,57 @@ class PlayerStatsActivity: StatsActivity() {
         val idText = "ID: $playerID"
         tvPID.text = idText
 
-        loadPlayerName(playerID, tvPName)
+        loadPlayerName(playerID)
 
-        loadPlayerTeams(playerID, llPTeams)
+        loadPlayerTeams(playerID)
 
-        val playerStatsTVs = arrayOf<TextView>(
-            findViewById(R.id.tvPHits),
-            findViewById(R.id.tvPSlugs),
-            findViewById(R.id.tvPGamesTotal),
-            findViewById(R.id.tvPGamesWon),
-            findViewById(R.id.tvPGamesWonRatio))
-        loadPlayerMatchStats(playerID, *playerStatsTVs)
+        loadPlayerHitRatio(playerID)
 
-        loadPlayerTournNumbStats(playerID,
-            findViewById<TextView>(R.id.tvPTurnamentsTotal),
-            findViewById<TextView>(R.id.tvPTurnamentsWon))
+        loadPlayerAvgSlugs(playerID)
 
+        loadPlayerMatchStats(playerID)
+
+        loadPlayerTournStats(playerID)
     }
 
 
-    override fun loadPlayerNameCallback(playerName: String, targetView: View) {
-        (targetView as TextView).text = playerName
+    private fun loadPlayerName(playerID: String) {
+        val name = dbHelper.getPlayerName(playerID)
+        findViewById<TextView>(R.id.tvPName).text = name
     }
 
-    /**
-     * Loads all Teams for the player with ID: [playerID]
-     */
-    private fun loadPlayerTeams(playerID: String, targetLayout: LinearLayout) {
-        //add progress bar
-        teamPgsBar.visibility = View.VISIBLE
+    private fun loadPlayerTeams(playerID: String) {
+        val teamsMap = dbHelper.getPlayersTeams(playerID) ?: return
 
-        //search for team memberships of player with ID: [playerID]
-        val teamMembQ = teamMembRef.orderByChild("playerID").equalTo(playerID)
-
-        //read the teamID for each membership
-        teamMembQ.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    //no teams found
-                    Log.w("Sven", "dataSnapshot was null")
-                    return
-                }
-                //loop through all teams found
-                @Suppress("UNCHECKED_CAST")
-                val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
-                values.forEach { (_, v) ->
-                    //read team name and return if null
-                    val teamID = v["teamID"] ?: return
-                    //read the team name and add it to the teamNames array list
-                    countTeamsLoading++
-                    loadTeamName(teamID, targetLayout)
-                }
-            }
-            override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
-            }
-        })
-    }
-
-    /**
-     * once all team names are done loading add them to the [targetView]
-     */
-    override fun loadTeamNameCallback(teamName: String?, targetView: View) {
-        //done loading the team name
-        countTeamsLoading--
-        if (teamName == null) {
-            Log.w("Sven", "Team name is null")
-            return
-        }
-        teamNamesList.add(teamName)
-
-        //create the team text views if $countTeamsLoading is 0
-        if (countTeamsLoading == 0) {
-            teamPgsBar.visibility = View.GONE
-            createTextViews(teamNamesList, targetView)
+        teamsMap.forEach { (id, name) ->
+            createTextView(name, id, findViewById(R.id.llPTeams))
         }
     }
 
+    private fun loadPlayerHitRatio(playerID: String) {
+        val ratio = dbHelper.getPlayerHitRatio(playerID)
+        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_1, ratio*100) + "%"
+        findViewById<TextView>(R.id.tvPHits).text = ratioFormat
+    }
 
+    private fun loadPlayerAvgSlugs(playerID: String) {
+        val avgSlugs = dbHelper.getPlayerAvgSlugs(playerID)
+        val avgSlugsFormat = String.format(AppConfig.FLOAT_FORMAT_1, avgSlugs)
+        findViewById<TextView>(R.id.tvPSlugs).text = avgSlugsFormat
+    }
+
+    private fun loadPlayerMatchStats(playerID: String) {
+        val stats = dbHelper.getPlayerMatchStats(playerID)
+        val ratio = stats[1].toFloat() / stats[0].toFloat()
+        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
+        findViewById<TextView>(R.id.tvPGamesTotal).text = stats[0].toString()
+        findViewById<TextView>(R.id.tvPGamesWon).text = stats[1].toString()
+        findViewById<TextView>(R.id.tvPGamesWonRatio).text = ratioFormat
+    }
+
+    private fun loadPlayerTournStats(playerID: String) {
+        val stats = dbHelper.getPlayerTournStats(playerID)
+        findViewById<TextView>(R.id.tvPTurnamentsTotal).text = stats[0].toString()
+        findViewById<TextView>(R.id.tvPTurnamentsWon).text = stats[1].toString()
+    }
 }
