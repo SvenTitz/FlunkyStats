@@ -1,13 +1,12 @@
 package com.example.flunkystats.database
 
 import android.util.Log
-import com.example.flunkystats.database.models.*
+import com.example.flunkystats.models.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.lang.Exception
 
 class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
@@ -34,8 +33,6 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         const val NUMBER_OF_TEAMS = "numbTeams"
         const val WINNER_ID = "winnerID"
 
-        const val TRUE = "true"
-        const val FALSE = "false"
     }
 
     private val database = Firebase.database
@@ -61,7 +58,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         reloadTimestamps()
     }
 
-    fun reloadPlayers() {
+    private fun reloadPlayers() {
         dbHelper.clearTable(DataBaseHelper.TABLE_PLAYERS)
 
         playersRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -80,7 +77,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadTeams() {
+    private fun reloadTeams() {
         dbHelper.clearTable(DataBaseHelper.TABLE_TEAMS)
 
         teamsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -99,7 +96,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadMatches() {
+    private fun reloadMatches() {
         dbHelper.clearTable(DataBaseHelper.TABLE_MATCHES)
 
         matchesRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -118,7 +115,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadTournaments() {
+    private fun reloadTournaments() {
         dbHelper.clearTable(DataBaseHelper.TABLE_TOURNAMENTS)
 
         tournsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -141,7 +138,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadPlayerTeamPairs() {
+    private fun reloadPlayerTeamPairs() {
         dbHelper.clearTable(DataBaseHelper.TABLE_PLAYER_TEAM_PAIR)
 
         playerTeamPairsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -160,7 +157,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadMatchPlayerPairs() {
+    private fun reloadMatchPlayerPairs() {
         dbHelper.clearTable(DataBaseHelper.TABLE_MATCH_PLAYER_PAIR)
 
         matchPlayerPairsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -185,7 +182,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadMatchTeamPairs() {
+    private fun reloadMatchTeamPairs() {
         dbHelper.clearTable(DataBaseHelper.TABLE_MATCH_TEAM_PAIR)
 
         matchTeamRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -207,7 +204,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         })
     }
 
-    fun reloadTimestamps() {
+    private fun reloadTimestamps() {
         dbHelper.clearTable(DataBaseHelper.TABLE_TIMESTAMPS)
 
         timestampsRef.addListenerForSingleValueEvent(object : ValueEventListener {

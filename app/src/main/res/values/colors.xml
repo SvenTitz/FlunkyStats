@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFA71A</color>
-    <color name="colorPrimaryDark">#B87100</color>
-    <color name="colorPrimaryLight">#FFC15E</color>
-    <color name="colorAccent">#FFD085</color>
-    <color name="background">#FF505050</color>
-    <color name="backgroundDark">#FF202020</color>
-    <color name="backgroundLight">#FF808080</color>
+<!--    <color name="colorPrimary">#FFA71A</color>-->
+<!--    <color name="colorPrimaryDark">#B87100</color>-->
+<!--    <color name="colorPrimaryLight">#FFC15E</color>-->
+<!--    <color name="colorAccent">#FFD085</color>-->
+<!--    <color name="background">#FF505050</color>-->
+<!--    <color name="backgroundDark">#FF303030</color>-->
+<!--    <color name="backgroundLight">#FF707070</color>-->
+<!--    <color name="backgroundMidDark">#FF404040</color>-->
+<!--    <color name="backgroundMidLight">#FF606060</color>-->
+    <color name="colorPrimary">#FF008B8B</color>
+    <color name="colorPrimaryDark">#FF006161</color>
+    <color name="colorPrimaryLight">#FF4daeae</color>
+    <color name="colorAccent">#FF80c5c5</color>
+    <color name="background">#FFF5F5F5</color>
+    <color name="backgroundDark">#FFA9A9A9</color>
+    <color name="backgroundLight">#FFFFFFFF</color>
+    <color name="backgroundMidDark">#FFD3D3D3</color>
+    <color name="backgroundMidLight">#FFF8F8F8</color>
+    <color name="text_primary_dark">#DE000000</color>
+    <color name="text_secondary_dark">#DE008B8B</color>
+<!--    <color name="text_secondary_dark">#8A000000</color>-->
+    <color name="text_primary_light">#DEFFFFFF</color>
+    <color name="text_secondary_light">#8AFFFFFF</color>
 </resources>

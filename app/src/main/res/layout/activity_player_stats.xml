@@ -3,289 +3,362 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/backgroundMidDark">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="vertical"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp">
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="8dp">
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border"
-                    android:paddingTop="8dp"
+                    android:background="@drawable/clickable"
                     android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/tvPName"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/name_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_p_stats_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
                         android:gravity="center"
-                        android:paddingBottom="4dp"
                         android:text="@string/placholder_spieler_name"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </RelativeLayout>
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/name_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
 
-                <LinearLayout
-                    android:id="@+id/llPTeams"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_p_stats_teams"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border"
-                    android:orientation="vertical"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/teams_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/clickable"
+                    android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/tvPHits"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:id="@+id/tv_p_stats_header_teams"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/teams_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/clickable"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/trefferquote_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_p_stats_hits"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_99_9"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </RelativeLayout>
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/trefferquote_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/clickable"
+                    android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/tvPSlugs"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/durchschnittliche_schluecke_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_p_stats_slugs"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_3_12"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </RelativeLayout>
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/durchschnittliche_schluecke_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
 
-                <LinearLayout
-                    android:id="@+id/llGames"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border"
-                    android:orientation="horizontal">
+                    android:background="@drawable/clickable"
+                    android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/tvPGamesTotal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/spiele_siege_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_p_stats_matches_total"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_99"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_matches_won"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/backgroundDark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_matches_won"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_matches_total"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tvPGamesWon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:id="@+id/tv_p_stats_matches_won"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_99"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_matches_ratio"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_matches_total"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/backgroundDark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_matches_ratio"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_matches_won"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tvPGamesWonRatio"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:id="@+id/tv_p_stats_matches_ratio"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_99_9"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </LinearLayout>
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_matches_won"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/spiele_siege_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
 
-                <LinearLayout
-                    android:id="@+id/llTurnaments"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/border"
-                    android:orientation="horizontal">
+                    android:background="@drawable/clickable"
+                    android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/tvPTurnamentsTotal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="@string/placeholder_99"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/turniere_siege_colon"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tvPTurnamentsWon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:id="@+id/tv_p_stats_tourn_total"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
                         android:gravity="center"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:text="@string/placeholder_99"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="36sp" />
-                </LinearLayout>
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_tourn_won"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:padding="4dp"
-                    android:text="@string/turniere_siege_colon"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/backgroundDark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_p_stats_tourn_won"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_tourn_total"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tv_p_stats_tourn_won"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_p_stats_tourn_total"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/tvPID"
+                android:id="@+id/tv_p_stats_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="@string/placeholder_id"
-                android:textColor="@color/colorPrimaryDark" />
-
+                android:textColor="@color/text_secondary_dark" />
         </LinearLayout>
     </ScrollView>
 

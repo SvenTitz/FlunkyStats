@@ -10,7 +10,7 @@
     <string name="placeholder_99_9">99.9%</string>
     <string name="trefferquote_colon">Trefferquote:</string>
     <string name="placeholder_3_12">3,12</string>
-    <string name="durchschnittliche_schluecke_colon">Durchschnittliche Schlücke:</string>
+    <string name="durchschnittliche_schluecke_colon">Durchschn. Schlücke:</string>
     <string name="placeholder_99">99</string>
     <string name="spiele_siege_colon">Spiele / Siege:</string>
     <string name="turniere_siege_colon">Turniere / Siege:</string>
@@ -24,4 +24,15 @@
     <string name="addPlayerDialogHint">Spieler Name</string>
     <string name="addTeamDialogTitle">Team Hinzufügen:</string>
     <string name="addTeamDialogHint">Team Name</string>
+    <string name="header">Header:</string>
+    <string name="settings">Settings</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="popup_menu">Popup Menu</string>
+    <string name="sum_menu">Sub Menu</string>
+    <string name="suche">Suche</string>
+    <string name="filter">Filter:</string>
+    <string name="rankings">Rankings</string>
+    <string name="ok">OK</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="todo">TODO</string>
 </resources>

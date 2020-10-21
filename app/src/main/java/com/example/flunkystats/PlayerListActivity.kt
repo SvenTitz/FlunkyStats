@@ -1,31 +1,32 @@
 package com.example.flunkystats
 
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.flunkystats.database.DataBaseHelper
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_player_list.*
 
 class PlayerListActivity: ListActivity() {
-
-    override val targetStatsActivity: Class<*>
-        get() = PlayerStatsActivity::class.java
-    override val targetButtonLayout: ViewGroup
-        get() = llPlayerList
-    override val rootLayout: ConstraintLayout
-        get() = findViewById<ConstraintLayout>(R.id.plaConstLayout)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player_list)
 
-        //loads Player data and creates a button for each player
-        loadEntries(DataBaseHelper.TABLE_PLAYERS)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val listDataset = dbHelper.getPlayerListData() ?: arrayListOf()
+
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = ListAdapter(listDataset, "Teams: ", this, PlayerStatsActivity::class.java)
+
+        findViewById<RecyclerView>(R.id.rv_PlayerList).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
 
         //set on click listener for floating action button "add Player"
         fabAddPlayer.setOnClickListener {

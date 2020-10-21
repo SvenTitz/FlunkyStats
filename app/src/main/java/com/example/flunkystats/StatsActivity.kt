@@ -1,96 +1,125 @@
 package com.example.flunkystats
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.database.DataBaseHelper
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.example.flunkystats.models.FilterListItemModel
 
 
 abstract class StatsActivity: AppCompatActivity() {
 
     lateinit var dbHelper: DataBaseHelper
 
+    protected lateinit var tournFilterData: ArrayList<FilterListItemModel>
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         dbHelper = DataBaseHelper(this)
-    }
-
-
-    /**
-     * Loads the Name of the Player with ID [playerID]
-     * and gives the name + [targetView] to the callback function
-     */
-    protected fun loadPlayerName(playerID: String, targetView: View) {
-
-    }
-
-
-    /**
-     * Loads the Name of the Team with ID [teamID]
-     * and gives the name + [targetView] to the callback function
-     */
-    protected fun loadTeamName(teamID: String, targetView: View) {
-
-    }
-
-
-
-    /**
-     * Adds all Names from [nameList] to the [targetView] as new TextViews.
-     * [textSize] defines the font size of the new TextViews. default is 36dp
-     */
-    protected fun createTextViews(nameList: ArrayList<String> , targetView: View, textSize: Float = 36f) {
+        tournFilterData = loadTournFilterData()
     }
 
     /**
-     * Adds a TextView to [targetView] with [name] as Text and font size [textSize]
+     * Adds a TextView to [targetLayout] with [name] as Text and font size [textSize]
      * default [textSize] is 36dp
-     * the ID of the new TextView will be [name].hashCode()
      * Returns the new TextView
      */
-    protected fun createTextView(name: String, entryID :String, targetView: View, textSize: Float = 36f): TextView {
-        val newTV:TextView = TextView.inflate(this, R.layout.inflatable_stats_text_view, null) as TextView
+    protected fun createTextView(name: String, entryID :String, targetLayout: ConstraintLayout, prevView: TextView?, textSize: Float = 36f): TextView {
+        val newTV:TextView = TextView.inflate(this, R.layout.inflatable_stats_single_text, null) as TextView
+
         newTV.text = name
         newTV.tag = entryID
-        newTV.id = name.hashCode()
         newTV.textSize = textSize
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1F)
-        newTV.layoutParams = params
+        newTV.id = entryID.hashCode()
 
-        (targetView as ViewGroup).addView(newTV)
+        targetLayout.addView(newTV)
+
+        val constSet = ConstraintSet()
+
+        constSet.constrainHeight(newTV.id, ConstraintSet.WRAP_CONTENT)
+        constSet.constrainWidth(newTV.id, 0)
+
+        constSet.connect(newTV.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32))
+        constSet.connect(newTV.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32))
+        if( prevView == null) {
+            constSet.connect(newTV.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, dp(16))
+        } else {
+            constSet.connect(newTV.id, ConstraintSet.TOP, prevView.id, ConstraintSet.BOTTOM, dp(8))
+        }
+
+        constSet.applyTo(targetLayout)
+
+        if(prevView != null) {
+            addVertDivider(targetLayout, prevView, newTV)
+        }
+
 
         return newTV
     }
 
+    private fun addVertDivider(targetLayout: ConstraintLayout, topView: View, botView: View): View {
+        val divider = View.inflate(this, R.layout.inflatable_stats_vertical_divier, null)
 
-    /**
-     * loads the hit ratio, average slugs and number of Games/wins of player with [playerID].
-     * Hit ratio is calculated from ratio between sum of all hits divided by all shots.
-     * Average slugs is calculated by sum of all Slugs in winning games, divided by the number of winning games.
-     * Number of Games is displayed alongside number of Wins and ratio between win/games
-     * [targetViews] is the list of views that should be updated
-     */
-    protected fun loadPlayerMatchStats(playerID: String, vararg targetViews: TextView) {
+        divider.id = View.generateViewId()
 
+        targetLayout.addView(divider)
+
+        val constSet = ConstraintSet()
+
+        constSet.constrainHeight(divider.id, dp(1))
+        constSet.constrainWidth(divider.id, 0)
+
+        constSet.connect(divider.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32))
+        constSet.connect(divider.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32))
+        constSet.connect(divider.id, ConstraintSet.TOP, topView.id, ConstraintSet.BOTTOM)
+        constSet.connect(divider.id, ConstraintSet.BOTTOM, botView.id, ConstraintSet.TOP)
+
+        constSet.applyTo(targetLayout)
+
+        return divider
     }
 
-    /**
-     * loads the total number of tournaments and wins for player with [playerID]
-     * and puts the into [gamesView] and [winsView]
-     */
-    protected fun loadPlayerTournNumbStats(playerID: String, gamesView: TextView, winsView: TextView) {
+    private fun dp(x: Int): Int {
+        return (x*this.resources.displayMetrics.density).toInt()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_stats, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_stats_filter -> {
+                openFilterAlertDialog(item)
+            }
+        }
+
+        return true
+    }
+
+    protected abstract fun openFilterAlertDialog(item: MenuItem)
+
+    protected abstract fun loadTournFilterData(): ArrayList<FilterListItemModel>
+
+    protected fun buildFilterRecView(recViewID: Int, dataset: ArrayList<FilterListItemModel>, view: View) {
+        val viewManager = LinearLayoutManager(this)
+        val viewAdapter = FilterListAdapter(dataset, this)
+
+        view.findViewById<RecyclerView>(recViewID).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
     }
 }

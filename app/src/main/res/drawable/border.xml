@@ -5,5 +5,7 @@
             android:radius="4dp"/>
         <stroke
             android:width="5dp"
-            android:color="@color/backgroundLight" />
+            android:alpha = "0.0"
+            android:color="#80006161"
+            />
 </shape>
