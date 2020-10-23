@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
 
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.flunkystats.adapter.ListAdapter
+import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
 
 abstract class ListActivity: AppCompatActivity() {

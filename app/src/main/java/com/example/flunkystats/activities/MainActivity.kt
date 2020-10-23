@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
+import com.example.flunkystats.R
 import com.example.flunkystats.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         //set on click listener for Teams button
         findViewById<Button>(R.id.btnTeams).setOnClickListener {
             startActivity(Intent(this, TeamListActivity::class.java))
+        }
+
+        findViewById<Button>(R.id.btnRankings).setOnClickListener {
+            startActivity(Intent(this, RankingsActivity::class.java))
         }
 
         findViewById<Button>(R.id.btnMatches).setOnClickListener {

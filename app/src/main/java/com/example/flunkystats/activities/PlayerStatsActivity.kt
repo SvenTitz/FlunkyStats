@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -10,7 +10,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.flunkystats.AppConfig
+import com.example.flunkystats.R
 import com.example.flunkystats.models.FilterListItemModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PlayerStatsActivity: StatsActivity() {
@@ -74,7 +78,7 @@ class PlayerStatsActivity: StatsActivity() {
         } else {
             dbHelper.getPlayerHitRatio(playerID, filterTeamIDs, filterTournIDs)
         }
-        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_1, ratio*100) + "%"
+        val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_p_stats_hits).text = ratioFormat
     }
 
@@ -84,14 +88,14 @@ class PlayerStatsActivity: StatsActivity() {
         } else {
             dbHelper.getPlayerAvgSlugs(playerID, filterTeamIDs, filterTournIDs)
         }
-        val avgSlugsFormat = String.format(AppConfig.FLOAT_FORMAT_1, avgSlugs)
+        val avgSlugsFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, avgSlugs)
         findViewById<TextView>(R.id.tv_p_stats_slugs).text = avgSlugsFormat
     }
 
     private fun loadPlayerMatchStats() {
         val stats = dbHelper.getPlayerMatchStats(playerID)
         val ratio = stats[1].toFloat() / stats[0].toFloat()
-        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
+        val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_p_stats_matches_total).text = stats[0].toString()
         findViewById<TextView>(R.id.tv_p_stats_matches_won).text = stats[1].toString()
         findViewById<TextView>(R.id.tv_p_stats_matches_ratio).text = ratioFormat

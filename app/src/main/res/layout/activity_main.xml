@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundMidDark"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -54,7 +54,7 @@
         android:layout_marginEnd="24dp"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="4dp"
-        android:text="@string/matches"
+        android:text="@string/spiele"
         android:textAllCaps="false"
         android:textColor="@color/text_primary_light"
         android:textSize="24sp"
@@ -71,7 +71,7 @@
         android:layout_marginEnd="24dp"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="4dp"
-        android:text="@string/rankings"
+        android:text="@string/rangliste"
         android:textAllCaps="false"
         android:textColor="@color/text_primary_light"
         android:textSize="24sp"

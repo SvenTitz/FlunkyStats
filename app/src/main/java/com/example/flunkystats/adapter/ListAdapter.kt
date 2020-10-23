@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.AppConfig
+import com.example.flunkystats.R
 import com.example.flunkystats.models.ListEntryModel
 
 class ListAdapter(

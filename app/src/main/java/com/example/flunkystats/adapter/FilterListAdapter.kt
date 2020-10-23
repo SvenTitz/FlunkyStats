@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.R
 import com.example.flunkystats.models.FilterListItemModel
 
 class FilterListAdapter(
@@ -20,8 +21,6 @@ class FilterListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.inflatable_filter_card, parent, false) as View
-
-        view.findViewById<CheckedTextView>(R.id.ctv_item)
 
         return ListViewHolder(view)
     }

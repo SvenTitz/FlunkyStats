@@ -1,10 +1,12 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.adapter.ListAdapter
+import com.example.flunkystats.R
 import kotlinx.android.synthetic.main.activity_player_list.*
 
 class PlayerListActivity: ListActivity() {

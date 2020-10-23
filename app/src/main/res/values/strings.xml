@@ -35,4 +35,14 @@
     <string name="ok">OK</string>
     <string name="abbrechen">Abbrechen</string>
     <string name="todo">TODO</string>
+    <string name="spiele">Spiele</string>
+    <string name="rangliste">Rangliste</string>
+    <string name="title_activity_matches">MatchesActivity</string>
+    <string name="tab_title_hits">Treffer</string>
+    <string name="tab_title_slugs">Schlücke</string>
+    <string name="tab_title_matches">Spiele</string>
+    <string name="tab_title_tourn">Turniere</string>
+    <string name="title_activity_rankings">Ranglisten</string>
+    <string name="placeholder_stat">Stat</string>
+    <string name="hashtag">#</string>
 </resources>

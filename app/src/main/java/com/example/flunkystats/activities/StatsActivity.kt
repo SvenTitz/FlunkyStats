@@ -1,5 +1,6 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,10 +9,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.adapter.FilterListAdapter
+import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.models.FilterListItemModel
+import com.example.flunkystats.ui.main.SimpleDividerItemDecoration
+import com.example.flunkystats.util.DPconvertion
 
 
 abstract class StatsActivity: AppCompatActivity() {
@@ -49,12 +56,12 @@ abstract class StatsActivity: AppCompatActivity() {
         constSet.constrainHeight(newTV.id, ConstraintSet.WRAP_CONTENT)
         constSet.constrainWidth(newTV.id, 0)
 
-        constSet.connect(newTV.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32))
-        constSet.connect(newTV.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32))
+        constSet.connect(newTV.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32F))
+        constSet.connect(newTV.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32F))
         if( prevView == null) {
-            constSet.connect(newTV.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, dp(16))
+            constSet.connect(newTV.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, dp(16F))
         } else {
-            constSet.connect(newTV.id, ConstraintSet.TOP, prevView.id, ConstraintSet.BOTTOM, dp(8))
+            constSet.connect(newTV.id, ConstraintSet.TOP, prevView.id, ConstraintSet.BOTTOM, dp(8F))
         }
 
         constSet.applyTo(targetLayout)
@@ -76,20 +83,22 @@ abstract class StatsActivity: AppCompatActivity() {
 
         val constSet = ConstraintSet()
 
-        constSet.constrainHeight(divider.id, dp(1))
+        constSet.constrainHeight(divider.id, dp(1F))
         constSet.constrainWidth(divider.id, 0)
 
-        constSet.connect(divider.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32))
-        constSet.connect(divider.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32))
+        constSet.connect(divider.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, dp(32F))
+        constSet.connect(divider.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, dp(32F))
         constSet.connect(divider.id, ConstraintSet.TOP, topView.id, ConstraintSet.BOTTOM)
         constSet.connect(divider.id, ConstraintSet.BOTTOM, botView.id, ConstraintSet.TOP)
 
         constSet.applyTo(targetLayout)
 
+        divider.background = ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary))
+
         return divider
     }
 
-    private fun dp(x: Int): Int {
+    private fun dp(x: Float): Int {
         return (x*this.resources.displayMetrics.density).toInt()
     }
 
@@ -120,6 +129,7 @@ abstract class StatsActivity: AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+            addItemDecoration(SimpleDividerItemDecoration(context, DPconvertion.toDP(40F, context), DPconvertion.toDP(40F, context)))
         }
     }
 }

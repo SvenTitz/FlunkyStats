@@ -106,9 +106,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         p0?.execSQL(createTableStatement)
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-
-    }
+    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {}
 
     private fun getFilterQuery(filterColumn: String, filterItems: List<String>?): String {
         var filterQuery = ""
@@ -275,7 +273,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         throw Exception("Could not find primary key of table $tableName")
     }
 
-    private fun getIDandName(tableName: String): HashMap<String, String> {
+    fun getIDandName(tableName: String): HashMap<String, String> {
         val resMap: HashMap<String, String> = HashMap()
 
         val db = this.writableDatabase
@@ -352,6 +350,38 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
 
         cursor.close()
         return resMap
+    }
+
+    fun getPlayerSumShots(playerID: String): Int {
+        val db = this.writableDatabase
+        val query = "SELECT SUM($COLUMN_SHOTS) " +
+                "FROM $TABLE_MATCH_PLAYER_PAIR " +
+                "WHERE $COLUMN_PLAYER_ID = '$playerID'"
+        val cursor = db.rawQuery(query, null)
+
+        if (!cursor.moveToFirst()) {
+            return 0
+        }
+        val shots = cursor.getInt(0)
+
+        cursor.close()
+        return shots
+    }
+
+    fun getPlayerSumHits(playerID: String): Int {
+        val db = this.writableDatabase
+        val query = "SELECT SUM($COLUMN_HITS) " +
+                "FROM $TABLE_MATCH_PLAYER_PAIR " +
+                "WHERE $COLUMN_PLAYER_ID = '$playerID'"
+        val cursor = db.rawQuery(query, null)
+
+        if (!cursor.moveToFirst()) {
+            return 0
+        }
+        val hits = cursor.getInt(0)
+
+        cursor.close()
+        return hits
     }
 
     fun getPlayerHitRatio(playerID: String): Float{

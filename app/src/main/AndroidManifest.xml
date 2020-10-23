@@ -10,7 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".activities.RankingsActivity"
+            android:label="@string/title_activity_rankings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,16 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlayerListActivity"
+            android:name=".activities.PlayerListActivity"
             android:label="Spieler Liste" />
         <activity
-            android:name=".PlayerStatsActivity"
+            android:name=".activities.PlayerStatsActivity"
             android:label="Spieler Stats" />
         <activity
-            android:name=".TeamStatsActivity"
+            android:name=".activities.TeamStatsActivity"
             android:label="Team Stats" />
         <activity
-            android:name=".TeamListActivity"
+            android:name=".activities.TeamListActivity"
             android:label="Team Liste" />
     </application>
 

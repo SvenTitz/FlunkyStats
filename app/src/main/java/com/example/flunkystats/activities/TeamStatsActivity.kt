@@ -1,4 +1,4 @@
-package com.example.flunkystats
+package com.example.flunkystats.activities
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -11,8 +11,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.flunkystats.AppConfig
+import com.example.flunkystats.R
 import com.example.flunkystats.models.FilterListItemModel
 import com.example.flunkystats.util.StringUtil
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TeamStatsActivity: StatsActivity() {
 
@@ -85,15 +89,15 @@ class TeamStatsActivity: StatsActivity() {
             dbHelper.getTeamHitRatio(teamID, filterTournIDs)
         }
 
-        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_1, ratio*100) + "%"
+        val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_t_stats_hit_ratio_t).text = ratioFormat
     }
 
     private fun loadPlayersHitRatio(filterTournIDs: List<String>? = null) {
         val ratio1 = dbHelper.getPlayerHitRatio(playerIDs[0], listOf(teamID), filterTournIDs)
         val ratio2 = dbHelper.getPlayerHitRatio(playerIDs[1], listOf(teamID), filterTournIDs)
-        val ratio1Format = String.format(AppConfig.FLOAT_FORMAT_1, ratio1*100) + "%"
-        val ratio2Format = String.format(AppConfig.FLOAT_FORMAT_1, ratio2*100) + "%"
+        val ratio1Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio1*100) + "%"
+        val ratio2Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio2*100) + "%"
         findViewById<TextView>(R.id.tv_t_stats_hit_ratio_p1).text = ratio1Format
         findViewById<TextView>(R.id.tv_t_stats_hit_ratio_p2).text = ratio2Format
     }
@@ -104,15 +108,15 @@ class TeamStatsActivity: StatsActivity() {
         } else {
             dbHelper.getTeamAvgSlugs(teamID, filterTournIDs)
         }
-        val avgSlugsFormat = String.format(AppConfig.FLOAT_FORMAT_1, avgSlugs)
+        val avgSlugsFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, avgSlugs)
         findViewById<TextView>(R.id.tv_t_stats_slugs_t).text = avgSlugsFormat
     }
 
     private fun loadPlayersAvgSlugs(filterTournIDs: List<String>? = null) {
         val slugs1 = dbHelper.getPlayerAvgSlugs(playerIDs[0], listOf(teamID), filterTournIDs)
         val slugs2 = dbHelper.getPlayerAvgSlugs(playerIDs[1], listOf(teamID), filterTournIDs)
-        val slugs1Format = String.format(AppConfig.FLOAT_FORMAT_1, slugs1)
-        val slugs2Format = String.format(AppConfig.FLOAT_FORMAT_1, slugs2)
+        val slugs1Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, slugs1)
+        val slugs2Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, slugs2)
         findViewById<TextView>(R.id.tv_t_stats_slugs_p1).text = slugs1Format
         findViewById<TextView>(R.id.tv_t_stats_slugs_p2).text = slugs2Format
     }
@@ -120,7 +124,7 @@ class TeamStatsActivity: StatsActivity() {
     private fun loadTeamMatchStats() {
         val stats = dbHelper.getTeamMatchStats(teamID)
         val ratio = stats[1].toFloat() / stats[0].toFloat()
-        val ratioFormat = String.format(AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
+        val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_t_stats_matches_total).text = stats[0].toString()
         findViewById<TextView>(R.id.tv_t_stats_matches_won).text = stats[1].toString()
         findViewById<TextView>(R.id.tv_t_stats_matches_ratio).text = ratioFormat
@@ -150,7 +154,7 @@ class TeamStatsActivity: StatsActivity() {
 
         val view:View = ConstraintLayout.inflate(this, R.layout.inflatable_dialog_filter_t, null)
 
-        buildFilterRecView(R.id.rv_Tourns ,tournFilterData, view)
+        buildFilterRecView(R.id.rv_Tourns,tournFilterData, view)
 
         builder.setView(view)
 
