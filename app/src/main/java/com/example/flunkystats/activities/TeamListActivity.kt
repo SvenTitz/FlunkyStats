@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flunkystats.adapter.ListAdapter
+import com.example.flunkystats.adapter.EntryListAdapter
 import com.example.flunkystats.R
 import kotlinx.android.synthetic.main.activity_team_list.*
 
@@ -22,7 +22,7 @@ class TeamListActivity : ListActivity() {
         val listDataset = dbHelper.getTeamListData() ?: arrayListOf()
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ListAdapter(listDataset, "Spieler: ", this, TeamStatsActivity::class.java)
+        viewAdapter = EntryListAdapter(listDataset, "Spieler: ", this, TeamStatsActivity::class.java)
 
         findViewById<RecyclerView>(R.id.rv_TeamList).apply {
             setHasFixedSize(true)

@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_m_stats_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundMidDark"
+    tools:context=".activities.MatchStatsActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background">
+
+                    <TextView
+                        android:id="@+id/tv_card_matches_team1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_card_matches_team2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_card_matches_vs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aldrich"
+                        android:rotation="-21"
+                        android:text="@string/vs"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_card_matches_team2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_card_matches_team1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background">
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_p1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placholder_spieler_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_winner1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_t1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_mid"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_p1" />
+
+                    <TextView
+                        android:id="@+id/würfe1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/wuerfe"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/treffer1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t1" />
+
+                    <TextView
+                        android:id="@+id/treffer1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/treffer"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/schlücke1"
+                        app:layout_constraintStart_toEndOf="@+id/würfe1"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t1" />
+
+                    <TextView
+                        android:id="@+id/schlücke1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/schluecke"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/treffer1"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t1" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_shots1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_hits1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/würfe1" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_hits1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_slugs1"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots1"
+                        app:layout_constraintTop_toBottomOf="@+id/treffer1" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_slugs1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits1"
+                        app:layout_constraintTop_toBottomOf="@+id/schlücke1" />
+
+                    <View
+                        android:id="@+id/divider6"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_shots1"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider7"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_hits1"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_winner1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/sieger"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_m_stats_p1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_p1"
+                        app:layout_constraintTop_toTopOf="@+id/tv_m_stats_p1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background">
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_winner2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/sieger"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_m_stats_p2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_p2"
+                        app:layout_constraintTop_toTopOf="@+id/tv_m_stats_p2" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_p2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placholder_spieler_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_winner2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_t2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_mid"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_p2" />
+
+                    <TextView
+                        android:id="@+id/würfe2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/wuerfe"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/treffer2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t2" />
+
+                    <TextView
+                        android:id="@+id/treffer2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/treffer"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/schlücke2"
+                        app:layout_constraintStart_toEndOf="@+id/würfe2"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t2" />
+
+                    <TextView
+                        android:id="@+id/schlücke2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/schluecke"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/treffer2"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t2" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_shots2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_hits2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/würfe2"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_hits2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_slugs2"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots2"
+                        app:layout_constraintTop_toBottomOf="@+id/treffer2" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_slugs2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits2"
+                        app:layout_constraintTop_toBottomOf="@+id/schlücke2" />
+
+                    <View
+                        android:id="@+id/divider8"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_shots2"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider9"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_hits2"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits2"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background">
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_p3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placholder_spieler_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_winner3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_t3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_mid"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_p3" />
+
+                    <TextView
+                        android:id="@+id/würfe3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/wuerfe"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/treffer3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t3" />
+
+                    <TextView
+                        android:id="@+id/treffer3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/treffer"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/schlücke3"
+                        app:layout_constraintStart_toEndOf="@+id/würfe3"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t3" />
+
+                    <TextView
+                        android:id="@+id/schlücke3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/schluecke"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/treffer3"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t3" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_shots3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_hits3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/würfe3" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_hits3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_slugs3"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots3"
+                        app:layout_constraintTop_toBottomOf="@+id/treffer3" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_slugs3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits3"
+                        app:layout_constraintTop_toBottomOf="@+id/schlücke3" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_winner3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/sieger"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_m_stats_p3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_p3"
+                        app:layout_constraintTop_toTopOf="@+id/tv_m_stats_p3" />
+
+                    <View
+                        android:id="@+id/divider1"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_shots3"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_hits3"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardMaxElevation="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background">
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_p4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placholder_spieler_name"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_winner4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_t4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/placeholder_team_name"
+                        android:textColor="@color/text_mid"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_p4" />
+
+                    <TextView
+                        android:id="@+id/würfe4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/wuerfe"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/treffer4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t4" />
+
+                    <TextView
+                        android:id="@+id/treffer4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/treffer"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/schlücke4"
+                        app:layout_constraintStart_toEndOf="@+id/würfe4"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t4" />
+
+                    <TextView
+                        android:id="@+id/schlücke4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/schluecke"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/treffer4"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_m_stats_t4" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_shots4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_hits4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/würfe4" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_hits4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_m_stats_slugs4"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots4"
+                        app:layout_constraintTop_toBottomOf="@+id/treffer4" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_slugs4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="@string/placeholder_99"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits4"
+                        app:layout_constraintTop_toBottomOf="@+id/schlücke4" />
+
+                    <TextView
+                        android:id="@+id/tv_m_stats_winner4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/sieger"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_m_stats_p4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_p4"
+                        app:layout_constraintTop_toTopOf="@+id/tv_m_stats_p4" />
+
+                    <View
+                        android:id="@+id/divider3"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_shots4"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_shots4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_m_stats_hits4"
+                        app:layout_constraintStart_toEndOf="@+id/tv_m_stats_hits4"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

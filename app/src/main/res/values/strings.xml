@@ -45,4 +45,21 @@
     <string name="title_activity_rankings">Ranglisten</string>
     <string name="placeholder_stat">Stat</string>
     <string name="hashtag">#</string>
+    <string name="name">Name</string>
+    <string name="quote">Quote</string>
+    <string name="header_wins">Siege</string>
+    <string name="header_shots">Würfe</string>
+    <string name="header_hits">Treffer</string>
+    <string name="header_matches">Spiele</string>
+    <string name="heade_tourn">Turn.</string>
+    <string name="header_slugs">Ø Schlücke</string>
+    <string name="vs">VS</string>
+    <string name="placeholder_match_card_info">Werkstattmeisterschaft 20, Spiel 15</string>
+    <string name="wuerfe">Würfe</string>
+    <string name="treffer">Treffer</string>
+    <string name="schluecke">Schlücke</string>
+    <string name="sieger">Sieger</string>
+    <string name="spiel">"Spiel: "</string>
+    <string name="title_activity_settings">Einstellungen</string>
+
 </resources>

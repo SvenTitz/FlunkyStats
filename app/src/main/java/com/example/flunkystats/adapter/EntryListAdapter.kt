@@ -13,12 +13,12 @@ import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.models.ListEntryModel
 
-class ListAdapter(
+class EntryListAdapter(
     private val dataset: ArrayList<ListEntryModel>,
     private val infoStartString: String,
     private val context: Context,
     private val intentClass: Class<*>
-) : RecyclerView.Adapter<ListAdapter.ListViewHolder>(), Filterable {
+) : RecyclerView.Adapter<EntryListAdapter.ListViewHolder>(), Filterable {
 
     private val datasetFull = dataset.toList()
 

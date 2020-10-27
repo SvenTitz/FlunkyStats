@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.models.FilterListItemModel
+import com.example.flunkystats.models.PlayerModel
 import com.example.flunkystats.util.StringUtil
 import java.util.*
 import kotlin.collections.ArrayList
@@ -21,7 +22,7 @@ import kotlin.collections.ArrayList
 class TeamStatsActivity: StatsActivity() {
 
     private lateinit var teamID: String
-    private lateinit var playerIDs: List<String>
+    private lateinit var players: List<PlayerModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         teamID = intent.getStringExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID) ?: return
@@ -36,7 +37,7 @@ class TeamStatsActivity: StatsActivity() {
 
         loadTeamName()
 
-        playerIDs = loadTeamPlayers()
+        players = loadTeamPlayers()
 
         loadTeamHitRatio()
 
@@ -57,8 +58,8 @@ class TeamStatsActivity: StatsActivity() {
         findViewById<TextView>(R.id.tv_t_stats_name).text = name
     }
 
-    private fun loadTeamPlayers(): List<String> {
-        val playerMap = dbHelper.getTeamsPlayers(teamID)
+    private fun loadTeamPlayers(): List<PlayerModel> {
+        val players = dbHelper.getTeamsPlayers(teamID)
         val tvPlayer1 = findViewById<TextView>(R.id.tv_t_stats_player1)
         val tvPlayer2 = findViewById<TextView>(R.id.tv_t_stats_player2)
         val clickListener = View.OnClickListener {
@@ -69,17 +70,17 @@ class TeamStatsActivity: StatsActivity() {
             startActivity(intent)
         }
 
-        val p1Name = StringUtil.newLineEachWord(playerMap.values.first())
+        val p1Name = players[0].playerName?.let { StringUtil.newLineEachWord(it) }
         tvPlayer1.text = p1Name
-        tvPlayer1.tag = playerMap.keys.first()
+        tvPlayer1.tag = players[0].playerID
         tvPlayer1.setOnClickListener(clickListener)
 
-        val p2Name = StringUtil.newLineEachWord(playerMap.values.last())
+        val p2Name = players[1].playerName?.let { StringUtil.newLineEachWord(it) }
         tvPlayer2.text = p2Name
-        tvPlayer2.tag = playerMap.keys.last()
+        tvPlayer2.tag = players[1].playerID
         tvPlayer2.setOnClickListener(clickListener)
 
-        return playerMap.keys.toList()
+        return players
     }
 
     private fun loadTeamHitRatio(filterTournIDs: List<String>? = null) {
@@ -94,8 +95,8 @@ class TeamStatsActivity: StatsActivity() {
     }
 
     private fun loadPlayersHitRatio(filterTournIDs: List<String>? = null) {
-        val ratio1 = dbHelper.getPlayerHitRatio(playerIDs[0], listOf(teamID), filterTournIDs)
-        val ratio2 = dbHelper.getPlayerHitRatio(playerIDs[1], listOf(teamID), filterTournIDs)
+        val ratio1 = dbHelper.getPlayerHitRatio(players[0].playerID, listOf(teamID), filterTournIDs)
+        val ratio2 = dbHelper.getPlayerHitRatio(players[1].playerID, listOf(teamID), filterTournIDs)
         val ratio1Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio1*100) + "%"
         val ratio2Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio2*100) + "%"
         findViewById<TextView>(R.id.tv_t_stats_hit_ratio_p1).text = ratio1Format
@@ -113,8 +114,8 @@ class TeamStatsActivity: StatsActivity() {
     }
 
     private fun loadPlayersAvgSlugs(filterTournIDs: List<String>? = null) {
-        val slugs1 = dbHelper.getPlayerAvgSlugs(playerIDs[0], listOf(teamID), filterTournIDs)
-        val slugs2 = dbHelper.getPlayerAvgSlugs(playerIDs[1], listOf(teamID), filterTournIDs)
+        val slugs1 = dbHelper.getPlayerAvgSlugs(players[0].playerID, listOf(teamID), filterTournIDs)
+        val slugs2 = dbHelper.getPlayerAvgSlugs(players[1].playerID, listOf(teamID), filterTournIDs)
         val slugs1Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, slugs1)
         val slugs2Format = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, slugs2)
         findViewById<TextView>(R.id.tv_t_stats_slugs_p1).text = slugs1Format
@@ -140,8 +141,8 @@ class TeamStatsActivity: StatsActivity() {
         val tournMap = dbHelper.getTeamsTourns(teamID)
         val resList: ArrayList<FilterListItemModel> = arrayListOf()
 
-        tournMap.forEach { (id, name) ->
-            val item = FilterListItemModel(id = id, name = name)
+        tournMap.forEach {
+            val item = FilterListItemModel(id = it.tournID, name = it.name ?: "ERROR")
             resList.add(item)
         }
 

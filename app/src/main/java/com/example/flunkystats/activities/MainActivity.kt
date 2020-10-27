@@ -7,12 +7,27 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
+import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.database.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        Log.d("Sven", "firebase auth current use: ${firebaseAuth.currentUser?.uid}")
 
         val dbHelper = DataBaseHelper(this)
         val fbDBHelper = FirebaseDatabaseHelper(dbHelper)
@@ -53,8 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnMatches).setOnClickListener {
-            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG)
-            toast.show()
+            startActivity(Intent(this, MatchesListActivity::class.java))
         }
 
         findViewById<Button>(R.id.btnTurnaments).setOnClickListener {
@@ -63,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -73,8 +92,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_main_settings -> {
-                val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG)
-                toast.show()
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
         return true

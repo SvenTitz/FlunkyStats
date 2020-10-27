@@ -11,6 +11,15 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"/>
+        <activity
+            android:name=".activities.MatchStatsActivity"
+            android:label="Spiel Stats" />
+        <activity
+            android:name=".activities.MatchesListActivity"
+            android:label="Spiel Liste" />
+        <activity
             android:name=".activities.RankingsActivity"
             android:label="@string/title_activity_rankings"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -33,6 +42,10 @@
         <activity
             android:name=".activities.TeamListActivity"
             android:label="Team Liste" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

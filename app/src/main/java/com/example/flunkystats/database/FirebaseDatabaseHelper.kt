@@ -32,6 +32,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         const val TOURNAMENT_TYPE = "type"
         const val NUMBER_OF_TEAMS = "numbTeams"
         const val WINNER_ID = "winnerID"
+        const val MATCH_NUMB = "matchNumb"
 
     }
 
@@ -105,7 +106,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, String>>
                 //loop through all entries and add them to the database
                 values.forEach { (k, v) ->
-                    val match = MatchModel(k, v[TOURNAMENT_ID])
+                    val match = MatchModel(k, v[TOURNAMENT_ID], v[MATCH_NUMB]!!.toInt())
                     dbHelper.addMatch(match)
                 }
             }

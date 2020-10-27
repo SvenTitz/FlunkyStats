@@ -2,10 +2,10 @@ package com.example.flunkystats.models
 
 data class PlayerModel(
     var playerID: String = "",
-    var name: String? = "",
+    var playerName: String? = "",
 ) {
 
     override fun toString(): String {
-        return "Player Name: $name, PlayerID: $playerID"
+        return "Player Name: $playerName, PlayerID: $playerID"
     }
 }

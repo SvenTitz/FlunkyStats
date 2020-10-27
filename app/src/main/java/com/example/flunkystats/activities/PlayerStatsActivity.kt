@@ -58,13 +58,14 @@ class PlayerStatsActivity: StatsActivity() {
         val teamsMap = dbHelper.getPlayersTeams(playerID)
 
         var prevView: TextView? = null
-        teamsMap.forEach { (id, name) ->
-            val tvTeam = createTextView(name, id, findViewById(R.id.cl_p_stats_teams), prevView)
+        teamsMap.forEach {
+            val teamID = it.teamID
+            val tvTeam = createTextView(it.teamName ?: "ERROR", it.teamID, findViewById(R.id.cl_p_stats_teams), prevView)
             prevView = tvTeam
             tvTeam.setOnClickListener {
                 //Open stats page of the entry. send entryID as extra message
                 val intent = Intent(this, TeamStatsActivity::class.java).apply {
-                    putExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID, id)
+                    putExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID, teamID)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
                 startActivity(intent)
@@ -93,7 +94,7 @@ class PlayerStatsActivity: StatsActivity() {
     }
 
     private fun loadPlayerMatchStats() {
-        val stats = dbHelper.getPlayerMatchStats(playerID)
+        val stats = dbHelper.getPlayerMatchNumbers(playerID)
         val ratio = stats[1].toFloat() / stats[0].toFloat()
         val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_p_stats_matches_total).text = stats[0].toString()
@@ -157,8 +158,8 @@ class PlayerStatsActivity: StatsActivity() {
         val tournMap = dbHelper.getPlayersTourns(playerID)
         val resList: ArrayList<FilterListItemModel> = arrayListOf()
 
-        tournMap.forEach{(id, name) ->
-            val item = FilterListItemModel(id = id, name = name)
+        tournMap.forEach{
+            val item = FilterListItemModel(id = it.tournID, name = it.name ?: "ERROR")
             resList.add(item)
         }
 
@@ -169,8 +170,8 @@ class PlayerStatsActivity: StatsActivity() {
         val teamMap = dbHelper.getPlayersTeams(playerID)
         val resList: ArrayList<FilterListItemModel> = arrayListOf()
 
-        teamMap.forEach{(id, name) ->
-            val item = FilterListItemModel(id = id, name = name)
+        teamMap.forEach{
+            val item = FilterListItemModel(id = it.teamID, name = it.teamName ?: "ERROR")
             resList.add(item)
         }
 
