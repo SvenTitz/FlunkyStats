@@ -76,8 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnTurnaments).setOnClickListener {
-            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_LONG)
-            toast.show()
+
         }
 
     }

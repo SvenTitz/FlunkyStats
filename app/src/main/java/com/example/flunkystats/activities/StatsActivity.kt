@@ -19,6 +19,7 @@ import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.models.FilterListItemModel
 import com.example.flunkystats.ui.main.SimpleDividerItemDecoration
 import com.example.flunkystats.util.DPconvertion
+import com.example.flunkystats.util.DPconvertion.toDP
 
 
 abstract class StatsActivity: AppCompatActivity() {
@@ -129,7 +130,7 @@ abstract class StatsActivity: AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-            addItemDecoration(SimpleDividerItemDecoration(context, DPconvertion.toDP(40F, context), DPconvertion.toDP(40F, context)))
+            addItemDecoration(SimpleDividerItemDecoration(context, 40F.toDP(context), 40F.toDP(context)))
         }
     }
 }

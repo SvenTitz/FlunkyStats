@@ -14,7 +14,8 @@
     <color name="colorPrimaryDarker">#FF001c1c</color>
     <color name="colorPrimaryLight">#FF4daeae</color>
     <color name="colorPrimaryLighter">#FFb3dcdc</color>
-    <color name="colorAccent">#FF80c5c5</color>
+    <color name="colorAccent">#A9008B8B</color>
+<!--    <color name="colorAccent">#FF80c5c5</color>-->
     <color name="background">#FFF5F5F5</color>
     <color name="backgroundDark">#FFA9A9A9</color>
     <color name="backgroundDarker">#FF888888</color>
@@ -26,4 +27,5 @@
     <color name="text_mid">#9A000000</color>
     <color name="text_primary_light">#DEFFFFFF</color>
     <color name="text_secondary_light">#8AFFFFFF</color>
+    <color name="grey">#FF9A9A9A</color>
 </resources>

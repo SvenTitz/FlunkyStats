@@ -8,6 +8,7 @@
     android:layout_marginTop="8dp"
     android:layout_marginEnd="12dp"
     android:layout_marginBottom="8dp"
+    app:cardCornerRadius="5dp"
     app:cardElevation="4dp"
     app:cardMaxElevation="4dp">
 
@@ -22,6 +23,7 @@
             android:id="@+id/tv_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:text="@string/placholder_spieler_name"
             android:textColor="@color/text_primary_dark"
             android:textSize="36sp"
@@ -32,6 +34,7 @@
             android:id="@+id/tv_card_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="@string/placeholder_team_name"
             android:textColor="@color/text_secondary_dark"
             app:layout_constraintStart_toStartOf="parent"

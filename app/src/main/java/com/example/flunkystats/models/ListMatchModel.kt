@@ -7,5 +7,6 @@ data class ListMatchModel (
     val team1ID: String,
     val team2Name: String,
     val team2ID: String,
+    val winnerID: String? = null,
     val matchInfo: List<String>
 )

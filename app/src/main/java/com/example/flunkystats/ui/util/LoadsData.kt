@@ -1,10 +1,11 @@
-package com.example.flunkystats
+package com.example.flunkystats.ui.util
 
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.example.flunkystats.R
 
 /**
  * interface for all classes that load data from the database

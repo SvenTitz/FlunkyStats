@@ -8,7 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.example.flunkystats.AppConfig
-import com.example.flunkystats.LoadsData
+import com.example.flunkystats.ui.util.LoadsData
 import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.models.PlayerMatchStatsModel

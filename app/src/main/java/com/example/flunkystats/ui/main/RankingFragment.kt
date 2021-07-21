@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.AppConfig
-import com.example.flunkystats.LoadsData
+import com.example.flunkystats.ui.util.LoadsData
 import com.example.flunkystats.R
 import com.example.flunkystats.adapter.FilterListAdapter
 import com.example.flunkystats.adapter.TableListAdapter
@@ -30,6 +30,7 @@ import com.example.flunkystats.models.EntryModel
 import com.example.flunkystats.models.FilterListItemModel
 import com.example.flunkystats.models.TableEntryModel
 import com.example.flunkystats.util.DPconvertion
+import com.example.flunkystats.util.DPconvertion.toDP
 import java.lang.IllegalArgumentException
 import java.lang.ref.WeakReference
 import java.util.*
@@ -338,7 +339,7 @@ class RankingFragment : Fragment(), LoadsData {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-            addItemDecoration(SimpleDividerItemDecoration(context, DPconvertion.toDP(40F, context), DPconvertion.toDP(40F, context)))
+            addItemDecoration(SimpleDividerItemDecoration(context, 40F.toDP(context), 40F.toDP(context)))
         }
     }
 
@@ -355,7 +356,7 @@ class RankingFragment : Fragment(), LoadsData {
     }
 
 
-    private class DatabaseAsyncTask(activity: RankingFragment): AsyncTask<LoadParams, Int, ArrayList<TableEntryModel>>() {
+    private class DatabaseAsyncTask(activity: RankingFragment): AsyncTask<LoadParams, Void, ArrayList<TableEntryModel>>() {
 
         private var activityWeakReference: WeakReference<RankingFragment>? = null
 
@@ -420,7 +421,7 @@ class RankingFragment : Fragment(), LoadsData {
                     throw IllegalArgumentException()
                 }
 
-                if(shotsStats[0] != 0) {
+                if(shotsStats[0] != 0 && shotsStats[0] != -1 && shotsStats[1] != -1) {
                     val ratio: Float =( shotsStats[1].toFloat() / shotsStats[0].toFloat() ) * 100F
                     val ratioS = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio) + "%"
                     dataSet.add(
