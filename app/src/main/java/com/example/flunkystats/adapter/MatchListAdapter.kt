@@ -41,7 +41,7 @@ class MatchListAdapter(
 
         clTeams.setOnClickListener {
             val matchID = view.findViewById<TextView>(R.id.tv_card_matches_vs).tag as String
-            val intent = Intent(context, MatchStatsActivity::class.java). apply {
+            val intent = Intent(context, MatchStatsActivity::class.java).apply {
                 putExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID, matchID)
             }
             context.startActivity(intent)

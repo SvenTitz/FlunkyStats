@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flunkystats.adapter.EntryListAdapter
 import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
+import com.example.flunkystats.database.FirebaseDatabaseHelper
 
 abstract class ListActivity: AppCompatActivity() {
 
     lateinit var dbHelper: DataBaseHelper
+    lateinit var fbDbHelper: FirebaseDatabaseHelper
     lateinit var viewManager: LinearLayoutManager
     lateinit var viewAdapter: EntryListAdapter
 
@@ -21,6 +23,7 @@ abstract class ListActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         dbHelper = DataBaseHelper(this)
+        fbDbHelper = FirebaseDatabaseHelper(dbHelper)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

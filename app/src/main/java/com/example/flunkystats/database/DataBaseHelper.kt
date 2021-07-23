@@ -231,6 +231,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         return res != -1L
     }
 
+
     fun clearTable(tableName: String) {
         val db = this.writableDatabase
 

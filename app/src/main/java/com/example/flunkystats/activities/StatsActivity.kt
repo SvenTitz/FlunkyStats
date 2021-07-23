@@ -122,7 +122,7 @@ abstract class StatsActivity: AppCompatActivity() {
 
     protected abstract fun loadTournFilterData(): ArrayList<FilterListItemModel>
 
-    protected fun buildFilterRecView(recViewID: Int, dataset: ArrayList<FilterListItemModel>, view: View) {
+    protected fun buildFilterRecView(recViewID: Int, dataset: ArrayList<FilterListItemModel>, view: View): FilterListAdapter {
         val viewManager = LinearLayoutManager(this)
         val viewAdapter = FilterListAdapter(dataset, this)
 
@@ -132,5 +132,7 @@ abstract class StatsActivity: AppCompatActivity() {
             adapter = viewAdapter
             addItemDecoration(SimpleDividerItemDecoration(context, 40F.toDP(context), 40F.toDP(context)))
         }
+
+        return viewAdapter
     }
 }

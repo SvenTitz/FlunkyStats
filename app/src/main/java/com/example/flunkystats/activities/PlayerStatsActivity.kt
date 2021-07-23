@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -93,8 +94,12 @@ class PlayerStatsActivity: StatsActivity() {
         findViewById<TextView>(R.id.tv_p_stats_slugs).text = avgSlugsFormat
     }
 
-    private fun loadPlayerMatchStats() {
-        val stats = dbHelper.getPlayerMatchNumbers(playerID)
+    private fun loadPlayerMatchStats(filterTeamIDs: List<String>? = null, filterTournIDs: List<String>? = null) {
+        val stats = if (filterTeamIDs == null && filterTournIDs == null) {
+            dbHelper.getPlayerMatchNumbers(playerID)
+        } else {
+            dbHelper.getPlayerMatchNumbers(playerID, filterTeamIDs, filterTournIDs)
+        }
         val ratio = stats[1].toFloat() / stats[0].toFloat()
         val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_p_stats_matches_total).text = stats[0].toString()
@@ -102,8 +107,12 @@ class PlayerStatsActivity: StatsActivity() {
         findViewById<TextView>(R.id.tv_p_stats_matches_ratio).text = ratioFormat
     }
 
-    private fun loadPlayerTournStats() {
-        val stats = dbHelper.getPlayerTournStats(playerID)
+    private fun loadPlayerTournStats(filterTeamIDs: List<String>? = null, filterTournIDs: List<String>? = null) {
+        val stats = if (filterTeamIDs == null && filterTournIDs == null) {
+            dbHelper.getPlayerTournStats(playerID)
+        } else {
+            dbHelper.getPlayerTournStats(playerID, filterTeamIDs, filterTournIDs)
+        }
         findViewById<TextView>(R.id.tv_p_stats_tourn_total).text = stats[0].toString()
         findViewById<TextView>(R.id.tv_p_stats_tourn_won).text = stats[1].toString()
     }
@@ -114,9 +123,20 @@ class PlayerStatsActivity: StatsActivity() {
 
         val view:View = ConstraintLayout.inflate(this, R.layout.inflatable_dialog_filter_p, null)
 
-        buildFilterRecView(R.id.rv_Tourns, tournFilterData, view)
-        buildFilterRecView(R.id.rv_Teams, teamFilterData, view)
+        val tournViewAdapter = buildFilterRecView(R.id.rv_Tourns, tournFilterData, view)
+        val teamViewAdapter = buildFilterRecView(R.id.rv_Teams, teamFilterData, view)
 
+        Log.d("Sven", "teams size: ${teamViewAdapter.ctvItemList.size}; tourn size: ${tournViewAdapter.ctvItemList.size}")
+        teamViewAdapter.ctvItemList.forEach {
+            Log.d("Sven", "team")
+            Log.d("Sven", "${it.text}")
+        }
+        tournViewAdapter.ctvItemList.forEach {
+            Log.d("Sven", "tourn")
+            Log.d("Sven", "${it.text}")
+        }
+
+        builder.setView(view)
         builder.setView(view)
 
         val dialog = builder.create()
@@ -145,6 +165,8 @@ class PlayerStatsActivity: StatsActivity() {
 
             loadPlayerHitRatio(filterTeamIDs, filterTournIDs)
             loadPlayerAvgSlugs(filterTeamIDs, filterTournIDs)
+            loadPlayerMatchStats(filterTeamIDs, filterTournIDs)
+            loadPlayerTournStats(filterTeamIDs, filterTournIDs)
 
             Handler().postDelayed( {
                 dialog.cancel()

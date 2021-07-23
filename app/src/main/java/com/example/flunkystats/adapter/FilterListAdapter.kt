@@ -14,8 +14,10 @@ class FilterListAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<FilterListAdapter.ListViewHolder>() {
 
+    val ctvItemList: ArrayList<CheckedTextView> = arrayListOf()
+
     class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val cvtItem: CheckedTextView = itemView.findViewById(R.id.ctv_item)
+        val ctvItem: CheckedTextView = itemView.findViewById(R.id.ctv_item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -29,11 +31,11 @@ class FilterListAdapter(
 
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.cvtItem.text = dataset[position].name
-        holder.cvtItem.tag = dataset[position].id
-        holder.cvtItem.isChecked = dataset[position].checked
+        holder.ctvItem.text = dataset[position].name
+        holder.ctvItem.tag = dataset[position].id
+        holder.ctvItem.isChecked = dataset[position].checked
 
-        holder.cvtItem.setOnClickListener{
+        holder.ctvItem.setOnClickListener{
             if (atLeastTwoChecked() || !(it as CheckedTextView).isChecked) {
                 (it as CheckedTextView).isChecked = !it.isChecked
                 dataset[position].checked = it.isChecked
@@ -42,6 +44,8 @@ class FilterListAdapter(
                 toast.show()
             }
         }
+
+        ctvItemList.add(holder.ctvItem)
     }
 
     private fun atLeastTwoChecked(): Boolean {
@@ -54,7 +58,6 @@ class FilterListAdapter(
         }
         return false
     }
-
 }
 
 

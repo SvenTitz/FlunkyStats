@@ -122,8 +122,12 @@ class TeamStatsActivity: StatsActivity() {
         findViewById<TextView>(R.id.tv_t_stats_slugs_p2).text = slugs2Format
     }
 
-    private fun loadTeamMatchStats() {
-        val stats = dbHelper.getTeamMatchStats(teamID)
+    private fun loadTeamMatchStats(filterTournIDs: List<String>? = null) {
+        val stats = if(filterTournIDs == null) {
+            dbHelper.getTeamMatchStats(teamID)
+        } else {
+            dbHelper.getTeamMatchStats(teamID, filterTournIDs)
+        }
         val ratio = stats[1].toFloat() / stats[0].toFloat()
         val ratioFormat = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_0, ratio*100) + "%"
         findViewById<TextView>(R.id.tv_t_stats_matches_total).text = stats[0].toString()
@@ -131,8 +135,12 @@ class TeamStatsActivity: StatsActivity() {
         findViewById<TextView>(R.id.tv_t_stats_matches_ratio).text = ratioFormat
     }
 
-    private fun loadTeamTournStats() {
-        val stats = dbHelper.getTeamTournStats(teamID)
+    private fun loadTeamTournStats(filterTournIDs: List<String>? = null) {
+        val stats = if(filterTournIDs == null) {
+            dbHelper.getTeamTournStats(teamID)
+        } else {
+            dbHelper.getTeamTournStats(teamID, filterTournIDs)
+        }
         findViewById<TextView>(R.id.tv_t_stats_tourn_total).text = stats[0].toString()
         findViewById<TextView>(R.id.tv_t_stats_tourn_won).text = stats[1].toString()
     }
@@ -180,6 +188,8 @@ class TeamStatsActivity: StatsActivity() {
             loadPlayersHitRatio(filterTournIDs)
             loadTeamAvgSlugs(filterTournIDs)
             loadPlayersAvgSlugs(filterTournIDs)
+            loadTeamMatchStats(filterTournIDs)
+            loadTeamTournStats(filterTournIDs)
 
             Log.d("Sven", "OK clicked")
             Handler().postDelayed( {

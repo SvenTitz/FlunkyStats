@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
+import com.example.flunkystats.database.DataBaseHelper
+import com.example.flunkystats.database.FirebaseDatabaseHelper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -26,6 +28,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var tvUser: TextView
     private lateinit var btnLogout: Button
     private lateinit var btnGoogleLogin: SignInButton
+    private lateinit var btnTest: Button
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
@@ -38,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
         tvUser = findViewById(R.id.tv_settings_user)
         btnLogout = findViewById(R.id.btn_settings_logout)
         btnGoogleLogin = findViewById(R.id.btn_settings_google_login)
+        btnTest = findViewById(R.id.btn_settings_test)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -61,7 +65,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         if(account == null) {
-
         } else {
             Log.d("Sven", "Signed in with $account")
             if(firebaseAuth.currentUser == null) {
@@ -84,6 +87,20 @@ class SettingsActivity : AppCompatActivity() {
         btnGoogleLogin.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, AppConfig.RC_SIGN_IN)
+        }
+
+        btnTest.setOnClickListener {
+            val dbHelper = DataBaseHelper(this)
+            val fbDBHelper = FirebaseDatabaseHelper(dbHelper)
+
+            fbDBHelper.testAuth{
+                val toast = if (it) {
+                    Toast.makeText(this, "You ARE authorized to edit the database", Toast.LENGTH_LONG)
+                } else {
+                    Toast.makeText(this, "You are NOT authorized to edit the database", Toast.LENGTH_LONG)
+                }
+                toast.show()
+            }
         }
 
     }
@@ -117,9 +134,9 @@ class SettingsActivity : AppCompatActivity() {
             account = completeTask.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account?.idToken!!)
         } catch (e: ApiException) {
-            Log.w("Sven", "Login failed")
+            Log.w("Sven", "Login  with code: " + e.statusCode)
+            throw(e)
         }
-
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -141,6 +158,8 @@ class SettingsActivity : AppCompatActivity() {
                 // ...
             }
     }
+
+
 
 
 }

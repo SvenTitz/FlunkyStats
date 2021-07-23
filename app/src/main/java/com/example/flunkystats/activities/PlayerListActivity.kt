@@ -31,10 +31,17 @@ class PlayerListActivity: ListActivity() {
         }
 
         //set on click listener for floating action button "add Player"
-        fabAddPlayer.setOnClickListener {
+        fab_add_player.setOnClickListener {
             //open the add player alert dialog
-            Toast.makeText(this, "disabled for now", Toast.LENGTH_LONG).show()
-            //openAddEntryDialog(getString(R.string.addPlayerDialogTitle), getString(R.string.addPlayerDialogHint))
+            fbDbHelper.testAuth {
+                val toast = if (it) {
+                    Toast.makeText(this, "You ARE authorized to edit the database", Toast.LENGTH_LONG)
+                } else {
+                    Toast.makeText(this, "You are NOT authorized to edit the database", Toast.LENGTH_LONG)
+                }
+                toast.show()
+            }
+
         }
     }
 

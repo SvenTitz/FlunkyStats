@@ -55,5 +55,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
 //    implementation 'com.facebook.android:facebook-android-sdk:4.x'
-    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 }
