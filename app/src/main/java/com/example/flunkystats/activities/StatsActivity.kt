@@ -1,11 +1,18 @@
 package com.example.flunkystats.activities
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -13,10 +20,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.adapter.FilterListAdapter
 import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
+import com.example.flunkystats.database.FirebaseDatabaseHelper
 import com.example.flunkystats.models.FilterListItemModel
+import com.example.flunkystats.models.ListEntryModel
+import com.example.flunkystats.models.PlayerModel
 import com.example.flunkystats.ui.main.SimpleDividerItemDecoration
 import com.example.flunkystats.util.DPconvertion
 import com.example.flunkystats.util.DPconvertion.toDP
@@ -25,8 +36,10 @@ import com.example.flunkystats.util.DPconvertion.toDP
 abstract class StatsActivity: AppCompatActivity() {
 
     lateinit var dbHelper: DataBaseHelper
+    lateinit var fbDbHelper: FirebaseDatabaseHelper
 
     protected lateinit var tournFilterData: ArrayList<FilterListItemModel>
+    protected lateinit var entryName: String
 
 
 
@@ -34,6 +47,7 @@ abstract class StatsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         dbHelper = DataBaseHelper(this)
+        fbDbHelper = FirebaseDatabaseHelper(dbHelper)
         tournFilterData = loadTournFilterData()
     }
 
@@ -113,10 +127,23 @@ abstract class StatsActivity: AppCompatActivity() {
             R.id.menu_stats_filter -> {
                 openFilterAlertDialog(item)
             }
+            R.id.menu_stats_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
+            R.id.menu_stats_delete -> {
+                openDeleteEntryDialog()
+            }
+            R.id.menu_stats_edit -> {
+                openEditEntryNameDialog()
+            }
         }
 
         return true
     }
+
+    protected abstract fun editEntry(name: String)
+
+    protected abstract fun deleteEntry()
 
     protected abstract fun openFilterAlertDialog(item: MenuItem)
 
@@ -134,5 +161,63 @@ abstract class StatsActivity: AppCompatActivity() {
         }
 
         return viewAdapter
+    }
+
+    private fun openDeleteEntryDialog() {
+        fbDbHelper.testAuth {
+            if (it) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
+                builder.setTitle("Eintrag Löschen")
+                builder.setMessage("Bist du sicher, dass du den Eintrag löschen willst?")
+                builder.setPositiveButton("Löschen") {dialog, _ ->
+                    deleteEntry()
+                    Handler().postDelayed( {
+                        dialog.cancel()
+                    }, 150)
+                }
+                builder.setNegativeButton("Abbrechen") { dialog, _ ->
+                    Handler().postDelayed( {
+                        dialog.cancel()
+                    }, 150)
+                }
+
+                builder.create().show()
+            } else {
+                val toast =  Toast.makeText(this, "You are NOT authorized to edit the database", Toast.LENGTH_LONG)
+                toast.show()
+            }
+        }
+    }
+
+    private fun openEditEntryNameDialog() {
+        fbDbHelper.testAuth {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.DialogStyle)
+            builder.setTitle("Name Bearbeiten:")
+
+            val view: View = ConstraintLayout.inflate(this, R.layout.inflatable_dialog_add_p, null)
+
+            builder.setView(view)
+
+            val dialog = builder.create()
+
+            val etName: EditText = view.findViewById<EditText>(R.id.et_add_dialog_p)
+
+            etName.setText(entryName)
+
+            view.findViewById<Button>(R.id.btn_add_dialog_cacel).setOnClickListener {
+                Handler().postDelayed( {
+                    dialog.cancel()
+                }, 150)
+            }
+
+            view.findViewById<Button>(R.id.btn_add_dialog_ok).setOnClickListener {
+                editEntry(etName.text.toString())
+                Handler().postDelayed( {
+                    dialog.cancel()
+                }, 150)
+            }
+
+            dialog.show()
+        }
     }
 }

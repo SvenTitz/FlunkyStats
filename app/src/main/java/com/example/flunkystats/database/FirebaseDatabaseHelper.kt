@@ -2,12 +2,11 @@ package com.example.flunkystats.database
 
 import android.util.Log
 import com.example.flunkystats.models.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlin.reflect.KFunction0
+import com.example.flunkystats.AppConfig.Companion.TAG
+import com.google.firebase.database.*
 
 class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
@@ -47,7 +46,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     private val tournsRef = database.getReference(TOURNAMENTS)
     private val playerTeamPairsRef = database.getReference(PLAYER_TEAM_PAIRS)
     private val matchPlayerPairsRef = database.getReference(MATCH_PLAYER_PAIRS)
-    private val matchTeamRef = database.getReference(MATCH_TEAM_PAIRS)
+    private val matchTeamPairsRef = database.getReference(MATCH_TEAM_PAIRS)
     private val timestampsRef = database.getReference(TIMESTAMPS)
 
 
@@ -57,7 +56,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     fun updateDatabase(doneUpdating: (Boolean) -> Unit) {
 
         fun update() {
-            Log.d("Sven", "update called with currentlyUpdating at:${currentlyUpdating}")
+            Log.d(TAG, "update called with currentlyUpdating at:${currentlyUpdating}")
             currentlyUpdating--
             if (currentlyUpdating <= 0) {
                 doneUpdating(true)
@@ -66,7 +65,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
         checkUpToDate { upToDate ->
             currentlyUpdating = upToDate.count { !it } +1 //+1 for timestamps or call allDone right away
-            Log.d("Sven", "currentlyUpdating set to ${currentlyUpdating}")
+            Log.d(TAG, "currentlyUpdating set to ${currentlyUpdating}")
             if (!upToDate[0]) reloadPlayers(::update)
             if (!upToDate[1]) reloadTeams(::update)
             if (!upToDate[2]) reloadMatches(::update)
@@ -75,10 +74,10 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             if (!upToDate[5]) reloadMatchPlayerPairs(::update)
             if (!upToDate[6]) reloadMatchTeamPairs(::update)
             if (upToDate.any{!it}) {
-                Log.d("Sven", "any false")
+                Log.d(TAG, "any false")
                 reloadTimestamps(::update)
             } else {
-                Log.d("Sven", "no false")
+                Log.d(TAG, "no false")
                 update()
             }
         }
@@ -99,7 +98,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -119,7 +118,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -139,7 +138,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -163,7 +162,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -183,7 +182,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -209,7 +208,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -217,7 +216,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     private fun reloadMatchTeamPairs(callbackFun: KFunction0<Unit>) {
         dbHelper.clearTable(DataBaseHelper.TABLE_MATCH_TEAM_PAIR)
 
-        matchTeamRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        matchTeamPairsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, *>>
@@ -232,7 +231,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 callbackFun()
             }
             override fun onCancelled (error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -259,7 +258,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -267,7 +266,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
     private fun checkUpToDate(callbackFun: (res: BooleanArray) -> Unit) {
 
-        Log.d("Sven", "Checking if Database is UpToDate")
+        Log.d(TAG, "Checking if Database is UpToDate")
         val res = BooleanArray(7){false}
 
         val dbTimestamps = dbHelper.getTimestamps()
@@ -298,7 +297,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.w("Sven", "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
     }
@@ -307,8 +306,116 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         val db = database.getReference(AUTH_TEST)
         val task = db.setValue("test")
         task.addOnCompleteListener {
-            Log.d("Sven", "auth test complete with result: ${task.isSuccessful}")
+            Log.d(TAG, "auth test complete with result: ${task.isSuccessful}")
             callbackFun(task.isSuccessful)
         }
     }
+
+    fun addPlayer(playerName: String, callbackFun: (String) -> Unit) {
+        val values = hashMapOf<String, String>(NAME to playerName)
+        addEntry(values, PLAYERS, callbackFun)
+    }
+
+    fun addTeam(teamName: String, callbackFun: (String) -> Unit) {
+        val values = hashMapOf<String, String>(NAME to teamName)
+        addEntry(values, TEAMS, callbackFun)
+    }
+
+    fun addPlayerTeamPair(teamID: String, playerID: String, callbackFun: (String) -> Unit) {
+        val values = hashMapOf<String, String>(PLAYER_ID to playerID, TEAM_ID to teamID)
+        addEntry(values, PLAYER_TEAM_PAIRS, callbackFun)
+    }
+
+    fun addEntry(entryValues: HashMap<String,String>, table: String, callbackFun: (String) -> Unit) {
+        val ref = database.getReference(table)
+        val entryID = ref.push().key
+        if (entryID == null) {
+            callbackFun("")
+            return
+        }
+        Log.d(TAG, entryID)
+        val task = ref.child(entryID).setValue(entryValues)
+        task.addOnCompleteListener {
+            Log.d(TAG, "add entry complete with result: ${task.isSuccessful}")
+            updateTimestamp(table)
+            if(task.isSuccessful) {
+                callbackFun(entryID)
+            }
+            else {
+                callbackFun("")
+            }
+        }
+    }
+
+    private fun updateTimestamp(table: String) {
+        timestampsRef.child(table).setValue(System.currentTimeMillis()/1000)
+    }
+
+    private fun deleteNestedEntry(childName: String, childValue:String , tableRef: DatabaseReference) {
+        val q: Query = tableRef.orderByChild(childName).equalTo(childValue)
+        q.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach { s ->
+                    s.ref.removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "deleteNestedEntry onCancelled");
+            }
+        })
+    }
+
+    fun deletePlayer(playerID: String) {
+        playersRef.child(playerID).removeValue()
+        val whereClause = hashMapOf<String, String>(PLAYER_ID to playerID)
+        deleteNestedEntry(PLAYER_ID, playerID, matchPlayerPairsRef)
+        deleteNestedEntry(PLAYER_ID, playerID, playerTeamPairsRef)
+        updateTimestamp(PLAYERS)
+    }
+
+    fun deleteTeam(teamID: String) {
+        teamsRef.child(teamID).removeValue()
+        val whereClause = hashMapOf<String, String>(TEAM_ID to teamID)
+        deleteNestedEntry(TEAM_ID, teamID, matchTeamPairsRef)
+        deleteNestedEntry(TEAM_ID, teamID, playerTeamPairsRef)
+        updateTimestamp(TEAMS)
+    }
+
+    fun deletePlayerTeamPair(teamID: String, playerID: String) {
+        val q: Query = playerTeamPairsRef.orderByChild(TEAM_ID).equalTo(teamID)
+        q.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach { s ->
+                    val value = s.value as HashMap<*, *>
+                    if(value[PLAYER_ID] == playerID) {
+                        s.ref.removeValue()
+                    }
+                }
+                updateTimestamp(PLAYER_TEAM_PAIRS)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "deletePlayerTeamPair onCancelled");
+            }
+        })
+
+    }
+
+    fun updatePlayerName(playerID: String, name: String) {
+        playersRef.child(playerID).child("name").setValue(name)
+        updateTimestamp(PLAYERS)
+    }
+
+    fun updateTeamName(teamID: String, name: String) {
+        teamsRef.child(teamID).child("name").setValue(name)
+        updateTimestamp(TEAMS)
+    }
+
+
+
+
 }
+
+
+

@@ -11,6 +11,13 @@ class AppConfig {
 
         const val FLOAT_FORMAT_1 = "%.1f"
         const val FLOAT_FORMAT_0 = "%.0f"
+
+        val Any.TAG: String
+            get() {
+                val tag = javaClass.simpleName +": Sven"
+                return tag;
+                //return if (tag.length <= 23) tag else tag.substring(0, 23)
+            }
     }
 
 }

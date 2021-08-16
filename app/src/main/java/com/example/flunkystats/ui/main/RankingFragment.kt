@@ -2,6 +2,7 @@ package com.example.flunkystats.ui.main
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.LayerDrawable
 import android.os.AsyncTask
 import android.os.Bundle
@@ -21,8 +22,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.AppConfig
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.ui.util.LoadsData
 import com.example.flunkystats.R
+import com.example.flunkystats.activities.SettingsActivity
 import com.example.flunkystats.adapter.FilterListAdapter
 import com.example.flunkystats.adapter.TableListAdapter
 import com.example.flunkystats.database.DataBaseHelper
@@ -261,10 +264,13 @@ class RankingFragment : Fragment(), LoadsData {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("Sven", "called")
+        Log.d(TAG, "called")
         when (item.itemId) {
             R.id.menu_rankings_filter -> {
                 openFilterAlertDialog(item)
+            }
+            R.id.menu_rankings_settings -> {
+                startActivity(Intent(activity as Context, SettingsActivity::class.java))
             }
         }
 
@@ -322,7 +328,7 @@ class RankingFragment : Fragment(), LoadsData {
 
             updateTableFilter(filterTournIDs)
 
-            Log.d("Sven", "OK clicked")
+            Log.d(TAG, "OK clicked")
             Handler().postDelayed( {
                 dialog.cancel()
             }, 150)

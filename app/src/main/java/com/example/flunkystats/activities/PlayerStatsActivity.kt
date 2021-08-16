@@ -8,12 +8,15 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.models.FilterListItemModel
+import com.example.flunkystats.AppConfig.Companion.TAG
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,7 +43,6 @@ class PlayerStatsActivity: StatsActivity() {
 
     }
 
-
     private fun loadStats() {
         loadPlayerName()
         loadPlayerTeams()
@@ -52,6 +54,7 @@ class PlayerStatsActivity: StatsActivity() {
 
     private fun loadPlayerName() {
         val name = dbHelper.getPlayerName(playerID)
+        entryName = name
         findViewById<TextView>(R.id.tv_p_stats_name).text = name
     }
 
@@ -126,14 +129,14 @@ class PlayerStatsActivity: StatsActivity() {
         val tournViewAdapter = buildFilterRecView(R.id.rv_Tourns, tournFilterData, view)
         val teamViewAdapter = buildFilterRecView(R.id.rv_Teams, teamFilterData, view)
 
-        Log.d("Sven", "teams size: ${teamViewAdapter.ctvItemList.size}; tourn size: ${tournViewAdapter.ctvItemList.size}")
+        Log.d(TAG, "teams size: ${teamViewAdapter.ctvItemList.size}; tourn size: ${tournViewAdapter.ctvItemList.size}")
         teamViewAdapter.ctvItemList.forEach {
-            Log.d("Sven", "team")
-            Log.d("Sven", "${it.text}")
+            Log.d(TAG, "team")
+            Log.d(TAG, "${it.text}")
         }
         tournViewAdapter.ctvItemList.forEach {
-            Log.d("Sven", "tourn")
-            Log.d("Sven", "${it.text}")
+            Log.d(TAG, "tourn")
+            Log.d(TAG, "${it.text}")
         }
 
         builder.setView(view)
@@ -199,4 +202,18 @@ class PlayerStatsActivity: StatsActivity() {
 
         return resList
     }
+
+    override fun editEntry(name: String) {
+        fbDbHelper.updatePlayerName(playerID, name)
+        dbHelper.updatePlayerName(playerID, name)
+        loadPlayerName()
+    }
+
+    override fun deleteEntry() {
+        fbDbHelper.deletePlayer(playerID)
+        dbHelper.deletePlayer(playerID)
+        this.finish()
+    }
+
 }
+

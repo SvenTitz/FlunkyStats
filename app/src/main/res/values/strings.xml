@@ -61,5 +61,10 @@
     <string name="sieger">Sieger</string>
     <string name="spiel">"Spiel: "</string>
     <string name="title_activity_settings">Einstellungen</string>
+    <string name="bearbeiten">Bearbeiten</string>
+    <string name="loeschen">Löschen</string>
+    <string name="add_player">Spieler Hinzufügen</string>
+    <string name="_0p">0%</string>
+    <string name="name_ndern">Name ändern</string>
 
 </resources>

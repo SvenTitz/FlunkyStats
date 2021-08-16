@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.flunkystats.AppConfig
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.database.FirebaseDatabaseHelper
@@ -57,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
 
 
         if (currentUser == null) {
-            Log.d("Sven", "User is null")
+            Log.d(TAG, "User is null")
         } else {
             btnLogout.isEnabled = true
             tvUser.text = currentUser.email
@@ -66,10 +67,10 @@ class SettingsActivity : AppCompatActivity() {
 
         if(account == null) {
         } else {
-            Log.d("Sven", "Signed in with $account")
+            Log.d(TAG, "Signed in with $account")
             if(firebaseAuth.currentUser == null) {
-                Log.d("Sven", "Signed in to firebase with account ${account?.id}")
-                Log.d("Sven", account?.idToken!!)
+                Log.d(TAG, "Signed in to firebase with account ${account?.id}")
+                Log.d(TAG, account?.idToken!!)
                 firebaseAuthWithGoogle(account?.idToken!!)
             }
         }
@@ -110,8 +111,8 @@ class SettingsActivity : AppCompatActivity() {
         tvUser.text = "Nicht Angemeldet"
         tvUser.setTextColor(ContextCompat.getColor(this, R.color.text_mid))
 
-        Log.d("Sven", "Google: $account")
-        Log.d("Sven", "Firebase: ${firebaseAuth.currentUser}")
+        Log.d(TAG, "Google: $account")
+        Log.d(TAG, "Firebase: ${firebaseAuth.currentUser}")
     }
 
     private fun updateUIafterLogin(user: FirebaseUser?) {
@@ -134,7 +135,7 @@ class SettingsActivity : AppCompatActivity() {
             account = completeTask.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account?.idToken!!)
         } catch (e: ApiException) {
-            Log.w("Sven", "Login  with code: " + e.statusCode)
+            Log.w(TAG, "Login  with code: " + e.statusCode)
             throw(e)
         }
     }
@@ -145,12 +146,12 @@ class SettingsActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("Sven", "signInWithCredential:success")
+                    Log.d(TAG, "signInWithCredential:success")
                     val user = firebaseAuth.currentUser
                     updateUIafterLogin(user)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("Sven", "signInWithCredential:failure", task.exception)
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                     val toast = Toast.makeText(this, "Authentication Failed.", Toast.LENGTH_LONG)
                     toast.show()
                 }

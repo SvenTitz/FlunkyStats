@@ -20,12 +20,11 @@ class EntryListAdapter(
     private val intentClass: Class<*>
 ) : RecyclerView.Adapter<EntryListAdapter.ListViewHolder>(), Filterable {
 
-    private val datasetFull = dataset.toList()
+    private val datasetFull: ArrayList<ListEntryModel> = ArrayList(dataset)
 
     class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tv_card_name)
         val tvInfo: TextView = itemView.findViewById(R.id.tv_card_info)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -84,6 +83,20 @@ class EntryListAdapter(
             dataset.addAll(p1?.values as Collection<ListEntryModel>)
             notifyDataSetChanged()
         }
+    }
+
+    fun addEntry(entry: ListEntryModel) {
+        dataset.add(entry)
+        dataset.sortBy { it.entryName.toLowerCase() }
+        notifyDataSetChanged()
+    }
+
+    fun updateDataset(newDataset: ArrayList<ListEntryModel>) {
+        dataset.clear()
+        dataset.addAll(newDataset)
+        datasetFull.clear()
+        datasetFull.addAll(dataset)
+        notifyDataSetChanged()
     }
 
 }

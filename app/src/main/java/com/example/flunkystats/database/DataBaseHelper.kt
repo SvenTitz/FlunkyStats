@@ -5,8 +5,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.models.*
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", null, 1) {
 
@@ -628,7 +631,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         return listOf(tournTotal, tournWon)
     }
 
-    fun getPlayerListData(): ArrayList<ListEntryModel>? {
+    fun getPlayerListData(): ArrayList<ListEntryModel> {
         val resList: ArrayList<ListEntryModel> = arrayListOf()
         val players = getIDandName(TABLE_PLAYERS)
         players.forEach { (id, name) ->
@@ -637,24 +640,26 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
             val entry = ListEntryModel(name, id, teams)
             resList.add(entry)
         }
-        resList.sortBy { it.entryName }
+        resList.sortBy { it.entryName.toLowerCase(Locale.ROOT) }
         return resList
     }
 
-    fun getTeamListData(): ArrayList<ListEntryModel>? {
+    fun getTeamListData(): ArrayList<ListEntryModel> {
         val resList: ArrayList<ListEntryModel> = arrayListOf()
         val teams = getIDandName(TABLE_TEAMS)
         teams.forEach { team ->
-            val players  = arrayListOf<String>()
-            getTeamsPlayers(team.entryID).forEach { players.add(it.playerName ?: "ERROR") }
+            val players = arrayListOf<String>()
+            getTeamsPlayers(team.entryID).forEach {
+                players.add(it.playerName ?: "ERROR")
+            }
             val entry = ListEntryModel(team.entryName, team.entryID, players)
             resList.add(entry)
         }
-        resList.sortBy { it.entryName }
+        resList.sortBy { it.entryName.toLowerCase(Locale.ROOT) }
         return resList
     }
 
-    fun getMatchListData(): ArrayList<ListMatchModel>? {
+    fun getMatchListData(): ArrayList<ListMatchModel> {
         val db = this.writableDatabase
         val query = """SELECT $COLUMN_MATCH_ID, $COLUMN_MATCH_NUMB FROM $TABLE_MATCHES"""
         val cursor = db.rawQuery(query, null)
@@ -784,7 +789,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
                 "AND $TABLE_PLAYER_TEAM_PAIR.$COLUMN_PLAYER_ID = $TABLE_PLAYERS.$COLUMN_PLAYER_ID"
         val cursor = db.rawQuery(query, null)
 
-        if (!cursor.moveToFirst() || cursor.count != 2) {
+        if (!cursor.moveToFirst() || cursor.count <1) {
             cursor.close()
             return resList
         }
@@ -1046,4 +1051,44 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         cursor.close()
         return res
     }
+
+    fun deletePlayer(playerID: String) {
+        val db = this.writableDatabase
+        val whereClause = "$COLUMN_PLAYER_ID = '$playerID'"
+        db.delete(TABLE_PLAYERS, whereClause, null)
+        db.delete(TABLE_MATCH_PLAYER_PAIR, whereClause, null)
+        db.delete(TABLE_PLAYER_TEAM_PAIR, whereClause, null)
+    }
+
+    fun deleteTeam(teamID: String) {
+        val db = this.writableDatabase
+        val whereClause = "$COLUMN_TEAM_ID = '$teamID'"
+        db.delete(TABLE_TEAMS, whereClause, null)
+        db.delete(TABLE_MATCH_TEAM_PAIR, whereClause, null)
+        db.delete(TABLE_PLAYER_TEAM_PAIR, whereClause, null)
+    }
+
+    fun deletePlayerTeamPair(teamID: String, playerID: String) {
+        val db = this.writableDatabase
+        val whereClause = "$COLUMN_PLAYER_ID = '$playerID' AND $COLUMN_TEAM_ID = '$teamID'"
+        db.delete(TABLE_PLAYER_TEAM_PAIR, whereClause, null)
+    }
+
+    fun updatePlayerName(playerID: String, name: String) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(COLUMN_NAME, name)
+        db.update(TABLE_PLAYERS, cv, "$COLUMN_PLAYER_ID = '$playerID'", null)
+    }
+
+    fun updateTeamName(teamID: Any, name: String) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(COLUMN_NAME, name)
+        db.update(TABLE_TEAMS, cv, "$COLUMN_TEAM_ID = '$teamID'", null)
+    }
+
+
+
+
 }

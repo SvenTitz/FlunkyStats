@@ -17,6 +17,7 @@ import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.database.*
 import com.example.flunkystats.ui.util.LoadsData
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity(), LoadsData {
 
 
         firebaseAuth = FirebaseAuth.getInstance()
-        Log.d("Sven", "firebase auth current use: ${firebaseAuth.currentUser?.uid}")
+        Log.d(TAG, "firebase auth current use: ${firebaseAuth.currentUser?.uid}")
 
         val dbHelper = DataBaseHelper(this)
         val fbDBHelper = FirebaseDatabaseHelper(dbHelper)
@@ -58,15 +59,14 @@ class MainActivity : AppCompatActivity(), LoadsData {
         fbDBHelper.updateDatabase {
             if (it) {
                 //database is up to date
-                Log.d("Sven", "Database IS up-to-date")
+                Log.d(TAG, "Database IS up-to-date")
                 val toast = Toast.makeText(this, "Database is up to date", Toast.LENGTH_SHORT)
                 toast.show()
                 pgsBar.visibility = View.GONE
                 showButtons()
             } else {
                 //database is not up to date
-                //TODO: reload only the part that is not up to date
-                Log.d("Sven", "Database is NOT up-to-date")
+                Log.d(TAG, "Database is NOT up-to-date")
             }
 
         }
