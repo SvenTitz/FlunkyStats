@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "959035597067",
-    "firebase_url": "https://flunky-stats.firebaseio.com",
-    "project_id": "flunky-stats",
-    "storage_bucket": "flunky-stats.appspot.com"
+    "project_number": "939549697336",
+    "firebase_url": "https://flunky-stats-eu-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "flunky-stats-eu",
+    "storage_bucket": "flunky-stats-eu.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:959035597067:android:1b3b4a05627ba5c040420e",
+        "mobilesdk_app_id": "1:939549697336:android:621efd1099e74ed73e4dcd",
         "android_client_info": {
           "package_name": "com.example.flunkystats"
         }
       },
       "oauth_client": [
         {
-          "client_id": "959035597067-i1lum8pq3qk6641ak04if73nffg0pv36.apps.googleusercontent.com",
+          "client_id": "939549697336-44qf3uelgpth4b0680lq7ko214qicgvc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flunkystats",
+            "certificate_hash": "c29b12bf714b4fa249e2797a67fba298041ae7bc"
+          }
+        },
+        {
+          "client_id": "939549697336-kk6aoknf7sbpbdrp87dg3874elad9va6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCl3mbHlgJXaq7W1SuoHQ1NDz3pL8U-hFc"
+          "current_key": "AIzaSyDo4rIESsZKcDLNsV_ktcP4ld5JA5f-ncc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "959035597067-i1lum8pq3qk6641ak04if73nffg0pv36.apps.googleusercontent.com",
+              "client_id": "939549697336-kk6aoknf7sbpbdrp87dg3874elad9va6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -62,21 +62,21 @@ class RankingFragment : Fragment(), LoadsData {
 
     companion object {
 
-        const val STAT_TYPE_HITS = 0
-        const val STAT_TYPE_SLUGS = 1
-        const val STAT_TYPE_MATCHES = 2
-        const val STAT_TYPE_TOURN = 3
-        const val STAT_TYPE_ERROR = -1
+        const val STAT_TYPE_HITS = 0x0
+        const val STAT_TYPE_SLUGS = 0x1
+        const val STAT_TYPE_MATCHES = 0x2
+        const val STAT_TYPE_TOURN = 0x3
+        const val STAT_TYPE_ERROR = -0x1
 
-        const val ENTRY_PLAYERS = 10
-        const val ENTRY_TEAMS = 20
+        const val ENTRY_PLAYERS = 0x10
+        const val ENTRY_TEAMS = 0x20
 
-        const val SORT_BY_STAT_1_DESC = 109
-        const val SORT_BY_STAT_1_ASC = 119
-        const val SORT_BY_STAT_2_DESC = 209
-        const val SORT_BY_STAT_2_ASC = 219
-        const val SORT_BY_STAT_3_DESC = 309
-        const val SORT_BY_STAT_3_ASC = 319
+        const val SORT_BY_STAT_1_DESC = 0x1D
+        const val SORT_BY_STAT_1_ASC = 0x1A
+        const val SORT_BY_STAT_2_DESC = 0x2D
+        const val SORT_BY_STAT_2_ASC = 0x2A
+        const val SORT_BY_STAT_3_DESC = 0x3D
+        const val SORT_BY_STAT_3_ASC = 0x3A
 
         @JvmStatic
         fun newInstance(statType: Int) =
@@ -98,7 +98,7 @@ class RankingFragment : Fragment(), LoadsData {
         tournFilterData = loadTournFilterData()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         val root = if(statType == STAT_TYPE_SLUGS) {
             inflater.inflate(R.layout.fragment_ranking_1, container, false)

@@ -12,7 +12,7 @@ import com.example.flunkystats.R
 
 class SimpleDividerItemDecoration(context: Context, private val paddingLeft: Float, private val paddingRight: Float) : ItemDecoration() {
 
-    private val mDivider: Drawable
+    private val mDivider: Drawable = ContextCompat.getDrawable(context, R.drawable.line_divider)!!
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = paddingLeft.toInt()
@@ -29,7 +29,4 @@ class SimpleDividerItemDecoration(context: Context, private val paddingLeft: Flo
     }
 
 
-    init {
-        mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)!!
-    }
 }

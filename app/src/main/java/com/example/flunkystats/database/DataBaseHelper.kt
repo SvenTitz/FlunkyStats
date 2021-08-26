@@ -690,6 +690,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         } while (cursor.moveToNext())
 
         cursor.close()
+        resList.sortWith(compareBy({ it.matchInfo[0].toLowerCase(Locale.ROOT) }, { it.matchNumb }))
         return resList
     }
 
@@ -720,6 +721,32 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
                 team2Name = teams[1].teamName ?: "ERROR",
                 winnerID = getWinnerTeamID(matchID),
                 matchInfo = listOf(tournName)
+            )
+            resList.add(entry)
+        } while (cursor.moveToNext())
+
+        cursor.close()
+        return resList
+    }
+
+    fun getTournListData(): List<TournamentModel> {
+        val db = this.writableDatabase
+        val query = "SELECT * FROM $TABLE_TOURNAMENTS"
+        val cursor = db.rawQuery(query, null)
+
+        if(!cursor.moveToFirst()) {
+            cursor.close()
+            return arrayListOf()
+        }
+
+        val resList: ArrayList<TournamentModel> = arrayListOf<TournamentModel>()
+        do {
+            val entry = TournamentModel(
+                tournID = cursor.getString(0),
+                winnerTeamID = cursor.getString(2),
+                name = cursor.getString(1),
+                numbTeams = cursor.getString(3).toInt() ,
+                tournType = cursor.getString(4)
             )
             resList.add(entry)
         } while (cursor.moveToNext())
@@ -1038,14 +1065,15 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         return res
     }
 
-    fun getWinnerTeamID(matchID: String): String {
+    fun getWinnerTeamID(matchID: String): String? {
         val db = this.writableDatabase
         val query = """SELECT $COLUMN_TEAM_ID FROM $TABLE_MATCH_TEAM_PAIR WHERE $COLUMN_MATCH_ID = '$matchID' AND $COLUMN_WON = '1'"""
         val cursor = db.rawQuery(query, null)
 
         if (!cursor.moveToFirst()) {
             cursor.close()
-            throw Exception("Could not find Winner of Match with ID $matchID")
+            return null
+            //throw Exception("Could not find Winner of Match with ID $matchID")
         }
         val res = cursor.getString(0)
         cursor.close()
@@ -1088,7 +1116,19 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         db.update(TABLE_TEAMS, cv, "$COLUMN_TEAM_ID = '$teamID'", null)
     }
 
+    fun matchExists(tournID: String, matchNumb: Int): Boolean {
+        val db = this.writableDatabase
+        val query = "SELECT * FROM $TABLE_MATCHES WHERE $COLUMN_TOURNAMENT_ID = '$tournID' AND $COLUMN_MATCH_NUMB = '$matchNumb'"
+        val cursor = db.rawQuery(query, null)
 
+        return if(cursor.moveToFirst()) {
+            cursor.close()
+            true
+        } else {
+            cursor.close()
+            false
+        }
+    }
 
 
 }

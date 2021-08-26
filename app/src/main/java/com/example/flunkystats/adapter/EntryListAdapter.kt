@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.models.ListEntryModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EntryListAdapter(
     private val dataset: ArrayList<ListEntryModel>,
@@ -87,7 +89,7 @@ class EntryListAdapter(
 
     fun addEntry(entry: ListEntryModel) {
         dataset.add(entry)
-        dataset.sortBy { it.entryName.toLowerCase() }
+        dataset.sortBy { it.entryName.toLowerCase(Locale.ROOT) }
         notifyDataSetChanged()
     }
 

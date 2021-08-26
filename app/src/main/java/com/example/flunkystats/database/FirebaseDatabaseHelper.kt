@@ -152,7 +152,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 val values = dataSnapshot.value as HashMap<String, HashMap<String, *>>
                 //loop through all entries and add them to the database
                 values.forEach { (k, v) ->
-                    val winnerID = v[WINNER_ID] as String
+                    val winnerID = v[WINNER_ID] as? String
                     val name = v[NAME] as String
                     val numbTeams = (v[NUMBER_OF_TEAMS] as Long).toInt()
                     val tournType = v[TOURNAMENT_TYPE] as String
@@ -275,7 +275,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             return
         }
 
-            timestampsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        timestampsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 @Suppress("UNCHECKED_CAST")
                 val values = dataSnapshot.value as HashMap<String, Long>
@@ -312,25 +312,57 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     }
 
     fun addPlayer(playerName: String, callbackFun: (String) -> Unit) {
-        val values = hashMapOf<String, String>(NAME to playerName)
+        val values = hashMapOf<String, Any>(NAME to playerName)
         addEntry(values, PLAYERS, callbackFun)
     }
 
     fun addTeam(teamName: String, callbackFun: (String) -> Unit) {
-        val values = hashMapOf<String, String>(NAME to teamName)
+        val values = hashMapOf<String, Any>(NAME to teamName)
         addEntry(values, TEAMS, callbackFun)
     }
 
     fun addPlayerTeamPair(teamID: String, playerID: String, callbackFun: (String) -> Unit) {
-        val values = hashMapOf<String, String>(PLAYER_ID to playerID, TEAM_ID to teamID)
+        val values = hashMapOf<String, Any>(
+            PLAYER_ID to playerID,
+            TEAM_ID to teamID
+        )
         addEntry(values, PLAYER_TEAM_PAIRS, callbackFun)
     }
 
-    fun addEntry(entryValues: HashMap<String,String>, table: String, callbackFun: (String) -> Unit) {
+    fun addMatch(tournID: String, matchNumb: Int, callbackFun: (String) -> Unit) {
+        val values = hashMapOf<String, Any>(
+            MATCH_NUMB to matchNumb.toString(),
+            TOURNAMENT_ID to tournID
+        )
+        addEntry(values, MATCHES, callbackFun)
+    }
+
+    fun addMatchTeamPair(matchID: String, teamID: String, won: Boolean, callbackFun: ((String) -> Unit)?) {
+        val values = hashMapOf<String, Any>(
+            MATCH_ID to matchID,
+            TEAM_ID to teamID,
+            WON to won
+        )
+        addEntry(values, MATCH_TEAM_PAIRS, callbackFun)
+    }
+
+    fun addMatchPlayerPair(matchID: String, playerID: String, shots: Int, hits: Int, slugs: Int, won: Boolean, callbackFun: ((String) -> Unit)?) {
+        val values = hashMapOf<String, Any>(
+            MATCH_ID to matchID,
+            PLAYER_ID to playerID,
+            SHOTS to shots,
+            HITS to hits,
+            SLUGS to slugs,
+            WON to won
+        )
+        addEntry(values, MATCH_PLAYER_PAIRS, callbackFun)
+    }
+
+    fun addEntry(entryValues: HashMap<String,Any>, table: String, callbackFun: ((String) -> Unit)?) {
         val ref = database.getReference(table)
         val entryID = ref.push().key
         if (entryID == null) {
-            callbackFun("")
+            callbackFun?.invoke("")
             return
         }
         Log.d(TAG, entryID)
@@ -339,10 +371,10 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             Log.d(TAG, "add entry complete with result: ${task.isSuccessful}")
             updateTimestamp(table)
             if(task.isSuccessful) {
-                callbackFun(entryID)
+                callbackFun?.invoke(entryID)
             }
             else {
-                callbackFun("")
+                callbackFun?.invoke("")
             }
         }
     }
@@ -361,14 +393,13 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "deleteNestedEntry onCancelled");
+                Log.e(TAG, "deleteNestedEntry onCancelled")
             }
         })
     }
 
     fun deletePlayer(playerID: String) {
         playersRef.child(playerID).removeValue()
-        val whereClause = hashMapOf<String, String>(PLAYER_ID to playerID)
         deleteNestedEntry(PLAYER_ID, playerID, matchPlayerPairsRef)
         deleteNestedEntry(PLAYER_ID, playerID, playerTeamPairsRef)
         updateTimestamp(PLAYERS)
@@ -376,7 +407,6 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
     fun deleteTeam(teamID: String) {
         teamsRef.child(teamID).removeValue()
-        val whereClause = hashMapOf<String, String>(TEAM_ID to teamID)
         deleteNestedEntry(TEAM_ID, teamID, matchTeamPairsRef)
         deleteNestedEntry(TEAM_ID, teamID, playerTeamPairsRef)
         updateTimestamp(TEAMS)
@@ -396,7 +426,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "deletePlayerTeamPair onCancelled");
+                Log.e(TAG, "deletePlayerTeamPair onCancelled")
             }
         })
 
@@ -410,6 +440,26 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     fun updateTeamName(teamID: String, name: String) {
         teamsRef.child(teamID).child("name").setValue(name)
         updateTimestamp(TEAMS)
+    }
+
+    fun matchExists(tournID: String, matchNumb: Int, callbackFun: (Boolean) -> Unit){
+        val q: Query = matchesRef.orderByChild(MATCH_NUMB).equalTo(matchNumb.toString())
+
+        q.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach { s ->
+                    val value = s.value as HashMap<*, *>
+                    if(value[TOURNAMENT_ID] == tournID) {
+                        callbackFun(true)
+                    }
+                }
+                callbackFun(false)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "matchExists onCancelled")
+            }
+        })
     }
 
 

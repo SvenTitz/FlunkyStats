@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.activities.MatchStatsActivity
+import com.example.flunkystats.models.ListEntryModel
 import com.example.flunkystats.models.ListMatchModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MatchListAdapter(
     private val dataset: ArrayList<ListMatchModel>,
     private val context: Context
 ) : RecyclerView.Adapter<MatchListAdapter.ListViewHolder>(), Filterable {
 
-    private val datasetFull = dataset.toList()
+    private val datasetFull: ArrayList<ListMatchModel> = ArrayList(dataset)
     private val clTeamsList = arrayListOf<ConstraintLayout>()
     private var flag_team_filtered = false
 
@@ -127,6 +130,20 @@ class MatchListAdapter(
 
             notifyDataSetChanged()
         }
+    }
+
+    fun addEntry(entry: ListMatchModel) {
+        dataset.add(entry)
+        dataset.sortWith(compareBy({ it.matchInfo[0].toLowerCase(Locale.ROOT) }, { it.matchNumb }))
+        notifyDataSetChanged()
+    }
+
+    fun updateDataset(newDataset: ArrayList<ListMatchModel>) {
+        dataset.clear()
+        dataset.addAll(newDataset)
+        datasetFull.clear()
+        datasetFull.addAll(dataset)
+        notifyDataSetChanged()
     }
 
 }

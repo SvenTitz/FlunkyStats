@@ -54,12 +54,11 @@ class PlayerListActivity: ListActivity() {
                 }
 
             }
-
         }
     }
 
     override fun updateDataset() {
-        viewAdapter.updateDataset(dbHelper.getPlayerListData() ?: arrayListOf())
+        viewAdapter.updateDataset(dbHelper.getPlayerListData())
     }
 
 

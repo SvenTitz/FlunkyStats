@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity(), LoadsData {
             if (it) {
                 //database is up to date
                 Log.d(TAG, "Database IS up-to-date")
-                val toast = Toast.makeText(this, "Database is up to date", Toast.LENGTH_SHORT)
-                toast.show()
+                val toast2 = Toast.makeText(this, "Database is up to date", Toast.LENGTH_SHORT)
+                toast2.show()
                 pgsBar.visibility = View.GONE
                 showButtons()
             } else {
@@ -91,8 +91,9 @@ class MainActivity : AppCompatActivity(), LoadsData {
         }
 
         findViewById<Button>(R.id.btnTurnaments).setOnClickListener {
-            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT)
-            toast.show()
+            startActivity(Intent(this, TournTreeActivity::class.java))
+            //val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT)
+            //toast.show()
         }
 
     }

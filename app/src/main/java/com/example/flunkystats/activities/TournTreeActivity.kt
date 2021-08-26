@@ -6,9 +6,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -22,12 +19,9 @@ import com.example.flunkystats.R
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.models.ListMatchModel
 import com.example.flunkystats.ui.util.LoadsData
-import com.example.flunkystats.util.DPconvertion
 import com.example.flunkystats.util.DPconvertion.toDP
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.lang.ref.WeakReference
-import kotlin.math.max
-import kotlin.math.min
 
 
 class TournTreeActivity: AppCompatActivity(), LoadsData {
@@ -67,7 +61,7 @@ class TournTreeActivity: AppCompatActivity(), LoadsData {
         pgsBar = addProgressBar(findViewById<ConstraintLayout>(R.id.cl_tourn_root), this)
         pgsBar.visibility = View.VISIBLE
 
-        loadTournament("-MKosJyZqNFKkDyD2FI2")
+        loadTournament("-MfHpNBagbK1p0dxTwzh")
 
         paint.strokeWidth =  3F.toDP(this)
         paint.color = ContextCompat.getColor(this, R.color.grey)
@@ -148,10 +142,35 @@ class TournTreeActivity: AppCompatActivity(), LoadsData {
             addLine2(matchCardList[1], matchCardList[12])
             addLine2(matchCardList[13], matchCardList[22])
 
+            addLine(matchCardList[22], matchCardList[27])
+            addLine2(matchCardList[23], matchCardList[27])
+
             addLine(matchCardList[27], matchCardList[29])
             addLine2(matchCardList[28], matchCardList[29])
 
+            addLine(matchCardList[2], matchCardList[13])
+            addLine2(matchCardList[3], matchCardList[13])
 
+            addLine(matchCardList[4], matchCardList[14])
+            addLine2(matchCardList[5], matchCardList[14])
+
+            addLine(matchCardList[6], matchCardList[15])
+            addLine2(matchCardList[7], matchCardList[15])
+
+            addLine(matchCardList[14], matchCardList[23])
+            addLine2(matchCardList[15], matchCardList[23])
+
+            addLine(matchCardList[19], matchCardList[21])
+            addLine2(matchCardList[18], matchCardList[21])
+
+            addLine(matchCardList[17], matchCardList[20])
+            addLine2(matchCardList[16], matchCardList[20])
+
+            addLine(matchCardList[24], matchCardList[26])
+            addLine2(matchCardList[25], matchCardList[26])
+
+            addLine(matchCardList[8], matchCardList[19])
+            addLine2(matchCardList[9], matchCardList[18])
 
             pgsBar.visibility = View.GONE
         }
@@ -311,11 +330,9 @@ class TournTreeActivity: AppCompatActivity(), LoadsData {
 
             val dbHelper = DataBaseHelper(activity as Context)
 
-            var resList = dbHelper.getMatchListData(tournID[0]!!)
+            val resList = dbHelper.getMatchListData(tournID[0]!!)
 
-            val resListSorted = resList.sortedBy { it.matchNumb }
-
-            return resListSorted
+            return resList.sortedBy { it.matchNumb }
         }
 
         override fun onPostExecute(result: List<ListMatchModel>?) {

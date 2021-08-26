@@ -18,6 +18,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:cropToPadding="false"
         android:drawingCacheQuality="auto"
         android:duplicateParentState="false"
@@ -26,15 +27,14 @@
         android:scaleType="fitXY"
         android:scaleX="1"
         android:src="@android:drawable/ic_input_add"
-        android:tint="@color/backgroundDark"
+        android:tint="@color/backgroundLight"
         app:backgroundTint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="36dp"
-        app:useCompatPadding="false"
-        android:contentDescription="@string/todo" />
+        app:useCompatPadding="false" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_TeamList"
