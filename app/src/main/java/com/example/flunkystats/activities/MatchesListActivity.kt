@@ -22,6 +22,7 @@ import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.database.FirebaseDatabaseHelper
 import com.example.flunkystats.models.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.lang.Exception
 
 class MatchesListActivity : AppCompatActivity() {
 
@@ -67,6 +68,11 @@ class MatchesListActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateDataset()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -145,7 +151,7 @@ class MatchesListActivity : AppCompatActivity() {
                 val tourn = spinnerTourn.selectedItem as Map.Entry<*, *>
                 val team1 = spinnerTeam1.selectedItem as Map.Entry<*, *>
                 val team2 = spinnerTeam2.selectedItem as Map.Entry<*, *>
-                tryAddMatch(tourn.key.toString(), etnMatchNumb.text.toString().toInt(), team1.key.toString(), team2.key.toString())
+                tryAddMatch(tourn.key.toString(), etnMatchNumb.text.toString().toIntOrNull(), team1.key.toString(), team2.key.toString())
             }
             Handler().postDelayed({
                 dialog.cancel()
@@ -155,7 +161,13 @@ class MatchesListActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun tryAddMatch(tournID: String, matchNumb: Int, team1ID: String, team2ID: String) {
+    private fun tryAddMatch(tournID: String, matchNumb: Int?, team1ID: String, team2ID: String) {
+        //check for valid match numb
+        if(matchNumb == null) {
+            val toast = Toast.makeText(this, "Keine gültige Spielnummer ausgewählt. Spiel NICHT hinzugefügt.", Toast.LENGTH_LONG)
+            toast.show()
+            return
+        }
         //check if match already exists
         //in db
         if (dbHelper.matchExists(tournID, matchNumb)) {
@@ -209,16 +221,16 @@ class MatchesListActivity : AppCompatActivity() {
             }
 
             //add match player pairs
-            fbDbHelper.addMatchPlayerPair(matchID, playersTeam1[0].playerID, 0, 0, 0, false) {
+            fbDbHelper.addMatchPlayerPair(matchID, playersTeam1[0].playerID!!, 0, 0, 0, false) {
                 dbHelper.addMatchPlayerPair(MatchPlayerPairModel(it, matchID, playersTeam1[0].playerID, 0, 0, 0, false))
             }
-            fbDbHelper.addMatchPlayerPair(matchID, playersTeam1[1].playerID, 0, 0, 0, false) {
+            fbDbHelper.addMatchPlayerPair(matchID, playersTeam1[1].playerID!!, 0, 0, 0, false) {
                 dbHelper.addMatchPlayerPair(MatchPlayerPairModel(it, matchID, playersTeam1[1].playerID, 0, 0, 0, false))
             }
-            fbDbHelper.addMatchPlayerPair(matchID, playersTeam2[0].playerID, 0, 0, 0, false) {
+            fbDbHelper.addMatchPlayerPair(matchID, playersTeam2[0].playerID!!, 0, 0, 0, false) {
                 dbHelper.addMatchPlayerPair(MatchPlayerPairModel(it, matchID, playersTeam2[0].playerID, 0, 0, 0, false))
             }
-            fbDbHelper.addMatchPlayerPair(matchID, playersTeam2[1].playerID, 0, 0, 0, false) {
+            fbDbHelper.addMatchPlayerPair(matchID, playersTeam2[1].playerID!!, 0, 0, 0, false) {
                 dbHelper.addMatchPlayerPair(MatchPlayerPairModel(it, matchID, playersTeam2[1].playerID, 0, 0, 0, false))
             }
 

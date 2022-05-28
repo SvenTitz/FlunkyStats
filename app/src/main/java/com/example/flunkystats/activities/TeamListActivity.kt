@@ -53,6 +53,7 @@ class TeamListActivity : ListActivity() {
 
     }
 
+
     override fun updateDataset() {
         viewAdapter.updateDataset(dbHelper.getTeamListData() ?: arrayListOf())
     }

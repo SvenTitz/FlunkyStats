@@ -50,4 +50,5 @@ class RankingsActivity : AppCompatActivity() {
         return true
     }
 
+
 }

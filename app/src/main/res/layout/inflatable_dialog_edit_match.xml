@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundMidDark"
+    android:paddingBottom="4dp">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider12"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+            <View
+                android:id="@+id/divider13"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+            <View
+                android:id="@+id/divider14"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_hits4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/treffer"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_edit_dialog_slugs4"
+                    app:layout_constraintStart_toEndOf="@id/tv_edit_dialog_shots4"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name4" />
+
+                <CheckBox
+                    android:id="@+id/cb_edit_dialog_winner4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:button="@null"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/sieger"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_dialog_name4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_dialog_name4" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_shots4"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_shots4"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_shots4"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_shots4" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_shots4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/wuerfe"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_edit_dialog_hits4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name4" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_name4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Spieler Name"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/cb_edit_dialog_winner4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_slugs4"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_slugs4"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_slugs4"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_slugs4" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_slugs4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/schluecke"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_dialog_hits4"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name4" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_hits4"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_hits4"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_hits4"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_hits4" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_hits3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/treffer"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_edit_dialog_slugs3"
+                    app:layout_constraintStart_toEndOf="@id/tv_edit_dialog_shots3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name3" />
+
+                <CheckBox
+                    android:id="@+id/cb_edit_dialog_winner3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:button="@null"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/sieger"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_dialog_name3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_dialog_name3" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_shots3"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_shots3"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_shots3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_shots3" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_shots3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/wuerfe"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_edit_dialog_hits3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name3" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_name3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Spieler Name"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/cb_edit_dialog_winner3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_slugs3"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_slugs3"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_slugs3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_slugs3" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_slugs3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/schluecke"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_dialog_hits3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name3" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_hits3"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_hits3"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_hits3"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_hits3" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_hits2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/treffer"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_edit_dialog_slugs2"
+                    app:layout_constraintStart_toEndOf="@id/tv_edit_dialog_shots2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name2" />
+
+                <CheckBox
+                    android:id="@+id/cb_edit_dialog_winner2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:button="@null"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/sieger"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_dialog_name2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_dialog_name2" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_shots2"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_shots2"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_shots2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_shots2" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_shots2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/wuerfe"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_edit_dialog_hits2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name2" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_name2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Spieler Name"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/cb_edit_dialog_winner2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_slugs2"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_slugs2"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_slugs2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_slugs2" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_slugs2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/schluecke"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_dialog_hits2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name2" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_hits2"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_hits2"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_hits2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_hits2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_hits1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/treffer"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_edit_dialog_slugs1"
+                    app:layout_constraintStart_toEndOf="@id/tv_edit_dialog_shots1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name1" />
+
+                <CheckBox
+                    android:id="@+id/cb_edit_dialog_winner1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:button="@null"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/sieger"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_edit_dialog_name1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_edit_dialog_name1" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_shots1"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_shots1"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_shots1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_shots1" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_shots1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/wuerfe"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_edit_dialog_hits1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name1" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_name1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Spieler Name"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/cb_edit_dialog_winner1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/text_primary_dark" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_slugs1"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_slugs1"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_slugs1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_slugs1" />
+
+                <TextView
+                    android:id="@+id/tv_edit_dialog_slugs1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/schluecke"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_edit_dialog_hits1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_name1" />
+
+                <EditText
+                    android:id="@+id/et_edit_dialog_hits1"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_edit_dialog_hits1"
+                    app:layout_constraintStart_toStartOf="@+id/tv_edit_dialog_hits1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_edit_dialog_hits1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_edit_dialog_ok"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/background"
+        android:text="@string/ok"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_edit_dialog_cacel"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+    <Button
+        android:id="@+id/btn_edit_dialog_cacel"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/background"
+        android:text="@string/abbrechen"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_edit_dialog_ok"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

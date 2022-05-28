@@ -36,7 +36,7 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
         const val AUTH_TEST = "authTest"
 
-        private var currentlyUpdating: Int = 0
+        private var currUpd: Float = 0f
     }
 
     private val database = Firebase.database
@@ -50,35 +50,32 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     private val timestampsRef = database.getReference(TIMESTAMPS)
 
 
-
-
-
     fun updateDatabase(doneUpdating: (Boolean) -> Unit) {
 
-        fun update() {
-            Log.d(TAG, "update called with currentlyUpdating at:${currentlyUpdating}")
-            currentlyUpdating--
-            if (currentlyUpdating <= 0) {
+        fun updateProgress() {
+            Log.d(TAG, "update called with currentlyUpdating at:${currUpd}")
+            currUpd--
+            if (currUpd <= 0) {
                 doneUpdating(true)
             }
         }
 
         checkUpToDate { upToDate ->
-            currentlyUpdating = upToDate.count { !it } +1 //+1 for timestamps or call allDone right away
-            Log.d(TAG, "currentlyUpdating set to ${currentlyUpdating}")
-            if (!upToDate[0]) reloadPlayers(::update)
-            if (!upToDate[1]) reloadTeams(::update)
-            if (!upToDate[2]) reloadMatches(::update)
-            if (!upToDate[3]) reloadTournaments(::update)
-            if (!upToDate[4]) reloadPlayerTeamPairs(::update)
-            if (!upToDate[5]) reloadMatchPlayerPairs(::update)
-            if (!upToDate[6]) reloadMatchTeamPairs(::update)
+            currUpd = upToDate.count { !it } +1f //+1 for timestamps or call allDone right away
+            Log.d(TAG, "currentlyUpdating set to ${currUpd}")
+            if (!upToDate[0]) reloadPlayers(::updateProgress)
+            if (!upToDate[1]) reloadTeams(::updateProgress)
+            if (!upToDate[2]) reloadMatches(::updateProgress)
+            if (!upToDate[3]) reloadTournaments(::updateProgress)
+            if (!upToDate[4]) reloadPlayerTeamPairs(::updateProgress)
+            if (!upToDate[5]) reloadMatchPlayerPairs(::updateProgress)
+            if (!upToDate[6]) reloadMatchTeamPairs(::updateProgress)
             if (upToDate.any{!it}) {
                 Log.d(TAG, "any false")
-                reloadTimestamps(::update)
+                reloadTimestamps(::updateProgress)
             } else {
                 Log.d(TAG, "no false")
-                update()
+                updateProgress()
             }
         }
     }
@@ -281,18 +278,27 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
                 val values = dataSnapshot.value as HashMap<String, Long>
                 //loop through all entries and add them to the database
                 val fbTimestamps = ArrayList<Int>()
-                fbTimestamps.add(values[PLAYERS]?.toInt() ?: 0)
-                fbTimestamps.add(values[TEAMS] ?.toInt() ?: 0)
-                fbTimestamps.add(values[MATCHES]?.toInt() ?: 0)
-                fbTimestamps.add(values[TOURNAMENTS]?.toInt() ?: 0)
-                fbTimestamps.add(values[PLAYER_TEAM_PAIRS]?.toInt() ?: 0)
-                fbTimestamps.add(values[MATCH_PLAYER_PAIRS]?.toInt() ?: 0)
-                fbTimestamps.add(values[MATCH_TEAM_PAIRS]?.toInt() ?: 0)
+                //fbTimestamps.add(values[PLAYERS]?.toInt() ?: 0)
+                //fbTimestamps.add(values[TEAMS] ?.toInt() ?: 0)
+                //fbTimestamps.add(values[MATCHES]?.toInt() ?: 0)
+                //fbTimestamps.add(values[TOURNAMENTS]?.toInt() ?: 0)
+                //fbTimestamps.add(values[PLAYER_TEAM_PAIRS]?.toInt() ?: 0)
+                //fbTimestamps.add(values[MATCH_PLAYER_PAIRS]?.toInt() ?: 0)
+                //fbTimestamps.add(values[MATCH_TEAM_PAIRS]?.toInt() ?: 0)
 
+                res[0] = dbTimestamps.playersTS ?: 0 >= values[PLAYERS] ?: 0
+                res[1] = dbTimestamps.teamsTS ?: 0 >= values[TEAMS] ?: 0
+                res[2] = dbTimestamps.matchesTS ?: 0 >= values[MATCHES] ?: 0
+                res[3] = dbTimestamps.tournTS ?: 0 >= values[TOURNAMENTS] ?: 0
+                res[4] = dbTimestamps.playerTeamTS ?: 0 >= values[PLAYER_TEAM_PAIRS] ?: 0
+                res[5] = dbTimestamps.matchPlayerTS ?: 0 >= values[MATCH_PLAYER_PAIRS] ?: 0
+                res[6] = dbTimestamps.matchTeamTS ?: 0 >= values[MATCH_TEAM_PAIRS] ?: 0
+
+                /*
                 for(i in 0 until fbTimestamps.size) {
                     val b = dbTimestamps[i] >= fbTimestamps[i]
                     res[i] =  b
-                }
+                }*/
                 callbackFun(res)
             }
 
@@ -380,7 +386,35 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
     }
 
     private fun updateTimestamp(table: String) {
-        timestampsRef.child(table).setValue(System.currentTimeMillis()/1000)
+        getTimestamp(table){
+            val newTs = System.currentTimeMillis()/1000
+            val dbTs = dbHelper.getTimestamps()
+            //das hier ist ganz große kaka
+            when (table) {
+                PLAYERS -> if(dbTs?.playersTS == it) dbHelper.updateTimestamps("Players", newTs)
+                TEAMS -> if(dbTs?.teamsTS == it) dbHelper.updateTimestamps("Teams", newTs)
+                MATCHES -> if(dbTs?.matchesTS == it) dbHelper.updateTimestamps("Matches", newTs)
+                TOURNAMENTS -> if(dbTs?.tournTS == it) dbHelper.updateTimestamps("Tournaments", newTs)
+                PLAYER_TEAM_PAIRS -> if(dbTs?.playerTeamTS == it) dbHelper.updateTimestamps("PlayerTeamPairs", newTs)
+                MATCH_PLAYER_PAIRS -> if(dbTs?.matchPlayerTS == it) dbHelper.updateTimestamps("MatchPlayerPairs", newTs)
+                MATCH_TEAM_PAIRS -> if(dbTs?.matchTeamTS == it) dbHelper.updateTimestamps("MatchTeamPairs", newTs)
+            }
+            timestampsRef.child(table).setValue(newTs)
+        }
+    }
+
+    private fun getTimestamp(table: String, callbackFun: (Long) -> Unit) {
+        timestampsRef.child(table).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.value as Long
+                Log.d(TAG, "Timestamp for $table = $value")
+                callbackFun(value)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "getTimestamp onCancelled")
+            }
+        })
     }
 
     private fun deleteNestedEntry(childName: String, childValue:String , tableRef: DatabaseReference) {
@@ -403,6 +437,8 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         deleteNestedEntry(PLAYER_ID, playerID, matchPlayerPairsRef)
         deleteNestedEntry(PLAYER_ID, playerID, playerTeamPairsRef)
         updateTimestamp(PLAYERS)
+        updateTimestamp(MATCH_PLAYER_PAIRS)
+        updateTimestamp(PLAYER_TEAM_PAIRS)
     }
 
     fun deleteTeam(teamID: String) {
@@ -410,6 +446,17 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
         deleteNestedEntry(TEAM_ID, teamID, matchTeamPairsRef)
         deleteNestedEntry(TEAM_ID, teamID, playerTeamPairsRef)
         updateTimestamp(TEAMS)
+        updateTimestamp(MATCH_TEAM_PAIRS)
+        updateTimestamp(PLAYER_TEAM_PAIRS)
+    }
+
+    fun deleteMatch(matchID: String) {
+        matchesRef.child(matchID).removeValue()
+        deleteNestedEntry(MATCH_ID, matchID, matchPlayerPairsRef)
+        deleteNestedEntry(MATCH_ID, matchID, matchTeamPairsRef)
+        updateTimestamp(MATCHES)
+        updateTimestamp(MATCH_PLAYER_PAIRS)
+        updateTimestamp(MATCH_TEAM_PAIRS)
     }
 
     fun deletePlayerTeamPair(teamID: String, playerID: String) {
@@ -432,14 +479,29 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
 
     }
 
+
+
     fun updatePlayerName(playerID: String, name: String) {
-        playersRef.child(playerID).child("name").setValue(name)
+        playersRef.child(playerID).child(NAME).setValue(name)
         updateTimestamp(PLAYERS)
     }
 
     fun updateTeamName(teamID: String, name: String) {
-        teamsRef.child(teamID).child("name").setValue(name)
+        teamsRef.child(teamID).child(NAME).setValue(name)
         updateTimestamp(TEAMS)
+    }
+
+    fun updateMatchPlayerStats(mpModel: MatchPlayerPairModel) {
+        matchPlayerPairsRef.child(mpModel.matchPlayerPairID  ?: "").child(SHOTS).setValue(mpModel.shots)
+        matchPlayerPairsRef.child(mpModel.matchPlayerPairID  ?: "").child(HITS).setValue(mpModel.hits)
+        matchPlayerPairsRef.child(mpModel.matchPlayerPairID  ?: "").child(SLUGS).setValue(mpModel.slugs)
+        matchPlayerPairsRef.child(mpModel.matchPlayerPairID  ?: "").child(WON).setValue(mpModel.won)
+        updateTimestamp(MATCH_PLAYER_PAIRS)
+    }
+
+    fun updateMatchTeamStats(mtModel: MatchTeamPairModel) {
+        matchTeamPairsRef.child(mtModel.matchTeamPairID!!).child(WON).setValue(mtModel.won)
+        updateTimestamp(MATCH_TEAM_PAIRS)
     }
 
     fun matchExists(tournID: String, matchNumb: Int, callbackFun: (Boolean) -> Unit){
@@ -461,9 +523,6 @@ class FirebaseDatabaseHelper(private val dbHelper: DataBaseHelper) {
             }
         })
     }
-
-
-
 
 }
 

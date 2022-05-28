@@ -1,7 +1,7 @@
 package com.example.flunkystats.models
 
 data class PlayerModel(
-    var playerID: String = "",
+    var playerID: String? = "",
     var playerName: String? = "",
 ) {
 

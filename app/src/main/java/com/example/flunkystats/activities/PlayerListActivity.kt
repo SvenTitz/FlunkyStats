@@ -30,6 +30,7 @@ class PlayerListActivity: ListActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+
         viewManager = LinearLayoutManager(this)
         viewAdapter = EntryListAdapter(listDataset, "Teams: ", this, PlayerStatsActivity::class.java)
 

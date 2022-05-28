@@ -90,6 +90,8 @@ class EntryListAdapter(
     fun addEntry(entry: ListEntryModel) {
         dataset.add(entry)
         dataset.sortBy { it.entryName.toLowerCase(Locale.ROOT) }
+        datasetFull.add(entry)
+        datasetFull.sortBy { it.entryName.toLowerCase(Locale.ROOT) }
         notifyDataSetChanged()
     }
 

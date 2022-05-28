@@ -64,7 +64,7 @@ class PlayerStatsActivity: StatsActivity() {
         var prevView: TextView? = null
         teamsMap.forEach {
             val teamID = it.teamID
-            val tvTeam = createTextView(it.teamName ?: "ERROR", it.teamID, findViewById(R.id.cl_p_stats_teams), prevView)
+            val tvTeam = createTextView(it.teamName ?: "ERROR", teamID ?: "", findViewById(R.id.cl_p_stats_teams), prevView)
             prevView = tvTeam
             tvTeam.setOnClickListener {
                 //Open stats page of the entry. send entryID as extra message
@@ -196,7 +196,7 @@ class PlayerStatsActivity: StatsActivity() {
         val resList: ArrayList<FilterListItemModel> = arrayListOf()
 
         teamMap.forEach{
-            val item = FilterListItemModel(id = it.teamID, name = it.teamName ?: "ERROR")
+            val item = FilterListItemModel(id = it.teamID ?: "", name = it.teamName ?: "ERROR")
             resList.add(item)
         }
 

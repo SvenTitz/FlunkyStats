@@ -5,25 +5,21 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.flunkystats.AppConfig.Companion.TAG
-import com.example.flunkystats.adapter.EntryListAdapter
 import com.example.flunkystats.R
+import com.example.flunkystats.adapter.EntryListAdapter
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.database.FirebaseDatabaseHelper
 import com.example.flunkystats.models.ListEntryModel
-import com.example.flunkystats.models.PlayerModel
 
 abstract class ListActivity: AppCompatActivity() {
 
@@ -104,6 +100,8 @@ abstract class ListActivity: AppCompatActivity() {
 
         dialog.show()
     }
+
+
 
 
     protected abstract fun updateDataset()

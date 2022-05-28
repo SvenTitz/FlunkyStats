@@ -1,8 +1,6 @@
 package com.example.flunkystats.activities
 
 import android.content.Intent
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,31 +8,24 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import com.example.flunkystats.AppConfig
+import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.R
 import com.example.flunkystats.database.*
 import com.example.flunkystats.ui.util.LoadsData
-import com.example.flunkystats.AppConfig.Companion.TAG
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), LoadsData {
 
+
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var pgsBar: ProgressBar
+    private lateinit var dbHelper: DataBaseHelper
+    private lateinit var fbDBHelper: FirebaseDatabaseHelper
+    private lateinit var pgsHandler: Handler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +38,9 @@ class MainActivity : AppCompatActivity(), LoadsData {
         firebaseAuth = FirebaseAuth.getInstance()
         Log.d(TAG, "firebase auth current use: ${firebaseAuth.currentUser?.uid}")
 
-        val dbHelper = DataBaseHelper(this)
-        val fbDBHelper = FirebaseDatabaseHelper(dbHelper)
+        dbHelper = DataBaseHelper(this)
+        fbDBHelper = FirebaseDatabaseHelper(dbHelper)
+        pgsHandler = Handler(this.mainLooper)
 
         //check if database is up to date
         pgsBar = findViewById(R.id.pgsBar_Main)
@@ -56,20 +48,8 @@ class MainActivity : AppCompatActivity(), LoadsData {
         hideButtons()
         val toast = Toast.makeText(this, "Updating Database", Toast.LENGTH_SHORT)
         toast.show()
-        fbDBHelper.updateDatabase {
-            if (it) {
-                //database is up to date
-                Log.d(TAG, "Database IS up-to-date")
-                val toast2 = Toast.makeText(this, "Database is up to date", Toast.LENGTH_SHORT)
-                toast2.show()
-                pgsBar.visibility = View.GONE
-                showButtons()
-            } else {
-                //database is not up to date
-                Log.d(TAG, "Database is NOT up-to-date")
-            }
 
-        }
+        updateDatabase()
 
         //set on click listener for Players Button
         findViewById<Button>(R.id.btnPlayers).setOnClickListener {
@@ -91,13 +71,28 @@ class MainActivity : AppCompatActivity(), LoadsData {
         }
 
         findViewById<Button>(R.id.btnTurnaments).setOnClickListener {
-            startActivity(Intent(this, TournTreeActivity::class.java))
-            //val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT)
-            //toast.show()
+            //startActivity(Intent(this, TournTreeActivity::class.java))
+            val toast = Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT)
+            toast.show()
         }
 
     }
 
+    private fun updateDatabase() {
+        fbDBHelper.updateDatabase() {
+            if (it) {
+                //database is up to date
+                Log.d(TAG, "Database IS up-to-date")
+                val toast2 = Toast.makeText(this, "Database is up to date", Toast.LENGTH_SHORT)
+                toast2.show()
+                pgsBar.visibility = View.GONE
+                showButtons()
+            } else {
+                //database is not up to date
+                Log.d(TAG, "Database is NOT up-to-date")
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)

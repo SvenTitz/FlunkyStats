@@ -135,6 +135,8 @@ class MatchListAdapter(
     fun addEntry(entry: ListMatchModel) {
         dataset.add(entry)
         dataset.sortWith(compareBy({ it.matchInfo[0].toLowerCase(Locale.ROOT) }, { it.matchNumb }))
+        datasetFull.add(entry)
+        datasetFull.sortWith(compareBy({ it.matchInfo[0].toLowerCase(Locale.ROOT) }, { it.matchNumb }))
         notifyDataSetChanged()
     }
 

@@ -1,6 +1,7 @@
 package com.example.flunkystats.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flunkystats.AppConfig
 import com.example.flunkystats.R
 import com.example.flunkystats.models.TableEntryModel
 
 class TableListAdapter (
     private var dataset: ArrayList<TableEntryModel>,
     private val context: Context,
-    private val numbStats: Int
+    private val numbStats: Int,
+    var intentClass: Class<*>
 ) : RecyclerView.Adapter<TableListAdapter.ListViewHolder>() {
 
     class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -44,16 +47,25 @@ class TableListAdapter (
                 view.elevation = 3*context.resources.displayMetrics.density
             }
         }
+
+        view.setOnClickListener {
+            val entryID = view.findViewById<TextView>(R.id.tv_table_name).tag as String
+            val intent = Intent(context, intentClass).apply {
+                putExtra(AppConfig.EXTRA_MESSAGE_ENTRY_ID, entryID)
+            }
+            context.startActivity(intent)
+        }
+
         return ListViewHolder(view)
     }
 
     override fun getItemCount() = dataset.size
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) {
-            return 0
+        return if (position == 0) {
+            0
         } else {
-            return (position % 2)
+            (position % 2)
         }
     }
 
@@ -61,6 +73,7 @@ class TableListAdapter (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
             holder.tvNumb.text = (position+1).toString()
             holder.tvName.text = dataset[position].name
+            holder.tvName.tag = dataset[position].id
             holder.tvStat1.text = dataset[position].stat1
             holder.tvStat2?.text = dataset[position].stat2
             holder.tvStat3?.text = dataset[position].stat3

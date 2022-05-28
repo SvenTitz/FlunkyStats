@@ -13,7 +13,7 @@ object StringUtil {
      */
     fun capitalizeFirstLetters(s:String):String {
         return s.split(" ")
-            .joinToString(" ") { it.toLowerCase(Locale.ROOT).capitalize(Locale.ROOT) }
+            .joinToString(" ") { it.lowercase(Locale.ROOT).capitalize(Locale.ROOT) }
     }
 
     fun newLineEachWord(s:String):String {

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import androidx.core.database.getIntOrNull
 import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.models.*
 import java.lang.Exception
@@ -222,13 +223,13 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         val db = this.writableDatabase
         val cv = ContentValues()
 
-        cv.put(TABLE_PLAYERS, timestamp.playersTS)
-        cv.put(TABLE_TEAMS, timestamp.teamsTS)
-        cv.put(TABLE_MATCHES, timestamp.matchesTS)
-        cv.put(TABLE_TOURNAMENTS, timestamp.tournTS)
-        cv.put(TABLE_PLAYER_TEAM_PAIR, timestamp.playerTeamTS)
-        cv.put(TABLE_MATCH_PLAYER_PAIR, timestamp.matchPlayerTS)
-        cv.put(TABLE_MATCH_TEAM_PAIR, timestamp.matchTeamTS)
+        if(timestamp.playersTS != null) cv.put(TABLE_PLAYERS, timestamp.playersTS)
+        if(timestamp.teamsTS != null) cv.put(TABLE_TEAMS, timestamp.teamsTS)
+        if(timestamp.matchesTS != null) cv.put(TABLE_MATCHES, timestamp.matchesTS)
+        if(timestamp.tournTS != null) cv.put(TABLE_TOURNAMENTS, timestamp.tournTS)
+        if(timestamp.playerTeamTS != null) cv.put(TABLE_PLAYER_TEAM_PAIR, timestamp.playerTeamTS)
+        if(timestamp.matchPlayerTS != null) cv.put(TABLE_MATCH_PLAYER_PAIR, timestamp.matchPlayerTS)
+        if(timestamp.matchTeamTS != null) cv.put(TABLE_MATCH_TEAM_PAIR, timestamp.matchTeamTS)
 
         val res = db.insert(TABLE_TIMESTAMPS, null, cv)
         return res != -1L
@@ -243,21 +244,26 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         db.execSQL(delTableStmt)
     }
 
-    fun getTimestamps(): ArrayList<Int>? {
+    fun getTimestamps(): TimestampsModel? {
         val db = this.writableDatabase
         val query = "SELECT * FROM $TABLE_TIMESTAMPS"
         val cursor = db.rawQuery(query, null)
-        val resList :ArrayList<Int> = ArrayList()
 
         if(!cursor.moveToFirst()) {
             cursor.close()
             return null
         }
-        for (i in 1 until cursor.columnCount) {
-            resList.add(cursor.getInt(i))
-        }
+        val resModel = TimestampsModel(
+            playersTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_PLAYERS))?.toLong(),
+            teamsTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_TEAMS))?.toLong(),
+            matchesTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_MATCHES))?.toLong(),
+            tournTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_TOURNAMENTS))?.toLong(),
+            playerTeamTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_PLAYER_TEAM_PAIR))?.toLong(),
+            matchPlayerTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_MATCH_PLAYER_PAIR))?.toLong(),
+            matchTeamTS = cursor.getIntOrNull(cursor.getColumnIndex(TABLE_MATCH_TEAM_PAIR))?.toLong(),
+        )
         cursor.close()
-        return resList
+        return resModel
     }
 
     private fun getPrimaryKey(tableName: String): String? {
@@ -581,7 +587,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
 
         val playersTeamIDs = arrayListOf<String>()
         getPlayersTeams(playerID).forEach {
-            playersTeamIDs.add(it.teamID)
+            playersTeamIDs.add(it.teamID!!)
         }
         val teamIDs: List<String> = filterTeamIDs ?: playersTeamIDs
 
@@ -616,7 +622,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
 
         val teamIDs = arrayListOf<String>()
         getPlayersTeams(playerID).forEach {
-            teamIDs.add(it.teamID)
+            teamIDs.add(it.teamID!!)
         }
 
         val tournTotal = cursor.count
@@ -679,10 +685,10 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
             val entry = ListMatchModel(
                 matchID = matchID,
                 matchNumb = matchNumb,
-                team1ID = teams[0].teamID,
-                team1Name = teams[0].teamName ?: "ERROR",
-                team2ID = teams[1].teamID,
-                team2Name = teams[1].teamName ?: "ERROR",
+                team1ID = teams.getOrNull(0)?.teamID ?: "ERROR",
+                team1Name = teams.getOrNull(0)?.teamName ?: "ERROR",
+                team2ID = teams.getOrNull(1)?.teamID ?: "ERROR",
+                team2Name = teams.getOrNull(1)?.teamName ?: "ERROR",
                 winnerID = getWinnerTeamID(matchID),
                 matchInfo = listOf(tournName)
             )
@@ -715,9 +721,9 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
             val entry = ListMatchModel(
                 matchID = matchID,
                 matchNumb = matchNumb,
-                team1ID = teams[0].teamID,
+                team1ID = teams[0].teamID!!,
                 team1Name = teams[0].teamName ?: "ERROR",
-                team2ID = teams[1].teamID,
+                team2ID = teams[1].teamID!!,
                 team2Name = teams[1].teamName ?: "ERROR",
                 winnerID = getWinnerTeamID(matchID),
                 matchInfo = listOf(tournName)
@@ -763,17 +769,81 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
                 AND $TABLE_MATCH_TEAM_PAIR.$COLUMN_MATCH_ID = '$matchID'"""
         val cursor = db.rawQuery(query, null)
 
-        if(!cursor.moveToFirst() || cursor.count != 2) {
-            return listOf()
+        val resList = arrayListOf<TeamModel>()
+
+        if(!cursor.moveToFirst()) {
+            cursor.close()
+            return resList
         }
 
-        val id1 = cursor.getString(0)
-        val name1 = cursor.getString(1)
-        cursor.moveToNext()
-        val id2 = cursor.getString(0)
-        val name2 = cursor.getString(1)
+        do {
+            resList.add(TeamModel(cursor.getString(0), cursor.getString(1)))
+        } while (cursor.moveToNext())
+
         cursor.close()
-        return listOf(TeamModel(id1,name1), TeamModel(id2, name2))
+        return resList
+    }
+
+    fun getMatchesPlayers(matchID: String): List<PlayerModel> {
+        val db = this.writableDatabase
+        val query = """SELECT DISTINCT $TABLE_PLAYERS.$COLUMN_PLAYER_ID, $TABLE_PLAYERS.$COLUMN_NAME 
+                FROM $TABLE_PLAYERS, $TABLE_MATCH_PLAYER_PAIR
+                WHERE $TABLE_PLAYERS.$COLUMN_PLAYER_ID = $TABLE_MATCH_PLAYER_PAIR.$COLUMN_PLAYER_ID 
+                AND $TABLE_MATCH_PLAYER_PAIR.$COLUMN_MATCH_ID = '$matchID'"""
+        val cursor = db.rawQuery(query, null)
+
+        if(!cursor.moveToFirst()) {
+            cursor.close()
+            throw Exception("could not find any players for the match")
+        }
+
+        val resList = arrayListOf<PlayerModel>()
+
+        do {
+            resList.add(PlayerModel(playerID = cursor.getString(0), playerName = cursor.getString(1)))
+        } while (cursor.moveToNext())
+
+        cursor.close()
+        return resList
+    }
+
+    fun getPlayersTeamInMatch(playerID: String, matchID: String): TeamModel {
+        val db = this.writableDatabase
+        val query = """SELECT DISTINCT $TABLE_TEAMS.$COLUMN_TEAM_ID, $TABLE_TEAMS.$COLUMN_NAME 
+            FROM $TABLE_TEAMS, $TABLE_PLAYER_TEAM_PAIR, $TABLE_MATCH_TEAM_PAIR 
+            WHERE $TABLE_PLAYER_TEAM_PAIR.$COLUMN_PLAYER_ID = '$playerID' 
+            AND $TABLE_MATCH_TEAM_PAIR.$COLUMN_MATCH_ID = '$matchID' 
+            AND $TABLE_PLAYER_TEAM_PAIR.$COLUMN_TEAM_ID = $TABLE_MATCH_TEAM_PAIR.$COLUMN_TEAM_ID 
+            AND $TABLE_TEAMS.$COLUMN_TEAM_ID = $TABLE_MATCH_TEAM_PAIR.$COLUMN_TEAM_ID"""
+        val cursor = db.rawQuery(query, null)
+
+        if(!cursor.moveToFirst()) {
+            cursor.close()
+            return TeamModel(null, null)
+        }
+
+        val res = TeamModel(cursor.getString(0), cursor.getString(1))
+        cursor.close()
+        return res
+    }
+
+    fun getMatchTeamID(matchID: String, teamID: String): String? {
+        val db = this.writableDatabase
+        val query = """SELECT $COLUMN_MATCH_TEAM_PAIR_ID 
+            FROM $TABLE_MATCH_TEAM_PAIR 
+            WHERE $COLUMN_MATCH_ID = '$matchID' 
+            AND $COLUMN_TEAM_ID = '$teamID'"""
+        val cursor = db.rawQuery(query, null)
+
+        if(!cursor.moveToFirst() || cursor.count != 1) {
+            Log.e(TAG, "Fehler beim finden der MatchTeamID ${cursor.moveToFirst()} ,  ${cursor.count}")
+            cursor.close()
+            throw Exception("Fehler beim finden der MatchTeamID")
+        }
+
+        val matchTeamID = cursor.getString(0)
+        cursor.close()
+        return matchTeamID
     }
 
     private fun getMatchesTournName(matchID: String): String {
@@ -1029,7 +1099,7 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
 
     fun getPlayerMatchStats(playerID: String, matchID: String): PlayerMatchStatsModel {
         val db = this.writableDatabase
-        val query = """SELECT $COLUMN_HITS, $COLUMN_SHOTS, $COLUMN_SLUGS, $COLUMN_WON 
+        val query = """SELECT $COLUMN_MATCH_PLAYER_PAIR_ID, $COLUMN_HITS, $COLUMN_SHOTS, $COLUMN_SLUGS, $COLUMN_WON 
             FROM $TABLE_MATCH_PLAYER_PAIR 
             WHERE $COLUMN_MATCH_ID = '$matchID' 
             AND $COLUMN_PLAYER_ID = '$playerID'"""
@@ -1042,10 +1112,11 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         val res = PlayerMatchStatsModel(
             playerID = playerID,
             playerName = getPlayerName(playerID),
-            hits = cursor.getInt(0),
-            shots = cursor.getInt(1),
-            slugs = cursor.getInt(2),
-            won = cursor.getInt(3) == 1
+            hits = cursor.getInt(1),
+            shots = cursor.getInt(2),
+            slugs = cursor.getInt(3),
+            won = cursor.getInt(4) == 1,
+            matchPlayerID = cursor.getString(0)
         )
         cursor.close()
         return res
@@ -1102,6 +1173,14 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         db.delete(TABLE_PLAYER_TEAM_PAIR, whereClause, null)
     }
 
+    fun deleteMatch(matchID: String) {
+        val db = this.writableDatabase
+        val whereClause = "$COLUMN_MATCH_ID = '$matchID'"
+        db.delete(TABLE_MATCHES, whereClause, null)
+        db.delete(TABLE_MATCH_TEAM_PAIR, whereClause, null)
+        db.delete(TABLE_MATCH_PLAYER_PAIR, whereClause, null)
+    }
+
     fun updatePlayerName(playerID: String, name: String) {
         val db = this.writableDatabase
         val cv = ContentValues()
@@ -1114,6 +1193,30 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
         val cv = ContentValues()
         cv.put(COLUMN_NAME, name)
         db.update(TABLE_TEAMS, cv, "$COLUMN_TEAM_ID = '$teamID'", null)
+    }
+
+    fun updateMatchPlayerStats(mpModel: MatchPlayerPairModel) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(COLUMN_SHOTS, mpModel.shots)
+        cv.put(COLUMN_HITS, mpModel.hits)
+        cv.put(COLUMN_SLUGS, mpModel.slugs)
+        cv.put(COLUMN_WON, if(mpModel.won) 1 else 0)
+        db.update(TABLE_MATCH_PLAYER_PAIR, cv, "$COLUMN_MATCH_PLAYER_PAIR_ID = '${mpModel.matchPlayerPairID}'", null)
+    }
+
+    fun updateMatchTeamStats(mtModel: MatchTeamPairModel) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(COLUMN_WON, if(mtModel.won!!) 1 else 0)
+        db.update(TABLE_MATCH_TEAM_PAIR, cv, "$COLUMN_MATCH_TEAM_PAIR_ID = '${mtModel.matchTeamPairID}'", null)
+    }
+
+    fun updateTimestamps(tableName: String, timestamp: Long) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(tableName, timestamp)
+        db.update(TABLE_TIMESTAMPS, cv, "", null)
     }
 
     fun matchExists(tournID: String, matchNumb: Int): Boolean {
@@ -1129,6 +1232,8 @@ class DataBaseHelper(context: Context?) : SQLiteOpenHelper(context, "database", 
             false
         }
     }
+
+
 
 
 }

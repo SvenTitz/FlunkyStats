@@ -7,6 +7,7 @@ import android.graphics.drawable.LayerDrawable
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -19,21 +20,24 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flunkystats.AppConfig
 import com.example.flunkystats.AppConfig.Companion.TAG
 import com.example.flunkystats.ui.util.LoadsData
 import com.example.flunkystats.R
+import com.example.flunkystats.activities.PlayerStatsActivity
 import com.example.flunkystats.activities.SettingsActivity
+import com.example.flunkystats.activities.TeamStatsActivity
 import com.example.flunkystats.adapter.FilterListAdapter
 import com.example.flunkystats.adapter.TableListAdapter
 import com.example.flunkystats.database.DataBaseHelper
 import com.example.flunkystats.models.EntryModel
 import com.example.flunkystats.models.FilterListItemModel
 import com.example.flunkystats.models.TableEntryModel
-import com.example.flunkystats.util.DPconvertion
 import com.example.flunkystats.util.DPconvertion.toDP
+import com.example.flunkystats.viewModels.FragmentFilterViewModel
 import java.lang.IllegalArgumentException
 import java.lang.ref.WeakReference
 import java.util.*
@@ -47,12 +51,13 @@ class RankingFragment : Fragment(), LoadsData {
 
     private var statType: Int? = null
     private var dataList: ArrayList<TableEntryModel> = arrayListOf()
-    private var entryType: Int = ENTRY_PLAYERS
+    //private var entryType: Int = ENTRY_PLAYERS
 
     private lateinit var dbHelper: DataBaseHelper
     private lateinit var tableAdapter: TableListAdapter
     private lateinit var pgsBar: ProgressBar
-    private lateinit var tournFilterData: ArrayList<FilterListItemModel>
+    private val filterViewModel: FragmentFilterViewModel by activityViewModels()
+    //private lateinit var tournFilterData: ArrayList<FilterListItemModel>
 
     private lateinit var tvStat1: TextView
     private lateinit var tvStat2: TextView
@@ -95,7 +100,9 @@ class RankingFragment : Fragment(), LoadsData {
 
         dbHelper = DataBaseHelper(context)
 
-        tournFilterData = loadTournFilterData()
+
+
+        //tournFilterData = loadTournFilterData()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -116,6 +123,7 @@ class RankingFragment : Fragment(), LoadsData {
         return root
     }
 
+
     private fun setUpTable(root: View) {
 
         tvStat1 = root.findViewById(R.id.tv_table_stat1)
@@ -134,14 +142,15 @@ class RankingFragment : Fragment(), LoadsData {
         updateSortArrows(sortBy)
 
         //start loading data in background thread
-        val loadParams = LoadParams(statType!!, entryType)
+        val loadParams = LoadParams(statType!!, filterViewModel.entryType.value!!, getTournFilterData())
         val asyncTask = DatabaseAsyncTask(this)
         asyncTask.execute(loadParams)
+
 
         val tableViewManager = LinearLayoutManager(activity)
         val numbStats: Int = if (statType == STAT_TYPE_SLUGS) 1 else 3
 
-        tableAdapter = TableListAdapter(dataList, activity as Context, numbStats)
+        tableAdapter = TableListAdapter(dataList, activity as Context, numbStats, PlayerStatsActivity::class.java)
 
         root.findViewById<RecyclerView>(R.id.rv_frag_table).apply {
             setHasFixedSize(true)
@@ -160,7 +169,13 @@ class RankingFragment : Fragment(), LoadsData {
     private fun updateTableFilter(filterTournIDs: List<String>) {
         pgsBar.visibility = View.VISIBLE
 
-        val loadParams = LoadParams(statType!!, entryType, filterTournIDs)
+        tableAdapter.intentClass = when {
+            filterViewModel.entryType.value!! == ENTRY_PLAYERS -> PlayerStatsActivity::class.java
+            filterViewModel.entryType.value!! == ENTRY_TEAMS -> TeamStatsActivity::class.java
+            else -> throw IllegalArgumentException("Wrong Entry Type")
+        }
+
+        val loadParams = LoadParams(statType!!, filterViewModel.entryType.value!!, filterTournIDs)
         val asyncTask = DatabaseAsyncTask(this)
         asyncTask.execute(loadParams)
     }
@@ -264,7 +279,6 @@ class RankingFragment : Fragment(), LoadsData {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "called")
         when (item.itemId) {
             R.id.menu_rankings_filter -> {
                 openFilterAlertDialog(item)
@@ -283,7 +297,7 @@ class RankingFragment : Fragment(), LoadsData {
 
         val view: View = ConstraintLayout.inflate(activity as Context, R.layout.inflatable_dialog_filter_r, null)
 
-        buildFilterRecView(tournFilterData, view)
+        buildFilterRecView(filterViewModel.tournFilterData.value!!, view)
 
         builder.setView(view)
 
@@ -292,49 +306,59 @@ class RankingFragment : Fragment(), LoadsData {
         val ctvPlayers = view.findViewById<CheckedTextView>(R.id.ctv_filter_r_players)
         val ctvTeams = view.findViewById<CheckedTextView>(R.id.ctv_filter_r_teams)
 
-        ctvPlayers.isChecked = (entryType == ENTRY_PLAYERS)
-        ctvTeams.isChecked = (entryType == ENTRY_TEAMS)
+        ctvPlayers.isChecked = (filterViewModel.entryType.value!! == ENTRY_PLAYERS)
+        ctvTeams.isChecked = (filterViewModel.entryType.value!! == ENTRY_TEAMS)
 
         ctvPlayers.setOnClickListener {
-            if(entryType == ENTRY_TEAMS) {
-                entryType = ENTRY_PLAYERS
+            if(filterViewModel.entryType.value!! == ENTRY_TEAMS) {
+                filterViewModel.entryType.value = ENTRY_PLAYERS
                 ctvPlayers.isChecked = true
                 ctvTeams.isChecked = false
             }
         }
 
         ctvTeams.setOnClickListener {
-            if(entryType == ENTRY_PLAYERS) {
-                entryType = ENTRY_TEAMS
+            if(filterViewModel.entryType.value!! == ENTRY_PLAYERS) {
+                filterViewModel.entryType.value = ENTRY_TEAMS
                 ctvPlayers.isChecked = false
                 ctvTeams.isChecked = true
             }
         }
 
         view.findViewById<Button>(R.id.btn_filter_dialog_cacel).setOnClickListener {
-            Handler().postDelayed( {
+            Handler(Looper.getMainLooper()).postDelayed( {
                 dialog.cancel()
             }, 150)
         }
 
         view.findViewById<Button>(R.id.btn_filter_dialog_ok).setOnClickListener {
 
-            val filterTournIDs: ArrayList<String> = arrayListOf()
-            tournFilterData.forEach{
-                if(it.checked) {
-                    filterTournIDs.add(it.id)
+            updateTableFilter(getTournFilterData())
+
+            //update other already loaded fragments
+            val fragments = requireActivity().supportFragmentManager.fragments
+            fragments.forEach {
+                if(it is RankingFragment) {
+                    it.updateTableFilter(getTournFilterData())
                 }
             }
 
-            updateTableFilter(filterTournIDs)
-
-            Log.d(TAG, "OK clicked")
-            Handler().postDelayed( {
+            Handler(Looper.getMainLooper()).postDelayed( {
                 dialog.cancel()
             }, 150)
         }
 
         dialog.show()
+    }
+
+    private fun getTournFilterData(): ArrayList<String>  {
+        val filterTournIDs: ArrayList<String> = arrayListOf()
+        filterViewModel.tournFilterData.value?.forEach {
+            if (it.checked) {
+                filterTournIDs.add(it.id)
+            }
+        }
+        return filterTournIDs
     }
 
     private fun buildFilterRecView(dataset: ArrayList<FilterListItemModel>, view: View) {
@@ -349,17 +373,7 @@ class RankingFragment : Fragment(), LoadsData {
         }
     }
 
-    private fun loadTournFilterData(): ArrayList<FilterListItemModel> {
-        val tournMap = dbHelper.getIDandName(DataBaseHelper.TABLE_TOURNAMENTS)
-        val resList: ArrayList<FilterListItemModel> = arrayListOf()
 
-        tournMap.forEach { (id, name) ->
-            val item = FilterListItemModel(id = id, name = name)
-            resList.add(item)
-        }
-
-        return resList
-    }
 
 
     private class DatabaseAsyncTask(activity: RankingFragment): AsyncTask<LoadParams, Void, ArrayList<TableEntryModel>>() {
@@ -432,6 +446,7 @@ class RankingFragment : Fragment(), LoadsData {
                     val ratioS = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio) + "%"
                     dataSet.add(
                         TableEntryModel(
+                            id = it.entryID,
                             name = it.entryName,
                             stat1 = shotsStats[0].toString(),
                             stat2 = shotsStats[1].toString(),
@@ -466,6 +481,7 @@ class RankingFragment : Fragment(), LoadsData {
                     val avgSlugsS = String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, avgSlugs)
                     dataSet.add(
                         TableEntryModel(
+                            id = it.entryID,
                             name = it.entryName,
                             stat1 = avgSlugsS,
                             stat2 = null,
@@ -502,6 +518,7 @@ class RankingFragment : Fragment(), LoadsData {
                         String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio) + "%"
                     dataSet.add(
                         TableEntryModel(
+                            id = it.entryID,
                             name = it.entryName,
                             stat1 = matchStats[0].toString(),
                             stat2 = matchStats[1].toString(),
@@ -538,6 +555,7 @@ class RankingFragment : Fragment(), LoadsData {
                         String.format(Locale.ENGLISH, AppConfig.FLOAT_FORMAT_1, ratio) + "%"
                     dataSet.add(
                         TableEntryModel(
+                            id = it.entryID,
                             name = it.entryName,
                             stat1 = shotsStats[0].toString(),
                             stat2 = shotsStats[1].toString(),

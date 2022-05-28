@@ -1,6 +1,7 @@
 package com.example.flunkystats.models
 
 data class TableEntryModel(
+    val id: String,
     val name: String,
     val stat1: String,
     val stat2: String?,

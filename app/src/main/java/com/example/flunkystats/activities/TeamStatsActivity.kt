@@ -69,6 +69,7 @@ class TeamStatsActivity : StatsActivity() {
         return true
     }
 
+
     private fun loadTeamName() {
         val name = dbHelper.getTeamName(teamID)
         entryName = name
@@ -129,12 +130,12 @@ class TeamStatsActivity : StatsActivity() {
 
     private fun loadPlayersHitRatio(filterTournIDs: List<String>? = null) {
         val ratio1 = if (players.count() > 0) {
-            dbHelper.getPlayerHitRatio(players[0].playerID, listOf(teamID), filterTournIDs)
+            dbHelper.getPlayerHitRatio(players[0].playerID ?: "", listOf(teamID), filterTournIDs)
         } else {
             0f
         }
         val ratio2 = if (players.count() > 1) {
-            dbHelper.getPlayerHitRatio(players[1].playerID, listOf(teamID), filterTournIDs)
+            dbHelper.getPlayerHitRatio(players[1].playerID ?: "", listOf(teamID), filterTournIDs)
         } else {
             0f
         }
@@ -156,12 +157,12 @@ class TeamStatsActivity : StatsActivity() {
 
     private fun loadPlayersAvgSlugs(filterTournIDs: List<String>? = null) {
         val slugs1 = if (players.count() > 0) {
-            dbHelper.getPlayerAvgSlugs(players[0].playerID, listOf(teamID), filterTournIDs)
+            dbHelper.getPlayerAvgSlugs(players[0].playerID ?: "", listOf(teamID), filterTournIDs)
         } else {
             0f
         }
         val slugs2 = if (players.count() > 1) {
-            dbHelper.getPlayerAvgSlugs(players[1].playerID, listOf(teamID), filterTournIDs)
+            dbHelper.getPlayerAvgSlugs(players[1].playerID ?: "", listOf(teamID), filterTournIDs)
         } else {
             0f
         }
@@ -304,7 +305,7 @@ class TeamStatsActivity : StatsActivity() {
     private fun openChoosePlayerDialog(playerList: List<PlayerModel>, resFunction: (String) -> Unit) {
         val arrayList = arrayListOf<ListEntryModel>()
         playerList.forEach {
-            it.playerName?.let { it1 -> ListEntryModel(entryName = it1, entryID = it.playerID, entryInfos = null) }?.let { it2 -> arrayList.add(it2) }
+            it.playerName?.let { it1 -> ListEntryModel(entryName = it1, entryID = it.playerID ?: "", entryInfos = null) }?.let { it2 -> arrayList.add(it2) }
         }
         openChoosePlayerDialog(arrayList, resFunction)
     }
